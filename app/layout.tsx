@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
+import Header from "@/components/shared/Header";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  display: "swap",
+  variable: '--font-poppins',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  preload: true,
+  adjustFontFallback: true,
+})
 
 export const metadata: Metadata = {
   title: "Vibes",
@@ -16,7 +26,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn('px-20', poppins.variable)}>
+        <Image
+          src="/assets/background.svg"
+          fill
+          objectFit="cover"
+          alt="background"
+          className='absolute z-[-9999]' 
+          priority
+        />
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
