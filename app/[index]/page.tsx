@@ -12,7 +12,7 @@ export default function EventPage()
     return (
         <AnimatePresence presenceAffectsLayout>
             <section className='flex w-full my-8'>
-                <div className='flex flex-col w-full max-w-[412px] rounded-xl bg-[rgba(217,217,217,0.2)] overflow-hidden'>
+                <div className='flex flex-col w-full max-w-[412px] rounded-xl bg-[rgba(217,217,217,0.2)]'>
                     <motion.div layoutId={index.toString()} className='w-full object-contain h-full max-h-[212px]'>
                         <Image
                             src={selectedEvent.imgUrl}
@@ -20,6 +20,7 @@ export default function EventPage()
                             height={500}
                             alt={selectedEvent.title}
                             priority
+                            className='rounded-t-xl'
                         />
                     </motion.div>
                     <div className='flex flex-col p-3 gap-4'>
