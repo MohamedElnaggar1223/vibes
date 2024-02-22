@@ -10,14 +10,15 @@ export default function EventPage()
     const selectedEvent = events[parseInt(index.toString())]
 
     return (
-        <AnimatePresence>
+        <AnimatePresence presenceAffectsLayout>
             <section className='flex w-full'>
                 <motion.div layoutId={index.toString()} className='w-[500px] p-5'>
                     <Image
                         src={selectedEvent.imgUrl}
                         width={500}
                         height={500}
-                        alt={selectedEvent.title} 
+                        alt={selectedEvent.title}
+                        priority
                     />
                 </motion.div>
                 <div className='flex-1'>

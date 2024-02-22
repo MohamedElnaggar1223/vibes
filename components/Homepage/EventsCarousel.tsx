@@ -46,7 +46,8 @@ export default function EventsCarousel()
                                         width={728} 
                                         height={448} 
                                         alt="second event"
-                                        className="rounded-lg object-cover h-full w-full" 
+                                        className="rounded-lg object-cover h-full w-full"
+                                        priority
                                     />
                                 </motion.div>
                             </CarouselItem>
