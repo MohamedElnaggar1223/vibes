@@ -12,8 +12,8 @@ export default function EventPage()
     return (
         <AnimatePresence presenceAffectsLayout>
             <section className='flex w-full my-8'>
-                <div className='flex flex-col w-full max-w-[412px] rounded-xl bg-[rgba(217,217,217,0.2)]'>
-                    <motion.div layoutId={index.toString()} className='w-full object-contain h-full max-h-[212px]'>
+                <div className='flex flex-col w-full max-w-[412px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1'>
+                    <motion.div layoutId={index.toString()} className='w-full object-contain h-full max-h-[212px] overflow-hidden'>
                         <Image
                             src={selectedEvent.imgUrl}
                             width={500}
