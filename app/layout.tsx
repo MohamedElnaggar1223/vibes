@@ -31,7 +31,7 @@ export default function RootLayout({
           src="/assets/background.svg"
           fill
           alt="background"
-          className='absolute z-[-9999] object-cover' 
+          className='bg-image'
           priority
         />
         <Header />
