@@ -31,7 +31,7 @@ export default function EventsCarousel()
             setApi={setApi}
         >
             <CarouselContent className=''>
-                <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 3 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 0 && 'blur-sm mt-14', selectedIndex === 2 && 'blur-sm mt-14')} onClick={() => api?.scrollTo(3)}>
+                <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 4 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 0 && 'blur-sm mt-14', selectedIndex === 3 && 'blur-sm mt-14')} onClick={() => api?.scrollTo(4)}>
                     <Image
                         src="/assets/secondEvent.jfif"
                         width={728} 
@@ -40,7 +40,7 @@ export default function EventsCarousel()
                         className="rounded-lg object-cover h-full w-full" 
                     />
                 </CarouselItem>
-                <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 0 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 1 && 'blur-sm mt-14', selectedIndex === 3 && 'blur-sm mt-14' )} onClick={() => api?.scrollTo(0)}>
+                <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 0 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 1 && 'blur-sm mt-14', selectedIndex === 4 && 'blur-sm mt-14' )} onClick={() => api?.scrollTo(0)}>
                     <Image
                         src="/assets/firstevent.jfif"
                         width={728} 
@@ -59,6 +59,15 @@ export default function EventsCarousel()
                     />
                 </CarouselItem>
                 <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 2 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 3 && 'blur-sm mt-14', selectedIndex === 1 && 'blur-sm mt-14' )} onClick={() => api?.scrollTo(2)}>
+                    <Image
+                        src="/assets/fourthEvent.jfif"
+                        width={728} 
+                        height={448} 
+                        alt="fourth event"
+                        className="rounded-lg object-cover h-full w-full" 
+                    />
+                </CarouselItem>
+                <CarouselItem className={cn('max-h-[448px] basis-1/4', selectedIndex === 3 && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === 4 && 'blur-sm mt-14', selectedIndex === 2 && 'blur-sm mt-14' )} onClick={() => api?.scrollTo(3)}>
                     <Image
                         src="/assets/fourthEvent.jfif"
                         width={728} 
