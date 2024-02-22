@@ -47,6 +47,7 @@ export default function EventsCarousel()
                                     width={728}
                                     height={448} 
                                     imageClassName="rounded-lg object-cover h-full w-full"
+                                    priority={true}
                                 />
                             </CarouselItem>
                         ))}
