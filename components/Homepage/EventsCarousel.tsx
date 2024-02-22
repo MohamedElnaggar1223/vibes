@@ -39,7 +39,7 @@ export default function EventsCarousel()
                 >
                     <CarouselContent className=''>
                         {events.map((event, index) => (
-                            <CarouselItem key={index} className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) && 'max-h-[550px] h-[550px] basis-1/2 w-full z-10', selectedIndex === index && 'blur-sm mt-14', index === 0 ? selectedIndex === events.length - 2 : index === 1 ? selectedIndex === events.length - 1 : selectedIndex === index - 2 && 'blur-sm mt-14')} onClick={() => api?.scrollTo(index === 0 ? events.length - 1 : index - 1)}>
+                            <CarouselItem key={index} className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14')} onClick={() => api?.scrollTo(index === 0 ? events.length - 1 : index - 1)}>
                                 <motion.div layoutId={index.toString()} className="rounded-lg object-cover h-full w-full" >
                                     <Image
                                         src={event.imgUrl}
