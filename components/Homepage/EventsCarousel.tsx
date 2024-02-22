@@ -1,11 +1,11 @@
 'use client'
-import Image from "next/image";
-import { Carousel, CarouselContent, CarouselPrevious, CarouselNext, CarouselItem, CarouselApi } from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "../ui/carousel";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { events } from "@/constants";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import ImageMotion from "../shared/ImageMotion";
+import { AnimatePresence } from "framer-motion";
 
 export default function EventsCarousel() 
 {
@@ -40,16 +40,14 @@ export default function EventsCarousel()
                     <CarouselContent className=''>
                         {events.map((event, index) => (
                             <CarouselItem key={index} className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14')} onClick={() => api?.scrollTo(index === 0 ? events.length - 1 : index - 1)}>
-                                <motion.div layoutId={index.toString()} className="rounded-lg object-cover h-full w-full" >
-                                    <Image
-                                        src={event.imgUrl}
-                                        width={728} 
-                                        height={448} 
-                                        alt="second event"
-                                        className="rounded-lg object-cover h-full w-full"
-                                        priority
-                                    />
-                                </motion.div>
+                                <ImageMotion
+                                    selectedEvent={event}
+                                    className='rounded-lg object-cover h-full w-full'
+                                    index={index}
+                                    width={728}
+                                    height={448} 
+                                    imageClassName="rounded-lg object-cover h-full w-full"
+                                />
                             </CarouselItem>
                         ))}
                     </CarouselContent>

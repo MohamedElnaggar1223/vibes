@@ -4,6 +4,8 @@ import "./globals.css";
 import Image from "next/image";
 import Header from "@/components/shared/Header";
 import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,7 +38,9 @@ export default function RootLayout({
         />
         <Header />
         <main className='px-6 md:p-20'>
-          {children}
+          <Suspense fallback={<Loading />}>
+            {children}
+          </Suspense>
         </main>
       </body>
     </html>
