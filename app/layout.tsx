@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn('px-20', poppins.variable)}>
+      <body className={cn('', poppins.variable)}>
         <Image
           src="/assets/background.svg"
           fill
@@ -35,7 +35,9 @@ export default function RootLayout({
           priority
         />
         <Header />
-        {children}
+        <main className='px-20'>
+          {children}
+        </main>
       </body>
     </html>
   );

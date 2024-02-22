@@ -4,14 +4,16 @@ import Link from "next/link";
 export default function Header() 
 {
     return (
-        <section className='py-2 w-full flex justify-between items-center sticky top-0 z-[9999]'>
-            <Image
-                src="/assets/logo.png"
-                width={200}
-                height={200}
-                alt="logo"
-                className=' z-[9999]'
-            /> 
+        <section className='py-2 px-20 min-w-full flex justify-between items-center sticky top-0 z-[9999] bg-black'>
+            <Link href='/'>
+                <Image
+                    src="/assets/logo.png"
+                    width={200}
+                    height={200}
+                    alt="logo"
+                    className='cursor-pointer z-[9999]'
+                /> 
+            </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
                 <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Categories
