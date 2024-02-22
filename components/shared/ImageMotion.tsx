@@ -15,9 +15,10 @@ type Props = {
     index?: number,
     width: number,
     height: number,
+    priority?: boolean,
 }
 
-export default function ImageMotion({ selectedEvent, className, index, width, height, imageClassName }: Props) 
+export default function ImageMotion({ selectedEvent, className, index, width, height, imageClassName, priority }: Props) 
 {
     return (
         <AnimatePresence>
@@ -27,7 +28,7 @@ export default function ImageMotion({ selectedEvent, className, index, width, he
                     width={width}
                     height={height}
                     alt={selectedEvent.title}
-                    priority
+                    priority={priority ?? false}
                     className={cn(imageClassName)}
                 />
             </motion.div>
