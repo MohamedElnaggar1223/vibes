@@ -30,9 +30,8 @@ export default function RootLayout({
         <Image
           src="/assets/background.svg"
           fill
-          objectFit="cover"
           alt="background"
-          className='absolute z-[-9999]' 
+          className='absolute z-[-9999] object-cover' 
           priority
         />
         <Header />
