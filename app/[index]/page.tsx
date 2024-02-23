@@ -23,6 +23,7 @@ export default function EventPage({ params }: Props)
                     imageClassName="rounded-t-xl"
                     className="w-full object-contain h-full max-h-[212px] overflow-hidden"
                     priority={true}
+                    layoutId={params.index.toString()}
                 />
                 <div className='flex flex-col p-3 gap-4'>
                     <p className='font-poppins text-xl font-bold text-white'>{selectedEvent.title}</p>

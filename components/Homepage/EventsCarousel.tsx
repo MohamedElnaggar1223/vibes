@@ -56,6 +56,7 @@ export default function EventsCarousel()
                                     height={448} 
                                     imageClassName="rounded-lg object-cover h-full w-full"
                                     priority={true}
+                                    layoutId={index.toString()}
                                 />
                             </CarouselItem>
                         ))}
