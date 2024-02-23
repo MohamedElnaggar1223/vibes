@@ -65,10 +65,10 @@ export default function EventPage({ params }: Props)
             <div className='flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full'>
                 <div className='w-full flex justify-between items-center gap-4'>
                     <div />
-                    <button className='text-white font-poppins font-semibold text-sm py-4 px-8 bg-[#232834] rounded-lg'>
+                    <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
                         Choose Your Tickets
                     </button>
-                    <button className='text-white font-poppins font-semibold text-sm py-4 px-8 bg-[#232834] rounded-lg'>
+                    <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
                         Map
                     </button>
                 </div>
@@ -78,11 +78,11 @@ export default function EventPage({ params }: Props)
                     </div>
                 </div>
                 <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
-                    <div className='flex flex-col items-center justify-between gap-4'>
+                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
                         <p className='font-poppins text-sm text-white'>Number of tickets</p>
                         <p className='font-poppins text-base text-white font-semibold'>0</p>
                     </div>
-                    <div className='flex flex-col items-center justify-between gap-4'>
+                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
                         <p className='font-poppins text-sm text-white'>Total</p>
                         <p className='font-poppins text-base text-white font-semibold'>0 EGP</p>
                     </div>
