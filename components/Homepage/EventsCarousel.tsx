@@ -6,6 +6,7 @@ import { events } from "@/constants";
 import { useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
+import Autoplay from 'embla-carousel-autoplay'
 
 export default function EventsCarousel() 
 {
@@ -35,6 +36,13 @@ export default function EventsCarousel()
                         loop: true,
                     }}
                     className="w-full mt-24 overflow-visible z-50"
+                    plugins={[
+                        Autoplay({
+                            delay: 3000,
+                            playOnInit: true,
+                            stopOnInteraction: true,
+                        })
+                    ]}
                     setApi={setApi}
                 >
                     <CarouselContent className=''>
