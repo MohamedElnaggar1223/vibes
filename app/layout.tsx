@@ -37,7 +37,7 @@ export default function RootLayout({
           priority
         />
         <Header />
-        <main className='px-6 md:p-20'>
+        <main className='px-6 md:px-20'>
           <Suspense fallback={<Loading />}>
             {children}
           </Suspense>
