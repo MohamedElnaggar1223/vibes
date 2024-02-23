@@ -79,15 +79,15 @@ export default function EventPage({ params }: Props)
                 </div>
                 <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
                     <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-sm text-white'>Number of tickets</p>
-                        <p className='font-poppins text-base text-white font-semibold'>0</p>
+                        <p className='font-poppins text-base text-white'>Number of tickets</p>
+                        <p className='font-poppins text-lg text-white font-semibold'>0</p>
                     </div>
                     <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-sm text-white'>Total</p>
-                        <p className='font-poppins text-base text-white font-semibold'>0 EGP</p>
+                        <p className='font-poppins text-base text-white'>Total</p>
+                        <p className='font-poppins text-lg text-white font-semibold'>0 EGP</p>
                     </div>
                     <div className='flex flex-col items-center justify-center'>
-                        <button className='font-poppins text-base w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                        <button className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
                             Buy Now
                         </button>
                     </div>
