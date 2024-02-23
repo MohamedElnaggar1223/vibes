@@ -25,7 +25,7 @@ export default function CarouselCategory({ title, subTitle, events }: Props)
             <Carousel
                 opts={{
                     align: "start",
-                    loop: true
+                    loop: true,
                 }}
                 className="h-full max-lg:w-full lg:flex-1"
             >
