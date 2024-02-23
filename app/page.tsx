@@ -9,9 +9,9 @@ export default async function Home()
 		<section className='flex flex-col items-center justify-center w-full'>
 			<Search />
 			<EventsCarouselContainer />
-			<section className='flex flex-col gap-4 mt-36'>
-				<CarouselCategory title='Hottest Events' subTitle="Those are the hottest events of 2024!" events={events} />
-				<CarouselCategory title='Vibes Exclusive' subTitle="These are some of the events you’ve missed! Don’t worry we have more coming!" events={events} />
+			<section className='flex flex-col gap-4 my-36'>
+				<CarouselCategory title='Hottest Events' subTitle="Those are the hottest events of 2024!" events={events.slice(5, 8)} />
+				<CarouselCategory title='Vibes Exclusive' subTitle="These are some of the events you’ve missed! Don’t worry we have more coming!" events={events.slice(8)} />
 			</section>
 		</section>
 	);

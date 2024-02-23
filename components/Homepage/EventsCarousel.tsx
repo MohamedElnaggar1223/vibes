@@ -64,7 +64,7 @@ export default function EventsCarousel()
                 </Carousel>
                 <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[-20px] z-10 text-white rounded-2xl'>
                     <div className='flex justify-between items-center w-full'>
-                        <p className='font-poppins font-medium text-2xl'>{selectedIndex === 0 ? 'Al Hilal VS Al Nassr' : 'Majid al-Muhandis'}</p>
+                        <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].title : events[selectedIndex + 1].title}</p>
                         <div className='flex flex-col gap-6 items-end'>
                             <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === 0 ? '2,900 EGP' : '3,200 EGP'}</p>
                             <button onClick={() => router.push(`/${selectedIndex === events.length - 1 ? '0' : `${selectedIndex + 1}`}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
