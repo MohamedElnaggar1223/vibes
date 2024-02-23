@@ -25,7 +25,7 @@ export default function EventPage({ params }: Props)
                     priority={true}
                     layoutId={params.index.toString()}
                 />
-                <div className='flex flex-col p-3 gap-5'>
+                <div className='flex flex-col p-3 gap-4'>
                     <p className='font-poppins text-2xl font-bold text-white'>{selectedEvent.title}</p>
                     <div className='w-full flex justify-between items-center'>
                         <p className='font-poppins text-md font-extralight text-white'>Al Manara Arena</p>
@@ -78,11 +78,11 @@ export default function EventPage({ params }: Props)
                     </div>
                 </div>
                 <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
-                    <div className='flex flex-col items-center justify-between gap-2'>
+                    <div className='flex flex-col items-center justify-between gap-4'>
                         <p className='font-poppins text-sm text-white'>Number of tickets</p>
                         <p className='font-poppins text-base text-white font-semibold'>0</p>
                     </div>
-                    <div className='flex flex-col items-center justify-between gap-2'>
+                    <div className='flex flex-col items-center justify-between gap-4'>
                         <p className='font-poppins text-sm text-white'>Total</p>
                         <p className='font-poppins text-base text-white font-semibold'>0 EGP</p>
                     </div>
