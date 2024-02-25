@@ -38,12 +38,7 @@ export default function PurchaseTickets()
     }, [])
 
     const total = useMemo(() => {
-        console.log('memo')
-        return Object.keys(selectedTickets).reduce((acc, ticket) => acc + selectedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price.replace(/,/g, '') || '0'), 0)
-    }, [purchasedTickets])
-
-    useEffect(() => {
-        console.log('effect')
+        return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price.replace(/,/g, '') || '0'), 0)
     }, [purchasedTickets])
 
     useEffect(() => {
