@@ -28,12 +28,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession()
-
-  if(!session?.user) redirect('/sign-up')
-
-  console.log(session.user)
-
   return (
     <html lang="en">
       <body className={cn('', poppins.variable)}>
