@@ -145,8 +145,8 @@ export default function PurchaseTickets()
                             Choose one or more type of tickets
                         </div>
                         <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
-                            {Object.keys(selectedTickets).map((ticket) => (
-                                <div className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setSelectedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}>
+                            {Object.keys(selectedTickets).map((ticket, index) => (
+                                <div key={index} className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setSelectedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}>
                                     <p className='text-white font-poppins text-normal font-normal flex-1'>{ticket}</p>
                                     {
                                         selectedTickets[ticket] > 0 && (

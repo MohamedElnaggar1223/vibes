@@ -25,10 +25,10 @@ export default function ImageMotion({ selectedEvent, className, index, width, he
         <AnimatePresence>
             <motion.div layoutId={layoutId} className={cn(className)}>
                 <Image
-                    src={selectedEvent.imgUrl}
+                    src={selectedEvent?.imgUrl}
                     width={width}
                     height={height}
-                    alt={selectedEvent.title}
+                    alt={selectedEvent?.title}
                     priority={priority ?? false}
                     className={cn(imageClassName)}
                 />

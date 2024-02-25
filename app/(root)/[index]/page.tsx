@@ -27,7 +27,7 @@ export default function EventPage({ params }: Props)
                     layoutId={params.index.toString()}
                 />
                 <div className='flex flex-col p-3 gap-4'>
-                    <p className='font-poppins text-2xl font-bold text-white'>{selectedEvent.title}</p>
+                    <p className='font-poppins text-2xl font-bold text-white'>{selectedEvent?.title}</p>
                     <div className='w-full flex justify-between items-center'>
                         <p className='font-poppins text-md font-extralight text-white'>Al Manara Arena</p>
                         <p className='font-poppins text-md font-extralight text-white mr-4'>Cairo, Egypt</p>

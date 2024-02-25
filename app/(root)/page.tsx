@@ -2,6 +2,7 @@ import EventsCarouselContainer from "@/components/Homepage/EventsCarouselContain
 import CarouselCategory from "@/components/shared/CarouselCategory";
 import Search from "@/components/shared/Search";
 import { events } from "@/constants";
+import { getServerSession } from "next-auth";
 
 export default async function Home() 
 {
