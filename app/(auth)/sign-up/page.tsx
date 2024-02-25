@@ -56,7 +56,7 @@ export default function SignUp()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute" />
+                                <FormMessage className="absolute font-poppins" />
                             </FormItem>
                         )}
                     />
@@ -72,7 +72,7 @@ export default function SignUp()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute" />
+                                <FormMessage className="absolute font-poppins" />
                             </FormItem>
                         )}
                     />
@@ -88,7 +88,7 @@ export default function SignUp()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute" />
+                                <FormMessage className="absolute font-poppins" />
                             </FormItem>
                         )}
                     />
@@ -106,7 +106,7 @@ export default function SignUp()
                                             <div className='h-14 bg-[rgba(0,0,0,0.25)] rotate-180 w-[2px] top-1 left-[60%] absolute z-20' />
                                         </div>
                                     </FormControl>
-                                    <FormMessage className="absolute" />
+                                    <FormMessage className="absolute font-poppins" />
                                 </FormItem>
                             )}
                         />
@@ -122,7 +122,7 @@ export default function SignUp()
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute" />
+                                    <FormMessage className="absolute font-poppins" />
                                 </FormItem>
                             )}
                         />
@@ -140,7 +140,7 @@ export default function SignUp()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute" />
+                                <FormMessage className="absolute font-poppins" />
                             </FormItem>
                         )}
                     />
@@ -157,7 +157,7 @@ export default function SignUp()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute" />
+                                <FormMessage className="absolute font-poppins" />
                             </FormItem>
                         )}
                     />
