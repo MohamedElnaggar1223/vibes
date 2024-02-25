@@ -37,7 +37,7 @@ export default function SignUp()
             await addDoc(collection(db, "users"), { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, id: userCredentials.user.uid})
             await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
         })
-      }
+    }
 
     return (
         <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24'>
