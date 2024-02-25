@@ -29,9 +29,11 @@ export default async function Header()
                 </Link>
                 {
                     !session?.user &&
-                    <button className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-6 py-2 text-white z-[9999]'>
-                        Sign in
-                    </button>
+                    <Link href='/sign-up'>
+                        <button className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-6 py-2 text-white z-[9999]'>
+                            Sign in
+                        </button>
+                    </Link>
                 }
             </div>
         </section>
