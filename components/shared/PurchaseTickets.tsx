@@ -9,21 +9,27 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 
 export default function PurchaseTickets() 
 {
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [purchasedTickets, setPurchasedTickets] = useState({ 'Standard Ticket': 0, 'Standard Plus': 0, 'VIP Standing': 0, 'VIP Premium': 0, })
 
     return (
         <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full'>
             <div className='w-full flex justify-between items-center gap-4'>
-                <div />
-                <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
-                    Choose Your Tickets
-                </button>
-                <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
-                    Map
-                </button>
+                <div className='flex-1' />
+                <div className='flex-1 flex items-center justify-center'>
+                    <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                        Choose Your Tickets
+                    </button>
+                </div>
+                <div className='flex-1 flex items-center justify-end'>
+                    <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                        Map
+                    </button>
+                </div>
             </div>
             <div className='flex-1 w-full flex items-center justify-center'>
                 <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white font-poppins font-semibold text-sm rounded-lg'>
@@ -52,24 +58,124 @@ export default function PurchaseTickets()
                             Choose one or more type of tickets
                         </div>
                         <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
-                            <div className='px-6 flex justify-between items-center py-6'>
-                                <p className='text-white font-poppins text-normal font-normal'>Standard Ticket</p>
-                                <p className='text-white font-poppins text-normal font-light'>2,900 EGP</p>
+                            <div className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setPurchasedTickets(prev => ({...prev, 'Standard Ticket': prev['Standard Ticket'] + 1}))}>
+                                <p className='text-white font-poppins text-normal font-normal flex-1'>Standard Ticket</p>
+                                {
+                                    purchasedTickets['Standard Ticket'] > 0 && (
+                                        <div className='flex justify-center items-center flex-1 gap-2'>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'Standard Ticket': prev['Standard Ticket'] - 1}))}
+                                                }
+                                            >
+                                                -
+                                            </button>
+                                            <p className='text-white font-poppins text-sm font-semibold'>{purchasedTickets['Standard Ticket']}</p>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'Standard Ticket': prev['Standard Ticket'] + 1}))}
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                                <p className='text-white font-poppins text-normal font-light flex-1 text-end'>2,290 EGP</p>
                             </div>
-                            <div className='px-6 flex justify-between items-center py-6'>
-                                <p className='text-white font-poppins text-normal font-normal'>Standard Ticket</p>
-                                <p className='text-white font-poppins text-normal font-light'>2,900 EGP</p>
+                            <div className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setPurchasedTickets(prev => ({...prev, 'Standard Plus': prev['Standard Plus'] + 1}))}>
+                                <p className='text-white font-poppins text-normal font-normal flex-1'>Standard Plus</p>
+                                {
+                                    purchasedTickets['Standard Plus'] > 0 && (
+                                        <div className='flex justify-center items-center flex-1 gap-2'>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'Standard Plus': prev['Standard Plus'] - 1}))}
+                                                }
+                                            >
+                                                -
+                                            </button>
+                                            <p className='text-white font-poppins text-sm font-semibold'>{purchasedTickets['Standard Plus']}</p>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'Standard Plus': prev['Standard Plus'] + 1}))}
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                                <p className='text-white font-poppins text-normal font-light flex-1 text-end'>3,500 EGP</p>
                             </div>
-                            <div className='px-6 flex justify-between items-center py-6'>
-                                <p className='text-white font-poppins text-normal font-normal'>Standard Ticket</p>
-                                <p className='text-white font-poppins text-normal font-light'>2,900 EGP</p>
+                            <div className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setPurchasedTickets(prev => ({...prev, 'VIP Standing': prev['VIP Standing'] + 1}))}>
+                                <p className='text-white font-poppins text-normal font-normal flex-1'>VIP Standing</p>
+                                {
+                                    purchasedTickets['VIP Standing'] > 0 && (
+                                        <div className='flex justify-center items-center flex-1 gap-2'>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'VIP Standing': prev['VIP Standing'] - 1}))}
+                                                }
+                                            >
+                                                -
+                                            </button>
+                                            <p className='text-white font-poppins text-sm font-semibold'>{purchasedTickets['VIP Standing']}</p>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'VIP Standing': prev['VIP Standing'] + 1}))}
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                                <p className='text-white font-poppins text-normal font-light flex-1 text-end'>5,500 EGP</p>
                             </div>
-                            <div className='px-6 flex justify-between items-center py-6'>
-                                <p className='text-white font-poppins text-normal font-normal'>Standard Ticket</p>
-                                <p className='text-white font-poppins text-normal font-light'>2,900 EGP</p>
+                            <div className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setPurchasedTickets(prev => ({...prev, 'VIP Premium': prev['VIP Premium'] + 1}))}>
+                                <p className='text-white font-poppins text-normal font-normal flex-1'>VIP Premium</p>
+                                {
+                                    purchasedTickets['VIP Premium'] > 0 && (
+                                        <div className='flex justify-center items-center flex-1 gap-2'>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'VIP Premium': prev['VIP Premium'] - 1}))}
+                                                }
+                                            >
+                                                -
+                                            </button>
+                                            <p className='text-white font-poppins text-sm font-semibold'>{purchasedTickets['VIP Premium']}</p>
+                                            <button 
+                                                className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPurchasedTickets(prev => ({...prev, 'VIP Premium': prev['VIP Premium'] + 1}))}
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                                <p className='text-white font-poppins text-normal font-light flex-1 text-end'>8,000 EGP</p>
                             </div>
                         </div>
-                        <div className='py-6 text-white font-poppins font-normal bg-[#5C5C5C] items-center text-center'>
+                        <div className={cn('py-6 text-white font-poppins font-normal bg-[#5C5C5C] items-center text-center cursor-pointer', Object.values(purchasedTickets).find(ticket => ticket > 0) && 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                             Add Tickets
                         </div>
                     </div>
