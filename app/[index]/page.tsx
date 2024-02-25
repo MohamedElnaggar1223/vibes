@@ -1,4 +1,5 @@
 import ImageMotion from "@/components/shared/ImageMotion"
+import PurchaseTickets from "@/components/shared/PurchaseTickets"
 import { events } from "@/constants"
 import Image from "next/image"
 
@@ -62,37 +63,7 @@ export default function EventPage({ params }: Props)
                     </div>
                 </div>
             </div>
-            <div className='flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full'>
-                <div className='w-full flex justify-between items-center gap-4'>
-                    <div />
-                    <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
-                        Choose Your Tickets
-                    </button>
-                    <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
-                        Map
-                    </button>
-                </div>
-                <div className='flex-1 w-full flex items-center justify-center'>
-                    <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white font-poppins font-semibold text-sm rounded-lg'>
-                        {"Choose Your Tickets & They’ll Appear Here"}
-                    </div>
-                </div>
-                <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
-                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-base text-white'>Number of tickets</p>
-                        <p className='font-poppins text-lg text-white font-semibold'>0</p>
-                    </div>
-                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-base text-white'>Total</p>
-                        <p className='font-poppins text-lg text-white font-semibold'>0 EGP</p>
-                    </div>
-                    <div className='flex flex-col items-center justify-center'>
-                        <button className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
-                            Buy Now
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <PurchaseTickets />
         </section>
     )
 }

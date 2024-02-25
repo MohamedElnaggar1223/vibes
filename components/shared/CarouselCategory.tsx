@@ -17,8 +17,8 @@ export default function CarouselCategory({ title, subTitle, events }: Props)
 {
     return (
         <section className='relative flex flex-col items-center h-[412px] justify-center gap-4 lg:flex-row'>
-            <div className='flex flex-col gap-2 w-[12%] text-white lg:mb-auto mt-2'>
-                <p className='font-poppins font-black text-2xl'>{title}</p>
+            <div className='flex flex-col gap-2 w-[15%] text-white lg:mb-auto mt-2'>
+                <p className='font-poppins font-black text-3xl'>{title}</p>
                 <div className='w-3/12 h-[2px] bg-white mb-4' />
                 <p className='font-poppins font-medium text-xs'>{subTitle}</p>
             </div>
