@@ -82,3 +82,19 @@
 * {
   min-width: 0;
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #222; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444; 
+}

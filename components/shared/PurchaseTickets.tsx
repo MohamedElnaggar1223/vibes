@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
     Dialog,
     DialogContent,
@@ -15,6 +15,27 @@ export default function PurchaseTickets()
     const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.ticket]: 0 }), {} as { [x: string]: number }))
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
     const [fakeLoading, setFakeLoading] = useState(false)
+    const [maxHeight, setMaxHeight] = useState(0)
+
+    const parentRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        setMaxHeight(parentRef.current?.offsetHeight || 0)
+    }, [])
+
+    useEffect(() => {
+        const tempRef = parentRef.current
+
+        window.addEventListener('resize', () => {
+            setMaxHeight(tempRef?.offsetHeight || 0)
+        })
+
+        return () => {
+            window.removeEventListener('resize', () => {
+                setMaxHeight(tempRef?.offsetHeight || 0)
+            })
+        }
+    }, [])
 
     const total = useMemo(() => {
         return Object.keys(selectedTickets).reduce((acc, ticket) => acc + selectedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price.replace(/,/g, '') || '0'), 0)
@@ -50,11 +71,58 @@ export default function PurchaseTickets()
                     </button>
                 </div>
             </div>
-            <div className='flex-1 w-full flex items-center justify-center'>
-                <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white font-poppins font-semibold text-sm rounded-lg'>
-                    {"Choose Your Tickets & They’ll Appear Here"}
-                </div>
-            </div>
+            {
+                Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 ? (
+                    <div ref={parentRef} className='flex-1'>
+                        <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
+                            {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
+                                <div className='relative px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
+                                    <p className='text-black font-poppins text-normal font-semibold flex-1'>{ticket}</p>
+                                    {
+                                        purchasedTickets[ticket] > 0 && (
+                                            <div className='flex justify-center items-center flex-1 gap-2'>
+                                                {
+                                                    purchasedTickets[ticket] > 1 &&
+                                                    <button 
+                                                        className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setPurchasedTickets(prev => ({...prev, [ticket]: prev[ticket] - 1}))}
+                                                        }
+                                                    >
+                                                        -
+                                                    </button>
+                                                }
+                                                <p className='text-black font-poppins text-sm font-semibold'>{purchasedTickets[ticket]}</p>
+                                                <button
+                                                    className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setPurchasedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}
+                                                    }
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        )
+                                    }
+                                    <p className='text-black font-poppins font-semibold flex-1 text-end'>{availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price} EGP</p>
+                                    <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                        X
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div ref={parentRef} className='flex-1 w-full flex items-center justify-center'>
+                        <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white font-poppins font-semibold text-sm rounded-lg'>
+                            {"Choose Your Tickets & They’ll Appear Here"}
+                        </div>
+                    </div>
+                )
+                
+            }
             <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
                 <div className='flex flex-col items-center justify-between gap-4 mb-1'>
                     <p className='font-poppins text-base text-white'>Number of tickets</p>
@@ -105,7 +173,7 @@ export default function PurchaseTickets()
                                             </div>
                                         )
                                     }
-                                    <p className='text-white font-poppins text-normal font-light flex-1 text-end'>{availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price}</p>
+                                    <p className='text-white font-poppins text-normal font-light flex-1 text-end'>{availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price} EGP</p>
                                 </div>
                             ))}
                         </div>
