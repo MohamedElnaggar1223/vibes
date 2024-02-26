@@ -4,6 +4,8 @@ import "./globals.css";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import AuthHeader from "@/components/shared/AuthHeader";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,11 +21,15 @@ export const metadata: Metadata = {
   description: "Buy and sell your tickets online",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession()
+
+  if(session?.user) redirect('/')
+
   return (
     <html lang="en">
       <body className={cn('', poppins.variable)}>

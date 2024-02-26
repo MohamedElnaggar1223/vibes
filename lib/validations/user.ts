@@ -16,7 +16,17 @@ export const UserSignUpSchema = z.object({
         return true
     }, { message: 'Email already exists' }),
     countryCode: z.enum(countryCodes),
-    phoneNumber: z.string().min(10, { message: 'Invalid phone number' }).refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }),
+    phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
+        .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', ''))
+        .refine(async (phoneNumber) => {
+            const userCollection = collection(db, 'users')
+            const userQuery = query(userCollection, where('phoneNumber', '==', phoneNumber))
+            const userSnapshot = await getDocs(userQuery)
+            if(userSnapshot.size > 0) {
+                return false
+            }
+            return true
+        }, { message: 'Phone number already exists' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
     confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 })

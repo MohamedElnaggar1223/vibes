@@ -15,9 +15,29 @@ import { countryCodes } from "@/constants"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "@/firebase/client/config"
 import { addDoc, collection } from "firebase/firestore"
+import { useEffect, useState } from "react"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Loader2 } from "lucide-react"
 
 export default function SignUp()
 {
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (loading) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+        }
+
+        window.addEventListener('click', handleClickOutside)
+
+        return () => {
+            window.removeEventListener('click', handleClickOutside)
+        }
+    }, [loading])
+
     const form = useForm<z.infer<typeof UserSignUpSchema>>({
         resolver: zodResolver(UserSignUpSchema),
         defaultValues: {
@@ -31,11 +51,18 @@ export default function SignUp()
         },
     })
 
+    const handlePhoneNumberChage = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: string) => void) => {
+        const value = e.target.value
+        onChange(value.replace(/[^\d]/g, ''))
+    }
+
     const onSubmit = async (values: z.infer<typeof UserSignUpSchema>) => {
+        setLoading(true)
         await createUserWithEmailAndPassword(auth, values.email, values.password)
         .then(async (userCredentials) => {
             await addDoc(collection(db, "users"), { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, id: userCredentials.user.uid})
             await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
+            setLoading(false)
         })
     }
 
@@ -43,7 +70,7 @@ export default function SignUp()
         <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24'>
             <p className='font-poppins font-base mb-6 text-white'>Sign up</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
                     <FormField
                         control={form.control}
                         name="firstname"
@@ -100,10 +127,13 @@ export default function SignUp()
                                 <FormItem className="">
                                     <FormControl>
                                         <div className='relative'>
-                                            <select {...field} className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-2 outline-none rounded-md z-10'>
+                                            <select {...field} className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-2 outline-none rounded-md z-10 appearance-none'>
                                                 {countryCodes.map((countryCode, index) => (<option key={index} value={countryCode}>{countryCode}</option>))}
                                             </select>
                                             <div className='h-14 bg-[rgba(0,0,0,0.25)] rotate-180 w-[2px] top-1 left-[60%] absolute z-20' />
+                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4z"/></svg>
+                                            </div>
                                         </div>
                                     </FormControl>
                                     <FormMessage className="absolute font-poppins" />
@@ -114,12 +144,13 @@ export default function SignUp()
                             control={form.control}
                             name="phoneNumber"
                             render={({ field }) => (
-                                <FormItem className="">
+                                <FormItem className="ml-auto flex-1">
                                     <FormControl>
                                         <input 
                                             placeholder="Phone Number" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
                                             {...field}
+                                            onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
                                         />
                                     </FormControl>
                                     <FormMessage className="absolute font-poppins" />
@@ -161,9 +192,14 @@ export default function SignUp()
                             </FormItem>
                         )}
                     />
-                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Submit</button>
+                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign up</button>
                 </form>
             </Form>
+            <Dialog open={loading}>
+                <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                    <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+            </Dialog>
         </section>
     )
 }
