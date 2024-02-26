@@ -11,7 +11,7 @@ function formatPrivateKey(key: string){
     return key.replace(/\\n/g, '\n')
 }
 
-export function createFirebaseAdminApp(params: FirebaseAdminAppParams){
+export async function createFirebaseAdminApp(params: FirebaseAdminAppParams){
     const privateKey = formatPrivateKey(params.privateKey)
 
     if(admin.apps.length > 0) return admin.app()

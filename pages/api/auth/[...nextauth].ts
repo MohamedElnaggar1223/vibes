@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
             name: 'Credentials',
             credentials: {},
             async authorize(credentials): Promise<any> {
-                return await signInWithEmailAndPassword(auth, (credentials as any).email || '', (credentials as any).password || '')
+                const data = await signInWithEmailAndPassword(auth, (credentials as any).email || '', (credentials as any).password || '')
                     .then(userCredential => {
                         if(userCredential.user) {
                             return { email: (credentials as any).email, id: (credentials as any).id}
@@ -23,18 +23,25 @@ export const authOptions: NextAuthOptions = {
                         console.error(error)
                         return null
                     })
+
+                return data
             }
         })
     ],
     callbacks: {
         async jwt({ token, account, profile }) {
-            token.id = token?.id
+            console.log('jwt', token, account, profile)
             return token
         },
-        async session({ session, token }) {
-            session.user.id = token?.id as string
+        async session({ session, token, user }) {
+            console.log('test')
+            session.user.id = token.sub as string
             return session
         }
+    },
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: 'jwt'
     }
 }
 

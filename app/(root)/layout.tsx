@@ -6,8 +6,11 @@ import Header from "@/components/shared/Header";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import Loading from "./loading";
-import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
+import { decode } from "next-auth/jwt"
+import { UserType } from "@/lib/types/userTypes";
 import { redirect } from "next/navigation";
+import { initAdmin } from "@/firebase/server/config";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,6 +31,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const admin = await initAdmin()
+  const cookiesData = cookies()
+  const token = await decode({ token: cookiesData.get('next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+  if(token?.sub)
+  {
+    const user = (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType
+    if(!user?.verified) return redirect('/complete-profile')
+  }
+
   return (
     <html lang="en">
       <body className={cn('', poppins.variable)}>

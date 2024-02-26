@@ -14,13 +14,16 @@ import { UserSignUpSchema } from "@/lib/validations/user"
 import { countryCodes } from "@/constants"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "@/firebase/client/config"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, doc, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function SignUp()
 {
+    const router = useRouter()
+
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -60,14 +63,15 @@ export default function SignUp()
         setLoading(true)
         await createUserWithEmailAndPassword(auth, values.email, values.password)
         .then(async (userCredentials) => {
-            await addDoc(collection(db, "users"), { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, id: userCredentials.user.uid})
+            const userRef = doc(db, "users", userCredentials.user.uid) 
+            await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: false})
             await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
             setLoading(false)
         })
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24'>
+        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24 pt-12'>
             <p className='font-poppins font-base mb-6 text-white'>Sign up</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -194,6 +198,7 @@ export default function SignUp()
                     />
                     <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign up</button>
                 </form>
+                <p className='text-white mt-2 font-poppins text-sm'>Already have an account? <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign In</span></p>
             </Form>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
