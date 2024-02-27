@@ -17,6 +17,7 @@ import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function SignIn()
 {
@@ -99,6 +100,37 @@ export default function SignIn()
                             </FormItem>
                         )}
                     />
+                    <div className='w-full flex justify-between items-center gap-2'>
+                        <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
+                        <p className='text-white font-poppins text-xs font-light'>or sign in using</p>
+                        <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
+                    </div>
+                    <div className='w-full flex justify-center items-center gap-6'>
+                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                            <Image
+                                src='/assets/google.svg' 
+                                width={16}
+                                height={16}
+                                alt='google'
+                            />
+                        </span>
+                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                            <Image
+                                src='/assets/facebook.svg' 
+                                width={19}
+                                height={19}
+                                alt='facebook'
+                            />
+                        </span>
+                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                            <Image
+                                src='/assets/x.svg'
+                                width={15}
+                                height={15}
+                                alt='x'
+                            />
+                        </span>
+                    </div>
                     <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign in</button>
                 </form>
                 <p className='text-white mt-2 font-poppins text-sm'>Don't have an account yet? <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign Up</span></p>
