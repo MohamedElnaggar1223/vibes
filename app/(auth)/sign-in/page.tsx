@@ -81,9 +81,9 @@ export default function SignIn()
                 setLoading(false)
             }
         }
-        catch(e: any)
+        catch(e)
         {
-            setError(e.message)   
+            setError('Something went wrong!')   
         }
     }
 
