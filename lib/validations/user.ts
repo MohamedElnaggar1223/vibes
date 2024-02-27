@@ -44,3 +44,20 @@ export const UserSignInSchema = z.object({
     }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 })
+
+export const UserCompleteProfileSchema = z.object({
+    firstname: z.string().min(2, { message: 'First name must be more than 1 character' }).max(255),
+    lastname: z.string().min(2, { message: 'Last name must be more than 1 character' }).max(255),
+    countryCode: z.enum(countryCodes),
+    phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
+        .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', ''))
+        .refine(async (phoneNumber) => {
+            const userCollection = collection(db, 'users')
+            const userQuery = query(userCollection, where('phoneNumber', '==', phoneNumber))
+            const userSnapshot = await getDocs(userQuery)
+            if(userSnapshot.size > 0) {
+                return false
+            }
+            return true
+        }, { message: 'Phone number already exists' }),
+})

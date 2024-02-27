@@ -32,11 +32,11 @@ export default async function RootLayout({
 }>) {
   const admin = await initAdmin()
   const cookiesData = cookies()
-  const token = await decode({ token: cookiesData.get('__Secure-next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+  const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
   if(token?.sub)
   {
     const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
-    if(user?.verified) redirect('/')
+    if(user?.verified) return redirect('/')
   }
 
   return (
