@@ -81,9 +81,9 @@ export default function SignIn()
                 setLoading(false)
             }
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong!')   
+            setError(e.message)   
         }
     }
 
@@ -185,7 +185,7 @@ export default function SignIn()
             </Dialog>
             <Dialog open={error !== ''}>
                 <DialogContent className='flex items-center justify-center bg-white border-none outline-none'>
-                    <p className='text-black mt-2 font-poppins text-lg font-semibold'>Something went wrong!</p>
+                    <p className='text-black mt-2 font-poppins text-lg font-semibold'>{error}</p>
                 </DialogContent>
             </Dialog>
         </section>
