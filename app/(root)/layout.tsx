@@ -34,6 +34,7 @@ export default async function RootLayout({
   const admin = await initAdmin()
   const cookiesData = cookies()
   const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+  console.log('token layout: ', token)
   if(token?.sub)
   {
     const user = (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType
@@ -51,7 +52,7 @@ export default async function RootLayout({
           priority
         />
         <Header />
-        <main className='px-6 md:px-20'>
+        <main className='px-6 md:px-20 min-h-screen flex'>
           <Suspense fallback={<Loading />}>
             {children}
           </Suspense>

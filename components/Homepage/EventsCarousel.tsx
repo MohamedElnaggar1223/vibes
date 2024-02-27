@@ -72,7 +72,7 @@ export default function EventsCarousel()
                             </button>
                         </div>
                     </div>
-                    <div className='flex gap-6 items-center justify-center flex-1 min-h-full'>
+                    <div className='flex gap-6 items-center justify-center flex-1'>
                         <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36'>
                             <p className='font-poppins font-extralight text-lg'>Grand Cairo Stadium</p>
                             <p className='font-poppins font-extralight text-lg'>May,28th,2024</p>

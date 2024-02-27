@@ -1,7 +1,9 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../../firebase/client/config'
+import GoogleProvider from 'next-auth/providers/google'
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { auth, db } from '../../../firebase/client/config'
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 export const authOptions: NextAuthOptions = {
     pages: {
@@ -12,20 +14,53 @@ export const authOptions: NextAuthOptions = {
             name: 'Credentials',
             credentials: {},
             async authorize(credentials): Promise<any> {
-                const data = await signInWithEmailAndPassword(auth, (credentials as any).email || '', (credentials as any).password || '')
-                    .then(userCredential => {
-                        if(userCredential.user) {
-                            return { email: (credentials as any).email, id: (credentials as any).id}
-                        }
-                        return null
-                    })
-                    .catch(error => {
-                        console.error(error)
-                        return null
-                    })
+                if((credentials as any).provider === 'google')
+                {
+                    const userDoc = doc(db, 'users', (credentials as any).id)
+                    const userData = await getDoc(userDoc)
 
-                return data
+                    if(userData.exists()) await updateDoc(userDoc, { provider: 'google' })
+                    else
+                    {
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'google', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                    }
+
+                    return { email: (credentials as any).email, id: (credentials as any).id}
+                }
+                else if ((credentials as any).provider === 'twitter')
+                {
+                    const userDoc = doc(db, 'users', (credentials as any).id)
+                    const userData = await getDoc(userDoc)
+
+                    if(userData.exists()) await updateDoc(userDoc, { provider: 'twitter' })
+                    else
+                    {
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'twitter', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                    }
+
+                    return { email: (credentials as any).email, id: (credentials as any).id}
+                }
+                else
+                {
+                    const data = await signInWithEmailAndPassword(auth, (credentials as any).email || '', (credentials as any).password || '')
+                        .then(userCredential => {
+                            if(userCredential.user) {
+                                return { email: (credentials as any).email, id: (credentials as any).id}
+                            }
+                            return null
+                        })
+                        .catch(error => {
+                            console.error(error)
+                            return null
+                        })
+    
+                    return data
+                }
             }
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         })
     ],
     callbacks: {

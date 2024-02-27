@@ -4,8 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import AuthHeader from "@/components/shared/AuthHeader";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
 import { UserType } from "@/lib/types/userTypes";
 import { decode } from "next-auth/jwt";
@@ -33,6 +32,7 @@ export default async function RootLayout({
   const admin = await initAdmin()
   const cookiesData = cookies()
   const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+  console.log('token layout: ', token)
   if(token?.sub)
   {
     const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
@@ -58,7 +58,7 @@ export default async function RootLayout({
           priority
           quality={100}
         />
-        <main className=''>
+        <main className='min-h-screen'>
             <AuthHeader />
             {children}
         </main>

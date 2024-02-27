@@ -14,8 +14,8 @@ export default function EventPage({ params }: Props)
     const selectedEvent = events[parseInt(params.index.toString())]
 
     return (
-        <section className='flex flex-col w-full my-8 gap-4 lg:flex-row max-lg:items-center'>
-            <div className='flex flex-col w-full max-w-[390px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1'>
+        <section className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-24'>
+            <div className='flex flex-col w-full max-w-[390px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1 h-full'>
                 <ImageMotion 
                     selectedEvent={selectedEvent}
                     width={500}

@@ -1,6 +1,6 @@
 import * as z from 'zod'
 import { db } from '@/firebase/client/config'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { collection, query, where, getDocs, and } from 'firebase/firestore'
 import { countryCodes } from '@/constants'
 
 export const UserSignUpSchema = z.object({
@@ -35,13 +35,13 @@ export const UserSignUpSchema = z.object({
 export const UserSignInSchema = z.object({
     email: z.string().email({ message: 'Invalid email' }).refine(async (email) => {
         const userCollection = collection(db, 'users')
-        const userQuery = query(userCollection, where('email', '==', email))
+        const userQuery = query(userCollection, and(where('email', '==', email), where('provider', '==', 'credentials')))
         const userSnapshot = await getDocs(userQuery)
         if(userSnapshot.size === 0) {
             return false
         }
         return true
-    }),
+    }, { message: 'Email does not exist' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 })
 

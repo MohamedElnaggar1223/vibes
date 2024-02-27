@@ -11,8 +11,8 @@ import {
     FormMessage,
   } from "@/components/ui/form"
 import { UserSignInSchema } from "@/lib/validations/user"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { auth, db } from "@/firebase/client/config"
+import { GoogleAuthProvider, TwitterAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
+import { auth } from "@/firebase/client/config"
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
@@ -24,6 +24,7 @@ export default function SignIn()
     const router = useRouter()
 
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -40,6 +41,10 @@ export default function SignIn()
         }
     }, [loading])
 
+    useEffect(() => {
+        if(error !== '') setTimeout(() => setError(''), 3000)
+    }, [error])
+
     const form = useForm<z.infer<typeof UserSignInSchema>>({
         resolver: zodResolver(UserSignInSchema),
         defaultValues: {
@@ -48,18 +53,56 @@ export default function SignIn()
         },
     })
 
-    const handlePhoneNumberChage = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: string) => void) => {
-        const value = e.target.value
-        onChange(value.replace(/[^\d]/g, ''))
-    }
-
     const onSubmit = async (values: z.infer<typeof UserSignInSchema>) => {
         setLoading(true)
-        await signInWithEmailAndPassword(auth, values.email, values.password)
-        .then(async (userCredentials) => {
-            await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
-            setLoading(false)
-        })
+        try
+        {
+            await signInWithEmailAndPassword(auth, values.email, values.password)
+            .then(async (userCredentials) => {
+                await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
+                setLoading(false)
+            })
+        }
+        catch(e)
+        {
+            setError('Something went wrong!')
+        }
+    }
+
+    const handleGoogleSignIn = async ()  => {
+        try
+        {
+            const provider = new GoogleAuthProvider()
+            const user = await signInWithPopup(auth, provider)
+            if(user.user) 
+            {
+                setLoading(true)
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: true, callbackUrl: '/' })
+                setLoading(false)
+            }
+        }
+        catch(e)
+        {
+            setError('Something went wrong!')   
+        }
+    }
+
+    const handleXSignIn = async () => {
+        try
+        {
+            const provider = new TwitterAuthProvider()
+            const user = await signInWithPopup(auth, provider)
+            if(user.user) 
+            {
+                setLoading(true)
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: true, callbackUrl: '/' })
+                setLoading(false)
+            }
+        }
+        catch(e)
+        {
+            setError('Something went wrong!')
+        }
     }
 
     return (
@@ -106,7 +149,7 @@ export default function SignIn()
                         <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
                     </div>
                     <div className='w-full flex justify-center items-center gap-6'>
-                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                        <span onClick={handleGoogleSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                             <Image
                                 src='/assets/google.svg' 
                                 width={16}
@@ -114,7 +157,7 @@ export default function SignIn()
                                 alt='google'
                             />
                         </span>
-                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                        <span className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                             <Image
                                 src='/assets/facebook.svg' 
                                 width={19}
@@ -122,7 +165,7 @@ export default function SignIn()
                                 alt='facebook'
                             />
                         </span>
-                        <span className='w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                        <span onClick={handleXSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                             <Image
                                 src='/assets/x.svg'
                                 width={15}
@@ -138,6 +181,11 @@ export default function SignIn()
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
                     <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+            </Dialog>
+            <Dialog open={error !== ''}>
+                <DialogContent className='flex items-center justify-center bg-white border-none outline-none'>
+                    <p className='text-black mt-2 font-poppins text-lg font-semibold'>Something went wrong!</p>
                 </DialogContent>
             </Dialog>
         </section>
