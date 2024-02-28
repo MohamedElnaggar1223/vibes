@@ -34,6 +34,14 @@ export type EventType = {
         quantity: number
     }[],
     timeZone: string,
-    updatedAt: Date,
     venue: string
+    updatedAt?: Date,
+}
+
+export type ExchangeRate = {
+    id: string,
+    USDToSAR: number,
+    USDToAED: number,
+    USDToEGP: number,
+    updatedAt: Date,
 }

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import EventsCarousel from "./EventsCarousel";
-import { EventType } from "@/lib/types/eventTypes";
+import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { initAdmin } from "@/firebase/server/config";
 
 type Props = {
@@ -19,17 +19,17 @@ export default async function EventsCarouselContainer({ events }: Props)
             createdAt: eventDoc.data()?.createdAt.toDate(),
             eventTime: eventDoc.data()?.eventTime.toDate(),
             eventDate: eventDoc.data()?.eventDate.toDate(),
-            updatedAt: eventDoc.data()?.updatedAt.toDate(),
+            updatedAt: eventDoc.data()?.updatedAt?.toDate(),
         } as EventType
 
     })
     const eventData = await Promise.all(eventsDocs || [])
 
-    console.log(eventData)
+    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
 
     return (
         <Suspense>
-            <EventsCarousel events={eventData} />
+            <EventsCarousel events={eventData} exchangeRate={exchangeRate} />
         </Suspense>
     )
 }

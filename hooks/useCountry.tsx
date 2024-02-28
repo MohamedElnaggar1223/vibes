@@ -25,8 +25,7 @@ export default function useCountry()
             fetch('https://api.ipregistry.co/?key=440sw5smcozgnnm3')
             .then(response => response.json())
             .then(data => {
-                console.log(data)
-                setCountry(data.currency.code)
+                setCountry(['EGP', 'AED', 'SAR'].includes(data.currency.code) ? data.currency.code : 'AED')
             })
         }
     }, [coordinates])

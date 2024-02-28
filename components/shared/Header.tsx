@@ -18,12 +18,12 @@ export default async function Header()
                 /> 
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
-                <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
+                {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Categories
                 </Link>
                 <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Sell Your Tickets
-                </Link>
+                </Link> */}
                 <Link href='/' className='text-white font-poppins text-lg font-semibold z-[9999]'>
                     AR
                 </Link>

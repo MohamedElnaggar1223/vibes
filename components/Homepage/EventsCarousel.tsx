@@ -1,36 +1,33 @@
 'use client'
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "../ui/carousel";
-import { memo, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { memo, useEffect, useMemo, useState } from "react";
+import { cn, getDaySuffix } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
 import Autoplay from 'embla-carousel-autoplay'
 import useCountry from "@/hooks/useCountry";
-import { EventType } from "@/lib/types/eventTypes";
+import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
+import { months } from "@/constants";
+import FormattedPrice from "../shared/FormattedPrice";
 
 type Props = {
-    events: EventType[]
+    events: EventType[],
+    exchangeRate: ExchangeRate
 }
 
-function getDaySuffix(day: number) {
-    if (day >= 11 && day <= 13) {
-        return "th";
-    }
-    switch (day % 10) {
-        case 1: return "st";
-        case 2: return "nd";
-        case 3: return "rd";
-        default: return "th";
-    }
-}
-
-function EventsCarousel({ events }: Props) 
+function EventsCarousel({ events, exchangeRate }: Props) 
 {
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
 
     const { country } = useCountry()
+
+    const selectedExchangeRate = useMemo(() => {
+        if(country === 'EGP') return exchangeRate.USDToEGP
+        else if(country === 'SAR') return exchangeRate.USDToSAR
+        else return exchangeRate.USDToAED
+    }, [country])
 
     const router = useRouter()
 
@@ -42,19 +39,19 @@ function EventsCarousel({ events }: Props)
         api.on("select", () => {
             setTimeout(() => {
                 setSelectedIndex(api.selectedScrollSnap())
-            }, 500)
+            }, 500);
         })
       }, [api])
 
     return (
         <AnimatePresence>
-            <section className='flex flex-col'>
+            <section className='w-full flex flex-col'>
                 <Carousel
                     opts={{
                         align: "start",
                         loop: true,
                     }}
-                    className="w-full mt-24 overflow-visible z-50"
+                    className="min-w-full mt-24 overflow-visible z-50"
                     plugins={[
                         Autoplay({
                             delay: 3000,
@@ -66,15 +63,26 @@ function EventsCarousel({ events }: Props)
                 >
                     <CarouselContent className=''>
                         {events.map((event, index) => (
-                            <CarouselItem key={index} className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14')} onClick={() => api?.scrollTo(index === 0 ? events.length - 1 : index - 1)}>
+                            <CarouselItem 
+                                key={index} 
+                                className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 w-full', events.length === 1 && 'mx-auto basis-auto')} 
+                                onClick={() => {
+                                    if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                                    else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                                    api?.scrollTo(index === 0 ? events.length - 1 : index - 1)
+                                    setTimeout(() => {
+                                        setSelectedIndex(index === 0 ? events.length - 1 : index - 1)
+                                    }, 500)
+                                }}
+                            >
                                 <ImageMotion
                                     selectedEvent={event}
-                                    className='rounded-lg object-cover h-full w-full'
+                                    className='rounded-lg object-cover h-full w-full flex items-center justify-center'
                                     width={728}
                                     height={448} 
-                                    imageClassName="rounded-lg object-cover h-full w-full"
+                                    imageClassName="rounded-lg object-cover h-full w-full max-w-[872px]"
                                     priority={true}
-                                    layoutId={index.toString()}
+                                    layoutId={event.id}
                                 />
                             </CarouselItem>
                         ))}
@@ -84,20 +92,20 @@ function EventsCarousel({ events }: Props)
                     <div className='flex justify-between items-center w-full'>
                         <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
                         <div className='flex flex-col gap-6 items-end'>
-                            <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === 0 ? '2,900 EGP' : '3,200 EGP'}</p>
-                            <button onClick={() => router.push(`/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
+                            <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</p>
+                            <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
                                 Book Now
                             </button>
                         </div>
                     </div>
-                    <div className='flex gap-6 items-center justify-center flex-1'>
+                    <div className='flex gap-6 items-center justify-center flex-1 w-full'>
                         <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36'>
                             <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
-                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? `${events[0].eventDate.getMonth()}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${events[selectedIndex + 1].eventDate.getMonth()}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
                             <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
                         </div>
                         <div className='w-4 rotate-180 h-[172px] bg-[#7D40FF]' />
-                        <p className='font-poppins font-extralight text-base w-fit'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
+                        <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
                     </div>
                 </div>
             </section>
