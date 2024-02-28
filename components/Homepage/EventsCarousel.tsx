@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
 import Autoplay from 'embla-carousel-autoplay'
-import useCountry from "@/hooks/useCountry";
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { months } from "@/constants";
 import FormattedPrice from "../shared/FormattedPrice";
@@ -21,14 +20,6 @@ function EventsCarousel({ events, exchangeRate }: Props)
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
 
-    const { country } = useCountry()
-
-    const selectedExchangeRate = useMemo(() => {
-        if(country === 'EGP') return exchangeRate.USDToEGP
-        else if(country === 'SAR') return exchangeRate.USDToSAR
-        else return exchangeRate.USDToAED
-    }, [country])
-
     const router = useRouter()
 
     useEffect(() => {
@@ -38,7 +29,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
 
         api.on("select", () => {
             setTimeout(() => {
-                setSelectedIndex(api.selectedScrollSnap())
+                setSelectedIndex(prev => prev === events.length - 1 ? events.length - 1 : api.selectedScrollSnap())
             }, 500);
         })
       }, [api])
