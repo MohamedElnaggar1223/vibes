@@ -29,7 +29,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
 
         api.on("select", () => {
             setTimeout(() => {
-                setSelectedIndex(prev => prev === events.length - 1 ? events.length - 1 : api.selectedScrollSnap())
+                if(selectedIndex !== events.length - 1) setSelectedIndex(api.selectedScrollSnap())
             }, 500);
         })
       }, [api])
