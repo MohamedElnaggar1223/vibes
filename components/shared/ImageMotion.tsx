@@ -1,15 +1,12 @@
 'use client'
 
+import { EventType } from "@/lib/types/eventTypes"
 import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
 
 type Props = {
-    selectedEvent: {
-        imgUrl: string,
-        title: string,
-        price: string,
-    },
+    selectedEvent: EventType
     className?: string,
     imageClassName?: string,
     index?: number,
@@ -19,16 +16,16 @@ type Props = {
     layoutId?: string
 }
 
-export default function ImageMotion({ selectedEvent, className, index, width, height, imageClassName, priority, layoutId }: Props) 
+export default function ImageMotion({ selectedEvent, className, width, height, imageClassName, priority, layoutId }: Props) 
 {
     return (
         <AnimatePresence>
             <motion.div layoutId={layoutId} className={cn(className)}>
                 <Image
-                    src={selectedEvent?.imgUrl}
+                    src={selectedEvent?.displayPageImage}
                     width={width}
                     height={height}
-                    alt={selectedEvent?.title}
+                    alt={selectedEvent?.name}
                     priority={priority ?? false}
                     className={cn(imageClassName)}
                 />

@@ -1,17 +1,36 @@
 'use client'
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "../ui/carousel";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { events } from "@/constants";
 import { useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
 import Autoplay from 'embla-carousel-autoplay'
+import useCountry from "@/hooks/useCountry";
+import { EventType } from "@/lib/types/eventTypes";
 
-export default function EventsCarousel() 
+type Props = {
+    events: EventType[]
+}
+
+function getDaySuffix(day: number) {
+    if (day >= 11 && day <= 13) {
+        return "th";
+    }
+    switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+    }
+}
+
+function EventsCarousel({ events }: Props) 
 {
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
+
+    const { country } = useCountry()
 
     const router = useRouter()
 
@@ -51,7 +70,6 @@ export default function EventsCarousel()
                                 <ImageMotion
                                     selectedEvent={event}
                                     className='rounded-lg object-cover h-full w-full'
-                                    index={index}
                                     width={728}
                                     height={448} 
                                     imageClassName="rounded-lg object-cover h-full w-full"
@@ -64,25 +82,28 @@ export default function EventsCarousel()
                 </Carousel>
                 <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[-20px] z-10 text-white rounded-2xl'>
                     <div className='flex justify-between items-center w-full'>
-                        <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].title : events[selectedIndex + 1].title}</p>
+                        <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
                         <div className='flex flex-col gap-6 items-end'>
                             <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === 0 ? '2,900 EGP' : '3,200 EGP'}</p>
-                            <button onClick={() => router.push(`/${selectedIndex === events.length - 1 ? '0' : `${selectedIndex + 1}`}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
+                            <button onClick={() => router.push(`/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
                                 Book Now
                             </button>
                         </div>
                     </div>
                     <div className='flex gap-6 items-center justify-center flex-1'>
                         <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36'>
-                            <p className='font-poppins font-extralight text-lg'>Grand Cairo Stadium</p>
-                            <p className='font-poppins font-extralight text-lg'>May,28th,2024</p>
-                            <p className='font-poppins font-extralight text-lg'>Egypt,Cairo</p>
+                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
+                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? `${events[0].eventDate.getMonth()}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${events[selectedIndex + 1].eventDate.getMonth()}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
                         </div>
                         <div className='w-4 rotate-180 h-[172px] bg-[#7D40FF]' />
-                        <p className='font-poppins font-extralight text-base w-fit'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p className='font-poppins font-extralight text-base w-fit'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
                     </div>
                 </div>
             </section>
         </AnimatePresence>
     )
 }
+
+const memoizedEventsCarousel = memo(EventsCarousel)
+export default memoizedEventsCarousel
