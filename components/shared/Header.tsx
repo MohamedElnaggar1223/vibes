@@ -15,6 +15,7 @@ export default async function Header()
                     height={200}
                     alt="logo"
                     className='cursor-pointer z-[9999]'
+                    priority
                 /> 
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
