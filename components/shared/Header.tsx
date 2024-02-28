@@ -11,11 +11,15 @@ export default async function Header()
             <Link href='/'>
                 <Image
                     src="/assets/logo.png"
-                    width={200}
-                    height={200}
+                    width={195}
+                    height={73}
                     alt="logo"
                     className='cursor-pointer z-[9999]'
                     priority
+                    style={{
+                        width: '195px',
+                        height: '73px',
+                    }}
                 /> 
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
