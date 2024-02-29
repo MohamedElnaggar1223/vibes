@@ -20,7 +20,7 @@ export default function FormattedPrice({ price, exchangeRate }: Props) {
 
     return (
         <>
-         {`${price * selectedExchangeRate} ${country ?? 'AED'}`}
+         {`${(price * selectedExchangeRate).toLocaleString()} ${country ?? 'AED'}`}
         </>
     )
 }

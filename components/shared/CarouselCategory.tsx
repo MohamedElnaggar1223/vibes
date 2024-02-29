@@ -26,6 +26,8 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
 
     const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
 
+    
+
     return (
         <section className='relative w-full flex flex-col items-center h-[412px] justify-center gap-4 lg:flex-row'>
             <div className='flex flex-col gap-2 w-[15%] text-white lg:mb-auto mt-2'>

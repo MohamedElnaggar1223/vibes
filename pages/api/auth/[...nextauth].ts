@@ -40,6 +40,19 @@ export const authOptions: NextAuthOptions = {
 
                     return { email: (credentials as any).email, id: (credentials as any).id}
                 }
+                else if ((credentials as any).provider === 'facebook')
+                {
+                    const userDoc = doc(db, 'users', (credentials as any).id)
+                    const userData = await getDoc(userDoc)
+
+                    if(userData.exists()) await updateDoc(userDoc, { provider: 'facebook' })
+                    else
+                    {
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'facebook', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                    }
+
+                    return { email: (credentials as any).email, id: (credentials as any).id}
+                }
                 else
                 {
                     const data = await signInWithEmailAndPassword(auth, (credentials as any).email || '', (credentials as any).password || '')

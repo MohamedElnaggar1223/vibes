@@ -11,7 +11,7 @@ import {
     FormMessage,
   } from "@/components/ui/form"
 import { UserSignInSchema } from "@/lib/validations/user"
-import { GoogleAuthProvider, TwitterAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
+import { FacebookAuthProvider, GoogleAuthProvider, TwitterAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth } from "@/firebase/client/config"
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
@@ -99,6 +99,24 @@ export default function SignIn()
                 setLoading(false)
             }
         }
+        catch(e: any)
+        {
+            setError(e.message)
+        }
+    }
+
+    const handleFacebookSignIn = async () => {
+        try
+        {
+            const provider = new FacebookAuthProvider()
+            const user = await signInWithPopup(auth, provider)
+            if(user.user)
+            {
+                setLoading(true)
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: true, callbackUrl: '/' })
+                setLoading(false)
+            }
+        }
         catch(e)
         {
             setError('Something went wrong!')
@@ -157,7 +175,7 @@ export default function SignIn()
                                 alt='google'
                             />
                         </span>
-                        <span className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                        <span onClick={handleFacebookSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                             <Image
                                 src='/assets/facebook.svg' 
                                 width={19}

@@ -2,8 +2,11 @@ import ImageMotion from "@/components/shared/ImageMotion"
 import PurchaseTickets from "@/components/shared/PurchaseTickets"
 import { months } from "@/constants"
 import { initAdmin } from "@/firebase/server/config"
-import { EventType } from "@/lib/types/eventTypes"
+import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
+import { UserType } from "@/lib/types/userTypes"
 import { formatTime, getDaySuffix } from "@/lib/utils"
+import { decode } from "next-auth/jwt"
+import { cookies } from "next/headers"
 import Image from "next/image"
 
 type Props = {
@@ -23,6 +26,14 @@ export default async function EventPage({ params }: Props)
         eventDate: fetchedEvent.data()?.eventDate.toDate(),
         updatedAt: fetchedEvent.data()?.updatedAt?.toDate(),
     } as EventType
+
+    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
+
+    const cookiesData = cookies()
+    const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+
+
+    const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
 
     return (
         <section className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-24'>
@@ -71,7 +82,7 @@ export default async function EventPage({ params }: Props)
                     </div>
                 </div>
             </div>
-            <PurchaseTickets />
+            <PurchaseTickets exchangeRate={exchangeRate} event={selectedEvent} user={user} />
         </section>
     )
 }

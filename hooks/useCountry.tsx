@@ -29,9 +29,7 @@ export default function useCountry()
             })
         }
     }, [coordinates])
-
-    console.log(country)
-
+    
     // useEffect(() => {
     //     if (currentLocation !== null) {
     //         fetch(`http://api.geonames.org/countryCodeJSON?lat=${42}&lng=10.2&username=demo`, {

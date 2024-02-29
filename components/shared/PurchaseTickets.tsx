@@ -8,12 +8,32 @@ import {
 import { cn } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
+import FormattedPrice from "./FormattedPrice"
+import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
+import { UserType } from "@/lib/types/userTypes"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
+import { doc, onSnapshot } from "firebase/firestore"
+import { db } from "@/firebase/client/config"
 
-export default function PurchaseTickets() 
+type Props = {
+    event: EventType,
+    exchangeRate: ExchangeRate,
+    user: UserType | null
+}
+
+export default function PurchaseTickets({ event, exchangeRate, user }: Props) 
 {
     const [dialogOpen, setDialogOpen] = useState(false)
-    const availableTickets = [{ ticket: 'Standard Ticket', price: '2,290' }, { ticket: 'Standard Plus', price: '3,500' }, { ticket: 'VIP Standing', price: '5,500' }, { ticket: 'VIP Premium', price: '8,000' }, ]
-    const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.ticket]: 0 }), {} as { [x: string]: number }))
+    const [eventData, setEventData] = useState(event)
+    const availableTickets = useMemo(() => {
+        return eventData.tickets.filter(ticket => ticket.quantity > 0)
+    }, [eventData])
+    const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
     const [fakeLoading, setFakeLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
@@ -22,6 +42,16 @@ export default function PurchaseTickets()
 
     useEffect(() => {
         setMaxHeight(parentRef.current?.offsetHeight || 0)
+    }, [])
+
+    useEffect(() => {
+        const unsub = onSnapshot(doc(db, 'events', event.id), (snapshot) => {
+            setEventData(snapshot.data() as EventType)
+        })
+
+        return () => {
+            unsub()
+        }
     }, [])
 
     useEffect(() => {
@@ -39,7 +69,7 @@ export default function PurchaseTickets()
     }, [])
 
     const total = useMemo(() => {
-        return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price.replace(/,/g, '') || '0'), 0)
+        return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0'), 0)
     }, [purchasedTickets])
 
     useEffect(() => {
@@ -100,7 +130,7 @@ export default function PurchaseTickets()
                                                         className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            setPurchasedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}
+                                                            setPurchasedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}
                                                         }
                                                     >
                                                         +
@@ -108,7 +138,7 @@ export default function PurchaseTickets()
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins font-semibold flex-1 text-end'>{availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price} EGP</p>
+                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
                                         <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                             X
                                         </div>
@@ -132,12 +162,29 @@ export default function PurchaseTickets()
                     </div>
                     <div className='flex flex-col items-center justify-between gap-4 mb-1'>
                         <p className='font-poppins text-base text-white'>Total</p>
-                        <p className='font-poppins text-lg text-white font-semibold'>{total.toLocaleString()} EGP</p>
+                        <p className='font-poppins text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
                     </div>
                     <div className='flex flex-col items-center justify-center'>
-                        <button className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
-                            Buy Now
-                        </button>
+                        {
+                            user === null ? (
+                                <TooltipProvider delayDuration={100}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <button disabled className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                                Buy Now
+                                            </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>You must be signed in!</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ) : (
+                                <button className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                    Buy Now
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -148,7 +195,7 @@ export default function PurchaseTickets()
                             </div>
                             <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
                                 {Object.keys(selectedTickets).map((ticket, index) => (
-                                    <div key={index} className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setSelectedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}>
+                                    <div key={index} className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setSelectedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}>
                                         <p className='text-white font-poppins text-normal font-normal flex-1'>{ticket}</p>
                                         {
                                             selectedTickets[ticket] > 0 && (
@@ -167,7 +214,7 @@ export default function PurchaseTickets()
                                                         className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            setSelectedTickets(prev => ({...prev, [ticket]: prev[ticket] + 1}))}
+                                                            setSelectedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}
                                                         }
                                                     >
                                                         +
@@ -175,7 +222,7 @@ export default function PurchaseTickets()
                                                 </div>
                                             )
                                         }
-                                        <p className='text-white font-poppins text-normal font-light flex-1 text-end'>{availableTickets.find(availableTicket => availableTicket.ticket === ticket)?.price} EGP</p>
+                                        <p className='text-white font-poppins text-normal font-light flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
                                     </div>
                                 ))}
                             </div>

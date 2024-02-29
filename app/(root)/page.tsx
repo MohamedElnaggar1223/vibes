@@ -16,7 +16,7 @@ export default async function Home()
 			<EventsCarouselContainer events={displays.find(display => display.display === 'Top Events')?.events} />
 			<section className='flex flex-col gap-4 my-36 w-full'>
 				{displays.slice().filter(display => display.events.length > 0 && display.display !== 'Top Events').map(display => (
-					<CarouselCategory title={display.display} subTitle={display.description} events={display.events} />
+					<CarouselCategory key={display.id} title={display.display} subTitle={display.description} events={display.events} />
 				))}
 				{/* <CarouselCategory title='Hottest Events' subTitle="Those are the hottest events of 2024!" events={events.slice(5, 8)} />
 				<CarouselCategory title='Vibes Exclusive' subTitle="These are some of the events you’ve missed! Don’t worry we have more coming!" events={events.slice(8)} /> */}
