@@ -36,7 +36,7 @@ export default async function EventPage({ params }: Props)
     const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
 
     return (
-        <section className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-24'>
+        <section className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-16'>
             <div className='flex flex-col w-full max-w-[390px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1 h-full'>
                 <ImageMotion 
                     selectedEvent={selectedEvent}

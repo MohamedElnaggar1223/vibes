@@ -55,6 +55,14 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     }, [])
 
     useEffect(() => {
+        availableTickets.forEach(ticket => {
+            if (selectedTickets[ticket.name] > ticket.quantity) {
+                setSelectedTickets(prevState => ({...prevState, [ticket.name]: ticket.quantity }))
+            }
+        })
+    }, [availableTickets])
+
+    useEffect(() => {
         const tempRef = parentRef.current
 
         window.addEventListener('resize', () => {
