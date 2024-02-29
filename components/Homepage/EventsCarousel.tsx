@@ -42,7 +42,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                         align: "start",
                         loop: true,
                     }}
-                    className="min-w-full mt-24 overflow-visible z-50"
+                    className={"min-w-full mt-24 overflow-visible z-50"}
                     plugins={[
                         Autoplay({
                             delay: 3000,
@@ -56,7 +56,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                         {events.map((event, index) => (
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 w-full', events.length === 1 && 'mx-auto basis-auto')} 
+                                className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 max-w-[400px]', events.length === 1 && 'mx-auto basis-auto', (events.length === 3 || events.length === 4) && (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) && 'min-w-[800px]' )} 
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)

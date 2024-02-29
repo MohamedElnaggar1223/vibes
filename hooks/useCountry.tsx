@@ -1,9 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useCountry() 
 {
     const [coordinates, setCoordinates] = useState<GeolocationCoordinates>()
     const [country, setCountry] = useState<string>()
+    const [preferedCountry, setPreferedCountry] = useState<string | null>()
+
+    useEffect(() => {
+        if(localStorage.getItem('country')) setPreferedCountry(localStorage.getItem('country'))
+        else setPreferedCountry(null)
+    }, [coordinates])
 
     // const currentLocation = useMemo(() => {
     //     return navigator.geolocation.getCurrentPosition((data) => setCountry(data.coords))
@@ -25,7 +31,10 @@ export default function useCountry()
             fetch('https://api.ipregistry.co/?key=440sw5smcozgnnm3')
             .then(response => response.json())
             .then(data => {
-                setCountry(['EGP', 'AED', 'SAR'].includes(data.currency.code) ? data.currency.code : 'AED')
+                setCountry(() => {
+                    if(preferedCountry !== null) return preferedCountry
+                    else return ['EGP', 'AED', 'SAR'].includes(data.currency.code) ? data.currency.code : 'AED'
+                })
             })
         }
     }, [coordinates])
@@ -43,5 +52,5 @@ export default function useCountry()
     //     }
     // }, [currentLocation])
 
-    return { country }
+    return { country, setCountry }
 }

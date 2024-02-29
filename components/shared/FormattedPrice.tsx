@@ -18,6 +18,8 @@ export default function FormattedPrice({ price, exchangeRate }: Props) {
         else return exchangeRate.USDToAED
     }, [country])
 
+    console.log(country, 'Price')
+
     return (
         <>
          {`${(price * selectedExchangeRate).toLocaleString()} ${country ?? 'AED'}`}

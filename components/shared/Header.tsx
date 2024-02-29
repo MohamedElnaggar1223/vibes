@@ -1,6 +1,17 @@
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+import { Separator } from "../ui/separator";
+import HeaderLinks from "./HeaderLinks";
 
 export default async function Header() 
 {
@@ -33,12 +44,28 @@ export default async function Header()
                     AR
                 </Link>
                 {
-                    !session?.user &&
-                    <Link href='/sign-in'>
-                        <button className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-6 py-2 text-white z-[9999]'>
-                            Sign in
-                        </button>
-                    </Link>
+                    !session?.user ? (
+                        <Link href='/sign-in'>
+                            <button className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-6 py-2 text-white z-[9999]'>
+                                Sign in
+                            </button>
+                        </Link>
+                    ) : (
+                        <Select>
+                            <SelectTrigger className="w-[140px] border-none bg-transparent text-white font-poppins text-base font-medium z-[999999] outline-none">
+                                <SelectValue placeholder="Profile" />
+                            </SelectTrigger>
+                            <SelectContent className='z-[999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md right-[35%] p-0'>
+                                <SelectGroup className='bg-white flex flex-col items-center justify-center'>
+                                    <Link href='/profile' className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'>
+                                        <span >Account Details</span>
+                                    </Link>
+                                    <Separator color="black" />
+                                    <HeaderLinks />
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    )
                 }
             </div>
         </section>
