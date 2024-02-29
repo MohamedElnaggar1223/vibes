@@ -31,7 +31,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [dialogOpen, setDialogOpen] = useState(false)
     const [eventData, setEventData] = useState(event)
     const availableTickets = useMemo(() => {
-        return eventData.tickets.filter(ticket => ticket.quantity > 0)
+        return eventData.tickets
     }, [eventData])
     const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
@@ -58,6 +58,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
         availableTickets.forEach(ticket => {
             if (selectedTickets[ticket.name] > ticket.quantity) {
                 setSelectedTickets(prevState => ({...prevState, [ticket.name]: ticket.quantity }))
+            }
+            if (purchasedTickets[ticket.name] > ticket.quantity) {
+                setPurchasedTickets(prevState => ({...prevState, [ticket.name]: ticket.quantity }))
             }
         })
     }, [availableTickets])
@@ -203,7 +206,15 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             </div>
                             <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
                                 {Object.keys(selectedTickets).map((ticket, index) => (
-                                    <div key={index} className='px-6 flex justify-between items-center py-6 cursor-pointer hover:bg-[#13161d]' onClick={() => setSelectedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}>
+                                    <div
+                                        key={index} 
+                                        className={cn('relative px-6 flex justify-between items-center py-6', availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity === 0 ? 'opacity-40' : 'cursor-pointer hover:bg-[#13161d]')} 
+                                        onClick={(e) => {
+                                            const ticketQuantity = availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0
+                                            if(ticketQuantity > 0 ) setSelectedTickets(prev => ({...prev, [ticket]: ticketQuantity >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))
+                                            else e.stopPropagation()
+                                        }}
+                                    >
                                         <p className='text-white font-poppins text-normal font-normal flex-1'>{ticket}</p>
                                         {
                                             selectedTickets[ticket] > 0 && (
@@ -229,6 +240,12 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                     </button>
                                                 </div>
                                             )
+                                        }
+                                        {
+                                            availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity === 0 &&
+                                            <div className='flex items-center justify-center bg-transparent border-none outline-none'>
+                                                <p className='font-poppins font-normal text-white text-center text-base'>Sold out!</p>
+                                            </div>
                                         }
                                         <p className='text-white font-poppins text-normal font-light flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
                                     </div>
