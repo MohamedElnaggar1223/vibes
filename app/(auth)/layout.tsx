@@ -50,18 +50,18 @@ export default async function RootLayout({
           priority
           quality={100}
         />
-        <Image
-          src="/assets/gradients.svg"
-          fill
-          alt="background"
-          className='bg-svg'
-          priority
-          quality={100}
-        />
         <main className='min-h-screen'>
             <AuthHeader />
             <section className='h-full flex'>
-              <section className='min-h-full pt-28 flex flex-col justify-between px-20'>
+              <section className='min-h-full pt-28 flex flex-col justify-between px-20 bg-svg'>
+                <Image
+                  src="/assets/gradients.svg"
+                  fill
+                  alt="background"
+                  className='bg-svg'
+                  priority
+                  quality={100}
+                />
                 <div className='text-white font-poppins text-5xl flex flex-col'>
                   <span>
                     Your Go To 

@@ -266,7 +266,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
                                 {Object.keys(selectedTickets).map((ticket, index) => (
                                     <div
-                                        key={index} 
+                                        key={index}
                                         className={cn('relative px-6 flex justify-between items-center py-6', availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity === 0 ? 'opacity-40' : 'cursor-pointer hover:bg-[#13161d]')} 
                                         onClick={(e) => {
                                             const ticketQuantity = availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0
@@ -277,7 +277,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                         <p className='text-white font-poppins text-normal font-normal flex-1'>
                                             {ticket}
                                             {
-                                                availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass !== 'None' &&
+                                                availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass === 'Included' &&
                                                 <span className='mt-auto text-end text-xs text-gray-400'>
                                                     {" "}(Including Parking Pass)
                                                 </span>

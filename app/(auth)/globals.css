@@ -80,11 +80,11 @@ body{
 }
 
 .bg-image {
-  @apply absolute z-[-5] object-cover top-0 left-0 !important
+  @apply fixed z-[-5] object-cover top-0 left-0 !important
 }
 
 .bg-svg {
-  @apply absolute z-[-4] h-fit w-fit top-auto left-24 !important
+  @apply fixed z-[-4] h-fit w-fit top-auto left-24 !important
 }
 
 * {
