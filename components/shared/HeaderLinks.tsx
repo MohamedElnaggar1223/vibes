@@ -6,12 +6,16 @@ import { auth } from "@/firebase/client/config"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { useRouter } from "next/navigation"
+import { CountryContext } from "@/providers/CountryProvider"
 
 export default function HeaderLinks() 
 {
-    const { country } = useCountry()
+    const context = useContext(CountryContext)
+    if(!context) return null
+
+    const { country, setCountry } = context
 
     const router = useRouter()
 
@@ -32,6 +36,8 @@ export default function HeaderLinks()
             <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center'>
                 Country
                 <Select defaultValue={defaultValue} onValueChange={(value) => {
+                    //@ts-expect-error country
+                    setCountry(Object.keys(countries).find(key => countries[key] === value))
                     //@ts-expect-error country
                     localStorage.setItem('country', Object.keys(countries).find(key => countries[key] === value))
                     router.refresh()

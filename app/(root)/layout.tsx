@@ -12,6 +12,7 @@ import { UserType } from "@/lib/types/userTypes";
 import { redirect } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
 import {  } from 'next/navigation'
+import CountryContextProvider from "@/providers/CountryProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -52,12 +53,14 @@ export default async function RootLayout({
           className='bg-image'
           priority
         />
-        <Header />
-        <main className='px-6 md:px-20 min-h-screen flex'>
-          <Suspense fallback={<Loading />}>
-            {children}
-          </Suspense>
-        </main>
+        <CountryContextProvider>
+          <Header />
+          <main className='px-6 md:px-20 min-h-screen flex'>
+            <Suspense fallback={<Loading />}>
+              {children}
+            </Suspense>
+          </main>
+        </CountryContextProvider>
       </body>
     </html>
   );

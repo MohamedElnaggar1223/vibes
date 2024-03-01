@@ -1,9 +1,9 @@
 'use client'
 
-import useCountry from "@/hooks/useCountry"
 import { ExchangeRate } from "@/lib/types/eventTypes"
+import { CountryContext } from "@/providers/CountryProvider"
 import { Loader2 } from "lucide-react"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 
 type Props = {
     price: number,
@@ -11,7 +11,9 @@ type Props = {
 }
 
 export default function FormattedPrice({ price, exchangeRate }: Props) {
-    const { country } = useCountry()
+    const context = useContext(CountryContext)
+    if(!context) return <Loader2 className='animate-spin' />
+    const { country } = context
 
     const selectedExchangeRate = useMemo(() => {
         if(country === 'EGP') return exchangeRate.USDToEGP

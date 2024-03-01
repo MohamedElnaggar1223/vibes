@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     Dialog,
     DialogContent,
@@ -19,6 +19,8 @@ import {
   } from "@/components/ui/tooltip"
 import { doc, onSnapshot } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
+import useCountry from "@/hooks/useCountry"
+import { CountryContext } from "@/providers/CountryProvider"
 
 type Props = {
     event: EventType,
@@ -28,6 +30,10 @@ type Props = {
 
 export default function PurchaseTickets({ event, exchangeRate, user }: Props) 
 {
+    const context = useContext(CountryContext)
+    if(!context) return <Loader2 className='animate-spin' />
+    const { country } = context
+
     const [dialogOpen, setDialogOpen] = useState(false)
     const [eventData, setEventData] = useState(event)
     const availableTickets = useMemo(() => {
@@ -89,7 +95,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
 
     const total = useMemo(() => {
         return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0'), 0) + purchasedParkingPass * (availableParkingPasses.price ?? 0)
-    }, [purchasedTickets, purchasedParkingPass])
+    }, [purchasedTickets, purchasedParkingPass, country])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -105,6 +111,12 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             window.removeEventListener('click', handleClickOutside)
         }
     }, [fakeLoading])
+
+    useEffect(() => {
+        console.log(country)
+    }, [country])
+
+    console.log(country)
 
     return (
         <AnimatePresence>
