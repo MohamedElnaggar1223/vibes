@@ -2,6 +2,7 @@
 
 import useCountry from "@/hooks/useCountry"
 import { ExchangeRate } from "@/lib/types/eventTypes"
+import { Loader2 } from "lucide-react"
 import { useMemo } from "react"
 
 type Props = {
@@ -18,11 +19,14 @@ export default function FormattedPrice({ price, exchangeRate }: Props) {
         else return exchangeRate.USDToAED
     }, [country])
 
-    console.log(country, 'Price')
-
     return (
         <>
-         {`${(price * selectedExchangeRate).toLocaleString()} ${country ?? 'AED'}`}
+        
+         {
+            country ?
+            `${((price ?? 0) * selectedExchangeRate).toLocaleString()} ${country ?? 'AED'}` :
+            <Loader2 className='animate-spin' />
+        }
         </>
     )
 }

@@ -13,16 +13,17 @@ type Props = {
     width: number,
     height: number,
     priority?: boolean,
-    layoutId?: string
+    layoutId?: string,
+    eventPage: boolean
 }
 
-export default function ImageMotion({ selectedEvent, className, width, height, imageClassName, priority, layoutId }: Props) 
+export default function ImageMotion({ selectedEvent, className, width, height, imageClassName, priority, layoutId, eventPage }: Props) 
 {
     return (
         <AnimatePresence>
             <motion.div layoutId={layoutId} className={cn(className)}>
                 <Image
-                    src={selectedEvent?.displayPageImage}
+                    src={eventPage ? selectedEvent.eventPageImage : selectedEvent?.displayPageImage}
                     width={width}
                     height={height}
                     alt={selectedEvent?.name}

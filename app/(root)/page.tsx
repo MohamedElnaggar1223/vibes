@@ -12,7 +12,7 @@ export default async function Home()
 
 	return (
 		<section className='flex flex-col items-center justify-center w-full'>
-			<Search />
+			{/* <Search /> */}
 			<EventsCarouselContainer events={displays.find(display => display.display === 'Top Events')?.events} />
 			<section className='flex flex-col gap-4 my-36 w-full'>
 				{displays.slice().filter(display => display.events.length > 0 && display.display !== 'Top Events').map(display => (

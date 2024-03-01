@@ -47,6 +47,7 @@ export default async function EventPage({ params }: Props)
                     className="w-full object-contain h-full max-h-[212px] overflow-hidden"
                     priority={true}
                     layoutId={params.id.toString()}
+                    eventPage={true}
                 />
                 <div className='flex flex-col p-3 gap-4 flex-1'>
                     <p className='font-poppins text-2xl font-bold text-white'>{selectedEvent?.name}</p>

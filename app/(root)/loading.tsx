@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Loading() 
 {
     return (
-        <section className='w-full h-full flex items-center justify-center'>
+        <section className='w-full h-[90vh] flex items-center justify-center'>
             <Image
                 src="/assets/background.svg"
                 fill
@@ -12,7 +12,7 @@ export default function Loading()
                 className='bg-image'
                 priority
             />
-            <Loader2 className='animate-spin' />
+            <Loader2 size={52} className='animate-spin' />
         </section>
     )
 }

@@ -23,6 +23,7 @@ export default async function EventCard({ event, exchangeRate }: Props)
                 imageClassName="object-cover h-full w-full"
                 priority={true}
                 layoutId={event.id}
+                eventPage={false}
             />
             <div className='absolute flex z-[9999] bg-gradient-to-t from-black from-30% via-black/75 to-slate-900/25 w-[calc(100%-1rem)] h-full opacity-0 text-lg group-hover:opacity-100 bottom-0 right-[0%] duration-300 cursor-pointer'>
                 <Link href={`/events/${event.id}`} className='absolute w-full h-full'/>
