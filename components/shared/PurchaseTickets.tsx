@@ -33,8 +33,12 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const availableTickets = useMemo(() => {
         return eventData.tickets
     }, [eventData])
+    const availableParkingPasses = useMemo(() => {
+        return eventData.parkingPass
+    }, [eventData])
     const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
+    const [purchasedParkingPass, setPurchasedParkingPass] = useState(0)
     const [fakeLoading, setFakeLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
 
@@ -66,6 +70,10 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     }, [availableTickets])
 
     useEffect(() => {
+        if(availableParkingPasses.quantity < purchasedParkingPass) setPurchasedParkingPass(availableParkingPasses.quantity)
+    }, [availableParkingPasses])
+
+    useEffect(() => {
         const tempRef = parentRef.current
 
         window.addEventListener('resize', () => {
@@ -80,8 +88,8 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     }, [])
 
     const total = useMemo(() => {
-        return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0'), 0)
-    }, [purchasedTickets])
+        return Object.keys(purchasedTickets).reduce((acc, ticket) => acc + purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0'), 0) + purchasedParkingPass * (availableParkingPasses.price ?? 0)
+    }, [purchasedTickets, purchasedParkingPass])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -103,19 +111,25 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full'>
                 <div className='w-full flex justify-between items-center gap-4'>
                     <div className='flex-1' />
-                    <div className='flex-1 flex items-center justify-center'>
+                    <div className='flex-auto flex items-center justify-center gap-4'>
                         <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
                             Choose Your Tickets
                         </button>
+                        {
+                            availableParkingPasses?.quantity > 0 &&
+                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                                Add Parking Pass
+                            </button>
+                        }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={eventData.seated} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
                             Map
                         </button>
                     </div>
                 </div>
                 {
-                    Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 ? (
+                    Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0 ? (
                         <div ref={parentRef} className='flex-1'>
                             <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
                                 {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
@@ -155,6 +169,44 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                         </div>
                                     </motion.div>
                                 ))}
+                                {
+                                    purchasedParkingPass &&
+                                    <motion.div layoutId={'parkinPass'} className='relative px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
+                                        <p className='text-black font-poppins text-normal font-semibold flex-1'>Parking pass</p>
+                                        {
+                                            purchasedParkingPass > 0 && (
+                                                <div className='flex justify-center items-center flex-1 gap-2'>
+                                                    {
+                                                        purchasedParkingPass > 1 &&
+                                                        <button 
+                                                            className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                setPurchasedParkingPass(prev => prev - 1)}
+                                                            }
+                                                        >
+                                                            -
+                                                        </button>
+                                                    }
+                                                    <p className='text-black font-poppins text-sm font-semibold'>{purchasedParkingPass}</p>
+                                                    <button
+                                                        className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)
+                                                        }}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                            )
+                                        }
+                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={availableParkingPasses?.price ?? 0} exchangeRate={exchangeRate} /></p>
+                                        <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                            X
+                                        </div>
+                                    </motion.div>
+                                }
                             </div>
                         </div>
                     ) : (
@@ -171,6 +223,13 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         <p className='font-poppins text-base text-white'>Number of tickets</p>
                         <p className='font-poppins text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
                     </div>
+                    {
+                        availableParkingPasses?.quantity > 0 &&
+                        <div className='flex flex-col items-center justify-between gap-4 mb-1'>
+                            <p className='font-poppins text-base text-white'>Parking Pass</p>
+                            <p className='font-poppins text-lg text-white font-semibold'>{purchasedParkingPass}</p>
+                        </div>
+                    }
                     <div className='flex flex-col items-center justify-between gap-4 mb-1'>
                         <p className='font-poppins text-base text-white'>Total</p>
                         <p className='font-poppins text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
@@ -215,7 +274,15 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             else e.stopPropagation()
                                         }}
                                     >
-                                        <p className='text-white font-poppins text-normal font-normal flex-1'>{ticket}</p>
+                                        <p className='text-white font-poppins text-normal font-normal flex-1'>
+                                            {ticket}
+                                            {
+                                                availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass !== 'None' &&
+                                                <span className='mt-auto text-end text-xs text-gray-400'>
+                                                    {" "}(Including Parking Pass)
+                                                </span>
+                                            }
+                                        </p>
                                         {
                                             selectedTickets[ticket] > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>

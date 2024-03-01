@@ -25,6 +25,8 @@ export default async function EventPage({ params }: Props)
         eventTime: fetchedEvent.data()?.eventTime.toDate(),
         eventDate: fetchedEvent.data()?.eventDate.toDate(),
         updatedAt: fetchedEvent.data()?.updatedAt?.toDate(),
+        gatesOpen: fetchedEvent.data()?.gatesOpen?.toDate(),
+        gatesClose: fetchedEvent.data()?.gatesClose?.toDate(),
     } as EventType
 
     const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
@@ -56,7 +58,7 @@ export default async function EventPage({ params }: Props)
                         <p className='font-poppins text-md font-extralight text-white mr-4'>{selectedEvent?.city}, {selectedEvent?.country}</p>
                     </div>
                     <p className='font-poppins text-md font-extralight text-white'>{`${months[selectedEvent.eventDate?.getMonth()]}, ${getDaySuffix(selectedEvent.eventDate?.getDate())}, ${selectedEvent.eventDate?.getFullYear()}`} | {formatTime(selectedEvent.eventTime)} {selectedEvent.timeZone}</p>
-                    {(selectedEvent.gatesOpen && selectedEvent.gatesClose) && <p className='font-poppins text-md font-extralight text-white'>Gates open {selectedEvent.gatesOpen} | Gates close {selectedEvent.gatesClose}</p>}
+                    <p className='font-poppins text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${formatTime(selectedEvent.gatesClose)}`}</p>
                     <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
                         <p className='font-poppins text-xs font-extralight text-white'>{selectedEvent.description}</p>
                     </div>

@@ -20,9 +20,11 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
             eventTime: eventDoc.data()?.eventTime.toDate(),
             eventDate: eventDoc.data()?.eventDate.toDate(),
             updatedAt: eventDoc.data()?.updatedAt?.toDate(),
-        }
+            gatesOpen: eventDoc.data()?.gatesOpen?.toDate(),
+            gatesClose: eventDoc.data()?.gatesClose?.toDate(),
+        } as EventType
     })
-    const eventsData = await Promise.all(eventsDocs || []) as EventType[]
+    const eventsData = await Promise.all(eventsDocs || [])
 
     const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
 

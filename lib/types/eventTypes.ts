@@ -22,8 +22,8 @@ export type EventType = {
     }[],
     eventPageImage: string,
     eventTime: Date,
-    gatesClose: string | null,
-    gatesOpen: string | null,
+    gatesClose: Date | null,
+    gatesOpen: Date | null,
     mapImage: string,
     name: string,
     seated: boolean,
@@ -34,7 +34,11 @@ export type EventType = {
         quantity: number
     }[],
     timeZone: string,
-    venue: string
+    venue: string,
+    parkingPass: {
+        price: number,
+        quantity: number
+    },
     updatedAt?: Date,
 }
 

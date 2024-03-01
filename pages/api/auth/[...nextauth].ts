@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
                     if(userData.exists()) await updateDoc(userDoc, { provider: 'google' })
                     else
                     {
-                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'google', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'google', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '', id: (credentials as any).id })
                     }
 
                     return { email: (credentials as any).email, id: (credentials as any).id}
@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
                     if(userData.exists()) await updateDoc(userDoc, { provider: 'twitter' })
                     else
                     {
-                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'twitter', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'twitter', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '', id: (credentials as any).id })
                     }
 
                     return { email: (credentials as any).email, id: (credentials as any).id}
@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
                     if(userData.exists()) await updateDoc(userDoc, { provider: 'facebook' })
                     else
                     {
-                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'facebook', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '' })
+                        await setDoc(userDoc, { email: (credentials as any).email, provider: 'facebook', verified: false, firstname: ((credentials as any).name as string).split(" ")[0] ?? '', lastname: ((credentials as any).name as string).split(" ")[1] ?? '', countryCode: '', phoneNumber: '', id: (credentials as any).id })
                     }
 
                     return { email: (credentials as any).email, id: (credentials as any).id}

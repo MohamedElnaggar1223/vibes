@@ -66,44 +66,38 @@ export default function CompleteProfileData({ user }: Props)
             <p className='font-poppins font-base mb-6 text-white'>Complete Your Profile</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
-                    {
-                        !user.firstname &&
-                        <FormField
-                            control={form.control}
-                            name="firstname"
-                            render={({ field }) => (
-                                <FormItem className="">
-                                    <FormControl>
-                                        <input 
-                                            placeholder="First Name" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
-                                </FormItem>
-                            )}
-                        />
-                    }
-                    {
-                        !user.lastname &&
-                        <FormField
-                            control={form.control}
-                            name="lastname"
-                            render={({ field }) => (
-                                <FormItem className="">
-                                    <FormControl>
-                                        <input 
-                                            placeholder="Last Name" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
-                                </FormItem>
-                            )}
-                        />
-                    }
+                    <FormField
+                        control={form.control}
+                        name="firstname"
+                        render={({ field }) => (
+                            <FormItem className="">
+                                <FormControl>
+                                    <input 
+                                        placeholder="First Name" 
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage className="absolute font-poppins" />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="lastname"
+                        render={({ field }) => (
+                            <FormItem className="">
+                                <FormControl>
+                                    <input 
+                                        placeholder="Last Name" 
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage className="absolute font-poppins" />
+                            </FormItem>
+                        )}
+                    />
                     <div className='w-screen max-w-[412px] flex gap-4'>
                         {
                             !user.countryCode &&

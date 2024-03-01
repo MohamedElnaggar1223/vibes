@@ -18,6 +18,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { authErrors } from "@/constants"
 
 export default function SignIn()
 {
@@ -63,9 +64,10 @@ export default function SignIn()
                 setLoading(false)
             })
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong!')
+            //@ts-expect-error authError
+            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
     }
 
@@ -81,9 +83,10 @@ export default function SignIn()
                 setLoading(false)
             }
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong!')   
+            //@ts-expect-error authError
+            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
     }
 
@@ -101,7 +104,8 @@ export default function SignIn()
         }
         catch(e: any)
         {
-            setError(e.message)
+            //@ts-expect-error authError
+            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
     }
 
@@ -117,9 +121,10 @@ export default function SignIn()
                 setLoading(false)
             }
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong!')
+            //@ts-expect-error authError
+            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
     }
 
@@ -202,8 +207,8 @@ export default function SignIn()
                 </DialogContent>
             </Dialog>
             <Dialog open={error !== ''}>
-                <DialogContent className='flex items-center justify-center bg-white border-none outline-none'>
-                    <p className='text-black mt-2 font-poppins text-lg font-semibold'>{error}</p>
+                <DialogContent className='flex items-center justify-center bg-white border-none outline-none text-center'>
+                    <p className='text-black mt-2 font-poppins text-lg font-semibold text-center'>{error}</p>
                 </DialogContent>
             </Dialog>
         </section>
