@@ -4,11 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import AuthHeader from "@/components/shared/AuthHeader";
-import { redirect, RedirectType } from "next/navigation";
-import { initAdmin } from "@/firebase/server/config";
-import { UserType } from "@/lib/types/userTypes";
-import { decode } from "next-auth/jwt";
-import { cookies } from "next/headers";
+import { Suspense } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,16 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const admin = await initAdmin()
-  const cookiesData = cookies()
-  const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
-  // console.log('token layout: ', token)
-  if(token?.sub)
-  {
-    const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
-    if(user?.verified) return redirect('/')
-  }
-
   return (
     <html lang="en">
       <body className={cn('', poppins.variable)}>
@@ -53,7 +39,7 @@ export default async function RootLayout({
         <main className='min-h-screen'>
             <AuthHeader />
             <section className='h-full flex'>
-              <section className='min-h-full pt-28 flex flex-col justify-between px-20 bg-svg'>
+              <section className='min-h-full pt-28 flex flex-col justify-between px-20 w-full bg-svg'>
                 <Image
                   src="/assets/gradients.svg"
                   fill
@@ -62,7 +48,7 @@ export default async function RootLayout({
                   priority
                   quality={100}
                 />
-                <div className='text-white font-poppins text-5xl flex flex-col'>
+                <div className='text-white font-poppins text-6xl flex flex-col'>
                   <span>
                     Your Go To 
                   </span>
@@ -71,10 +57,10 @@ export default async function RootLayout({
                   </span>
                 </div>
                 <div className='flex flex-col'>
-                  <span className='font-poppins text-white text-base font-semibold mb-3'>
+                  <span className='font-poppins text-white text-2xl font-semibold mb-3'>
                     Don't Skip a Beat.. 
                   </span>
-                  <span className='font-poppins text-white text-base font-normal flex flex-col'>
+                  <span className='font-poppins text-white text-2xl font-normal flex flex-col'>
                     <span>
                       Get access to all the premium events
                     </span>
@@ -85,7 +71,9 @@ export default async function RootLayout({
                 </div>
                 <div />
               </section>
-              {children}
+              <Suspense>
+                {children}
+              </Suspense>
             </section>
         </main>
       </body>

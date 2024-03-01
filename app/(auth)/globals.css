@@ -84,11 +84,11 @@ body{
 }
 
 .bg-svg {
-  @apply fixed z-[-4] h-fit w-fit top-auto left-24 !important
+  @apply fixed z-[-4] h-fit top-auto left-24 !important
 }
 
 .bg-svg-img{
-  @apply fixed z-[-4] h-full w-fit top-auto left-24 !important
+  @apply fixed z-[-4] h-full w-fit top-[6rem] left-24 !important
 }
 
 * {
