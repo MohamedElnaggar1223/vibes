@@ -61,3 +61,32 @@ export const UserCompleteProfileSchema = z.object({
             return true
         }, { message: 'Phone number already exists' }),
 })
+
+export const UserUpdateProfileSchema = z.object({
+    firstname: z.string().min(2, { message: 'First name must be more than 1 character' }).max(255),
+    lastname: z.string().min(2, { message: 'Last name must be more than 1 character' }).max(255),
+    countryCode: z.enum(countryCodes),
+    email: z.string().email({ message: 'Invalid email' }),
+    phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
+        .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', '')),
+    id: z.string(),
+})
+.refine(async (values) => {
+    const userCollection = collection(db, 'users')
+    const userQuery = query(userCollection, where('phoneNumber', '==', values.phoneNumber))
+    const userSnapshot = await getDocs(userQuery)
+    if(userSnapshot.size > 0 && userSnapshot.docs.find(doc => doc.id !== values?.id)?.exists()) {
+        return false
+    }
+    return true
+}, { message: 'Phone number already exists', path: ['phoneNumber'] })
+.refine(async (values) => {
+    const userCollection = collection(db, 'users')
+    const userQuery = query(userCollection, where('email', '==', values.email))
+    const userSnapshot = await getDocs(userQuery)
+    if(userSnapshot.size > 0 && userSnapshot.docs.find(doc => doc.id !== values.id)?.exists()) {
+        return false
+    }
+    return true
+}, { message: 'Email already exists', path: ['email'] })
+

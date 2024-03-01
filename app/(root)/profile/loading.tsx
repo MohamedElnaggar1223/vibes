@@ -1,7 +1,7 @@
 export default function loading()
 {
     return (
-        <section className='flex w-full min-h-[90vh] items-center justify-center gap-16'>
+        <section className='flex w-full min-h-[85vh] items-center justify-center gap-16'>
             <div className='flex flex-1 flex-col items-center justify-center rounded-lg divide-y-[1px]'>
                 <div className='py-8 min-w-[19rem] bg-[rgba(217,217,217,0.2)] flex items-center justify-center rounded-t-lg'>
                     <p className='w-[12rem] py-2 rounded-lg bg-[rgba(217,217,217,0.2)] animate-pulse'></p>

@@ -43,6 +43,10 @@ export default function SignUp()
         }
     }, [loading])
 
+    useEffect(() => {
+        if(error !== '') setTimeout(() => setError(''), 3000)
+    }, [error])
+
     const form = useForm<z.infer<typeof UserSignUpSchema>>({
         resolver: zodResolver(UserSignUpSchema),
         defaultValues: {
@@ -300,6 +304,11 @@ export default function SignUp()
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
                     <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+            </Dialog>
+            <Dialog open={error !== ''}>
+                <DialogContent className='flex items-center justify-center bg-white border-none outline-none text-center'>
+                    <p className='text-black mt-2 font-poppins text-lg font-semibold text-center'>{error}</p>
                 </DialogContent>
             </Dialog>
         </section>
