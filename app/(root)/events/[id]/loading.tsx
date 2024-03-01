@@ -1,4 +1,4 @@
-export default function loading() 
+export default function Loading() 
 {
     return (
         <section className='flex flex-col w-full my-1 md:flex-row'>

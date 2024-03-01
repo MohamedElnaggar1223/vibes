@@ -1,14 +1,15 @@
 'use client'
 
-import useCountry from "@/hooks/useCountry"
 import { Separator } from "../ui/separator"
 import { auth } from "@/firebase/client/config"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { useContext, useMemo } from "react"
+import { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CountryContext } from "@/providers/CountryProvider"
+import { Dialog, DialogContent } from "../ui/dialog"
+import { Loader2 } from "lucide-react"
 
 export default function HeaderLinks() 
 {
@@ -17,13 +18,17 @@ export default function HeaderLinks()
 
     const { country, setCountry } = context
 
+    const [loading, setLoading] = useState(false)
+
     const router = useRouter()
 
     const countries = { 'SAR': 'KSA', 'AED': 'UAE', 'EGP': 'EG' }
 
     const handleLogout = async () => {
+        setLoading(true)
         await auth.signOut()
         await signOut()
+        setLoading(false)
     }
 
     const defaultValue = useMemo(() => {
@@ -64,6 +69,11 @@ export default function HeaderLinks()
                 />
                 Logout
             </span>
+            <Dialog open={loading}>
+                <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                    <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+			</Dialog>
         </>
     )
 }

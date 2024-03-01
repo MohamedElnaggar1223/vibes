@@ -3,6 +3,9 @@ import { UserType } from "@/lib/types/userTypes"
 import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
+import Loading from './loading'
+import MyProfile from "@/components/shared/MyProfile"
 
 export default async function Profile()
 {
@@ -15,13 +18,8 @@ export default async function Profile()
     if(!user?.verified) return redirect('/sign-in')
 
     return (
-        <section className='w-full h-full flex gap-16 items-center justify-center'>
-            <div className='flex flex-col w-fit'>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div></div>
-        </section>
+        <Suspense fallback={<Loading />}>
+            <MyProfile user={user} />
+        </Suspense>
     )
 }

@@ -80,7 +80,11 @@ body{
 }
 
 .bg-image {
-  @apply fixed z-[-9999] object-cover top-0 !important
+  @apply fixed z-[-9999] object-cover top-0 !important;
+}
+
+.profile-span span {
+  @apply text-[#E72377];
 }
 
 * {
