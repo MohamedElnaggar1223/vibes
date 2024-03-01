@@ -87,6 +87,10 @@ body{
   @apply fixed z-[-4] h-fit w-fit top-auto left-24 !important
 }
 
+.bg-svg-img{
+  @apply fixed z-[-4] h-100% w-fit top-auto left-24 !important
+}
+
 * {
   min-width: 0;
 }

@@ -58,7 +58,7 @@ export default async function RootLayout({
                   src="/assets/gradients.svg"
                   fill
                   alt="background"
-                  className='bg-svg'
+                  className='bg-svg-img'
                   priority
                   quality={100}
                 />
