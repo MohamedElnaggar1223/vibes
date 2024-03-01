@@ -88,7 +88,7 @@ body{
 }
 
 .bg-svg-img{
-  @apply fixed z-[-4] h-100% w-fit top-auto left-24 !important
+  @apply fixed z-[-4] h-full w-fit top-auto left-24 !important
 }
 
 * {
