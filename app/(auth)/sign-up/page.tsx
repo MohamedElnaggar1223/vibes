@@ -5,6 +5,7 @@ import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
+import Loading from "./loading"
 
 export default async function SignUpPage()
 {
@@ -19,7 +20,7 @@ export default async function SignUpPage()
     }
 
     return (
-        <Suspense>
+        <Suspense fallback={<Loading />}>
             <SignUp />
         </Suspense>
     )

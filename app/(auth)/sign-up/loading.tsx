@@ -1,4 +1,4 @@
-export default function loading()
+export default function Loading()
 {
     return (
         <section className='min-h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24 pt-12 overflow-auto'>
