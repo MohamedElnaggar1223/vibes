@@ -5,5 +5,6 @@ export type UserType = {
     firstname: string,
     lastname: string,
     phoneNumber?: string,
-    verified: boolean
+    verified: boolean,
+    provider: string
 }

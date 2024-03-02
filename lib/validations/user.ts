@@ -1,7 +1,8 @@
 import * as z from 'zod'
-import { db } from '@/firebase/client/config'
+import { auth, db } from '@/firebase/client/config'
 import { collection, query, where, getDocs, and } from 'firebase/firestore'
 import { countryCodes } from '@/constants'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export const UserSignUpSchema = z.object({
     firstname: z.string().min(2, { message: 'First name must be more than 1 character' }).max(255),
@@ -44,6 +45,15 @@ export const UserSignInSchema = z.object({
     }, { message: 'Email does not exist' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 })
+.refine(async (values) => {
+    const user = await signInWithEmailAndPassword(auth, values.email, values.password)
+    .catch((error) => {
+        
+    })
+
+    if(user !== null) return true
+    return false
+}, { message: 'Wrong password!', path: ['password'] })
 
 export const UserCompleteProfileSchema = z.object({
     firstname: z.string().min(2, { message: 'First name must be more than 1 character' }).max(255),
@@ -90,3 +100,20 @@ export const UserUpdateProfileSchema = z.object({
     return true
 }, { message: 'Email already exists', path: ['email'] })
 
+export const UserChangePasswordSchema = z.object({
+    email: z.string().email({ message: 'Invalid email' }),
+    oldPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    newPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    confirmNewPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+})
+.refine(async (values) => {
+    const user = await signInWithEmailAndPassword(auth, values.email, values.oldPassword)
+    .catch((error) => {
+        
+    })
+
+    if(user !== null) return true
+    return false
+}, { message: 'Wrong password!', path: ['oldPassword'] })
+.refine(context => context.newPassword === context.confirmNewPassword, { message: 'Passwords must match', path: ['confirmNewPassword'] })
+.refine(values => values.newPassword!== values.oldPassword, { message: 'New password must be different from old password', path: ['newPassword'] })

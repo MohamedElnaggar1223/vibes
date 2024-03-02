@@ -69,6 +69,10 @@ export default function SignIn()
             //@ts-expect-error authError
             if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
+        finally
+        {
+            setLoading(false)
+        }
     }
 
     const handleGoogleSignIn = async ()  => {
@@ -87,6 +91,10 @@ export default function SignIn()
         {
             //@ts-expect-error authError
             if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
+        }
+        finally
+        {
+            setLoading(false)
         }
     }
 
@@ -107,6 +115,10 @@ export default function SignIn()
             //@ts-expect-error authError
             if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
         }
+        finally
+        {
+            setLoading(false)
+        }
     }
 
     const handleFacebookSignIn = async () => {
@@ -125,6 +137,10 @@ export default function SignIn()
         {
             //@ts-expect-error authError
             if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
+        }
+        finally
+        {
+            setLoading(false)
         }
     }
 

@@ -3,9 +3,7 @@ import { UserType } from "@/lib/types/userTypes"
 import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { Suspense } from "react"
-import Loading from './loading'
-import MyProfile from "@/components/shared/MyProfile"
+import MyProfile from "@/components/auth/profile/MyProfile"
 
 export default async function Profile()
 {
@@ -18,8 +16,6 @@ export default async function Profile()
     if(!user?.verified) return redirect('/sign-in')
 
     return (
-        <Suspense fallback={<Loading />}>
-            <MyProfile user={user} />
-        </Suspense>
+        <MyProfile user={user} />
     )
 }
