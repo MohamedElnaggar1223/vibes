@@ -14,7 +14,7 @@ import { UserUpdateProfileSchema } from "@/lib/validations/user"
 import { Dispatch, SetStateAction } from "react"
 import { doc, updateDoc } from "firebase/firestore"
 import { auth, db } from "@/firebase/client/config"
-import { User, updateEmail } from "firebase/auth"
+import { User, signInWithEmailAndPassword, updateEmail } from "firebase/auth"
 import { authErrors, countryCodes } from "@/constants"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
@@ -36,11 +36,14 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,
+            password: '',
             countryCode: user.countryCode,
             phoneNumber: user.phoneNumber,
             id: user.id
         },
     })
+
+    const emailChanged = form.getValues().email !== user.email
 
     const handlePhoneNumberChage = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: string) => void) => {
         const value = e.target.value
@@ -51,6 +54,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
         setLoading(true)
         try
         {
+            if(emailChanged) await signInWithEmailAndPassword(auth, user.email, values?.password ?? '')
             await updateDoc(doc(db, 'users', user?.id ?? ''), {...values})
             const currentUser = auth.currentUser
             await updateEmail(currentUser as User, values.email)
@@ -71,7 +75,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
     }
     
     const unChanged = [form.getValues().firstname === user.firstname, form.getValues().lastname === user.lastname, form.getValues().email === user.email, form.getValues().countryCode === user.countryCode, form.getValues().phoneNumber === user.phoneNumber].every(Boolean)
-    
+
     return (
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
             <p className='mb-4 font-poppins text-white font-medium'>Account details</p>
@@ -109,22 +113,45 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem className="">
-                                <FormControl>
-                                    <input 
-                                        placeholder="Email" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage className="absolute font-poppins" />
-                            </FormItem>
-                        )}
-                    />
+                    {
+                        user.provider === 'credentials' &&
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem className="">
+                                    <FormControl>
+                                        <input 
+                                            placeholder="Email" 
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage className="absolute font-poppins" />
+                                </FormItem>
+                            )}
+                        />
+                    }
+                    {
+                        emailChanged &&
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem className="">
+                                    <FormControl>
+                                        <input 
+                                            placeholder="Password" 
+                                            type='password'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage className="absolute font-poppins" />
+                                </FormItem>
+                            )}
+                        />
+                    }
                     <div className='w-screen max-w-[412px] flex gap-4'>
                         <FormField
                             control={form.control}

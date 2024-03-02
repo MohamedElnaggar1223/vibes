@@ -77,6 +77,7 @@ export const UserUpdateProfileSchema = z.object({
     lastname: z.string().min(2, { message: 'Last name must be more than 1 character' }).max(255),
     countryCode: z.enum(countryCodes),
     email: z.string().email({ message: 'Invalid email' }),
+    password: z.string().min(8, { message: 'Password must be at least 8 characters' }).optional(),
     phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
         .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', '')),
     id: z.string(),

@@ -70,9 +70,7 @@ export default function MyProfile({ user }: Props)
                 ) : selectedTab === 'password' ? (
                     <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                 ) : (
-                    <Suspense fallback={<TicketsLoading />}>
-                        <MyTickets user={user} />
-                    </Suspense>
+                    <MyTickets user={user} />
                 )
             }
             
