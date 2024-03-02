@@ -17,7 +17,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-import { doc, onSnapshot } from "firebase/firestore"
+import { Timestamp, addDoc, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import useCountry from "@/hooks/useCountry"
 import { CountryContext } from "@/providers/CountryProvider"
@@ -45,7 +45,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
     const [purchasedParkingPass, setPurchasedParkingPass] = useState(0)
-    const [fakeLoading, setFakeLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
 
     const parentRef = useRef<HTMLDivElement>(null)
@@ -99,7 +99,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (fakeLoading) {
+            if (loading) {
                 event.preventDefault()
                 event.stopPropagation()
             }
@@ -110,13 +110,43 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
         return () => {
             window.removeEventListener('click', handleClickOutside)
         }
-    }, [fakeLoading])
+    }, [loading])
 
-    useEffect(() => {
-        console.log(country)
+    const selectedExchangeRate = useMemo(() => {
+        if(country === 'EGP') return exchangeRate.USDToEGP
+        else if(country === 'SAR') return exchangeRate.USDToSAR
+        else return exchangeRate.USDToAED
     }, [country])
 
-    console.log(country)
+    const handleBuyTickets = async () => {
+        setLoading(true)
+        try 
+        {
+            const addedTicketObject = {
+                userId: user?.id,
+                eventId: event.id,
+                tickets: purchasedTickets,
+                seats: {},
+                parkingPass: purchasedParkingPass,
+                country: country,
+                totalPaid: total * selectedExchangeRate,
+                createdAt: Timestamp.now()
+            }
+            const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
+            await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })) })
+            await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
+            setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
+            setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
+        }
+        catch(e: any)
+        {
+            console.log(e.message)
+        }
+        finally
+        {
+            setLoading(false)
+        }
+    }
 
     return (
         <AnimatePresence>
@@ -262,9 +292,21 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     </Tooltip>
                                 </TooltipProvider>
                             ) : (
-                                <button className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
-                                    Buy Now
-                                </button>
+                                <TooltipProvider delayDuration={100}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <button onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                                Buy Now
+                                            </button>
+                                        </TooltipTrigger>
+                                        {
+                                            !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) &&
+                                            <TooltipContent>
+                                                <p>Add tickets to continue!</p>
+                                            </TooltipContent>
+                                        }
+                                    </Tooltip>
+                                </TooltipProvider>
                             )
                         }
                     </div>
@@ -333,18 +375,14 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             <div 
                                 className={cn('py-6 text-white font-poppins font-normal bg-[#5C5C5C] items-center text-center cursor-pointer', Object.values(selectedTickets).find(ticket => ticket > 0) && 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}
                                 onClick={() => {
-                                    setFakeLoading(true)
-                                    setTimeout(() => {
-                                        setPurchasedTickets(selectedTickets)
-                                        setFakeLoading(false)
-                                        setDialogOpen(false)
-                                    }, 2000)
+                                    setPurchasedTickets(selectedTickets)
+                                    setDialogOpen(false)
                                 }}
                             >
                                 Add Tickets
                             </div>
                         </div>
-                        <Dialog open={fakeLoading}>
+                        <Dialog open={loading}>
                             <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
                                 <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
                             </DialogContent>
