@@ -182,7 +182,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     </motion.div>
                                 ))}
                                 {
-                                    purchasedParkingPass &&
+                                    purchasedParkingPass > 0 &&
                                     <motion.div layoutId={'parkinPass'} className='relative px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
                                         <p className='text-black font-poppins text-normal font-semibold flex-1'>Parking pass</p>
                                         {

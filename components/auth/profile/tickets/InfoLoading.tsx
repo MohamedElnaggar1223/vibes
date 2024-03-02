@@ -1,4 +1,4 @@
-export default function loading()
+export default function InfoLoading()
 {
     return (
         <section className='flex w-full min-h-[85vh] items-center justify-center gap-16'>

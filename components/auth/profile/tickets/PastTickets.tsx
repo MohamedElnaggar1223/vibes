@@ -1,6 +1,6 @@
 import { UserType } from "@/lib/types/userTypes"
 import { Suspense } from "react"
-import Loading from "./Loading"
+import Loading from "./TicketsLoading"
 
 type Props = {
     user: UserType

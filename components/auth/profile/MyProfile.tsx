@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation"
 import PersonalInformation from "./PersonalInformation"
 import ChangePassword from "./ChangePassword"
 import MyTickets from "./MyTickets"
-import Loading from '@/app/(root)/profile/loading'
+import InfoLoading from "./tickets/InfoLoading"
+import TicketsLoading from "./tickets/TicketsLoading"
 
 type Props = {
     user: UserType
@@ -17,8 +18,6 @@ type Props = {
 
 export default function MyProfile({ user }: Props)
 {
-    const router = useRouter()
-
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
@@ -65,13 +64,15 @@ export default function MyProfile({ user }: Props)
             </div>
             {
                 selectedTab === 'personal' ? (
-                    <Suspense fallback={<Loading />}>
+                    <Suspense fallback={<InfoLoading />}>
                         <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                     </Suspense>
                 ) : selectedTab === 'password' ? (
                     <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                 ) : (
-                    <MyTickets user={user} />
+                    <Suspense fallback={<TicketsLoading />}>
+                        <MyTickets user={user} />
+                    </Suspense>
                 )
             }
             
