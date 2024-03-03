@@ -5,13 +5,17 @@ import { auth } from "@/firebase/client/config"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { useContext, useMemo, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CountryContext } from "@/providers/CountryProvider"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { Loader2 } from "lucide-react"
 
-export default function HeaderLinks() 
+type Props = {
+    setOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export default function HeaderLinks({ setOpen }: Props) 
 {
     const context = useContext(CountryContext)
     if(!context) return null
@@ -25,6 +29,7 @@ export default function HeaderLinks()
     const countries = { 'SAR': 'KSA', 'AED': 'UAE', 'EGP': 'EG' }
 
     const handleLogout = async () => {
+        setOpen(false)
         setLoading(true)
         await auth.signOut()
         await signOut()
