@@ -17,10 +17,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-import { Timestamp, addDoc, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
+import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import useCountry from "@/hooks/useCountry"
 import { CountryContext } from "@/providers/CountryProvider"
+import Image from "next/image"
 
 type Props = {
     event: EventType,
@@ -47,6 +48,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [purchasedParkingPass, setPurchasedParkingPass] = useState(0)
     const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
+    const [showMap, setShowMap] = useState(false)
 
     const parentRef = useRef<HTMLDivElement>(null)
 
@@ -134,6 +136,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             }
             const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
             await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })) })
+            await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(addedTicket.id) })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
@@ -165,7 +168,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={eventData.seated} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
                             Map
                         </button>
                     </div>
@@ -205,7 +208,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
+                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
                                         <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                             X
                                         </div>
@@ -295,7 +298,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <button onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                            <button onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                                                 Buy Now
                                             </button>
                                         </TooltipTrigger>
@@ -387,6 +390,16 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
                             </DialogContent>
                         </Dialog>
+                    </DialogContent>
+                </Dialog>
+                <Dialog open={showMap} onOpenChange={setShowMap}>
+                    <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                        <Image
+                            src={event.mapImage}
+                            width={600}
+                            height={400}
+                            alt='event map'
+                        />
                     </DialogContent>
                 </Dialog>
             </div>
