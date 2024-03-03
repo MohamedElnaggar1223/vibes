@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { startTransition, useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     Dialog,
     DialogContent,
@@ -121,7 +121,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     }, [country])
 
     const handleBuyTickets = async () => {
-        setLoading(true)
+        startTransition(() => {
+            setLoading(true)
+        })
         try 
         {
             const addedTicketObject = {
@@ -138,15 +140,14 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })) })
             await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(addedTicket.id) })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
+            setLoading(false)
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
+            setPurchasedParkingPass(0)
         }
         catch(e: any)
         {
             console.log(e.message)
-        }
-        finally
-        {
             setLoading(false)
         }
     }
@@ -246,7 +247,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={availableParkingPasses?.price ?? 0} exchangeRate={exchangeRate} /></p>
+                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableParkingPasses?.price ?? 0) * purchasedParkingPass} exchangeRate={exchangeRate} /></p>
                                         <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                             X
                                         </div>
@@ -385,11 +386,6 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 Add Tickets
                             </div>
                         </div>
-                        <Dialog open={loading}>
-                            <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
-                                <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
-                            </DialogContent>
-                        </Dialog>
                     </DialogContent>
                 </Dialog>
                 <Dialog open={showMap} onOpenChange={setShowMap}>
@@ -400,6 +396,11 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             height={400}
                             alt='event map'
                         />
+                    </DialogContent>
+                </Dialog>
+                <Dialog open={loading}>
+                    <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                        <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
                     </DialogContent>
                 </Dialog>
             </div>
