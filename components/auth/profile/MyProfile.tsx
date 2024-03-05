@@ -9,8 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import PersonalInformation from "./PersonalInformation"
 import ChangePassword from "./ChangePassword"
 import InfoLoading from "./tickets/InfoLoading"
-import TicketsLoading from "./tickets/TicketsLoading"
-import ViewMyTickets from "./ViewMyTickets"
+import MyTickets from "./MyTickets"
 
 type Props = {
     user: UserType
@@ -96,7 +95,7 @@ export default function MyProfile({ user }: Props)
                         <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                     </Suspense>
                 ) : selectedTab === 'my-tickets' ? (
-                    <ViewMyTickets user={user} />
+                    <MyTickets user={user} />
                 ) : (
                     <Suspense fallback={<InfoLoading />}>
                         <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
