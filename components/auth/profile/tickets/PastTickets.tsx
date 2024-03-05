@@ -6,7 +6,7 @@ type Props = {
     user: UserType
 }
 
-export default async function PastTickets({ user }: Props)
+export default function PastTickets({ user }: Props)
 {
 
     return (
