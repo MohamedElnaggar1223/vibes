@@ -1,7 +1,7 @@
 'use client'
 import { UserType } from "@/lib/types/userTypes";
 import { cn } from "@/lib/utils";
-import { Suspense, useState } from "react";
+import { Suspense, startTransition, useState } from "react";
 import CurrentTickets from "./tickets/CurrentTickets";
 import PastTickets from "./tickets/PastTickets";
 import TicketsLoading from "./tickets/TicketsLoading";
@@ -10,6 +10,7 @@ import { TicketType } from "@/lib/types/ticketTypes";
 import { db } from "@/firebase/client/config";
 import { getDoc, doc, Timestamp } from "firebase/firestore";
 import { EventType } from "@/lib/types/eventTypes";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
     user: UserType,
@@ -17,7 +18,12 @@ type Props = {
 
 export default function ViewMyTickets({ user }: Props)
 {
-    const [selectedTab, setSelectedTab] = useState('current')
+    // const [selectedTab, setSelectedTab] = useState('current')
+
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    const selectedTab = searchParams?.get('date') ?? 'current'
 
     const { data, isLoading, error } = useSWR('tickets', async (...args) => {
         const ticketsPromise = user.tickets?.map(async (ticketId) => {
@@ -59,15 +65,31 @@ export default function ViewMyTickets({ user }: Props)
     return (
         <div className='flex flex-1 flex-col items-center justify-center min-h-[60%] max-h-[60%]'>
             <div className='flex items-start justify-between px-12 gap-12 h-fit'>
-                <button onClick={() => setSelectedTab('current')} className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', selectedTab === 'current' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}>Current Tickets</button>
-                <button onClick={() => setSelectedTab('past')} className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', selectedTab === 'past' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}>Past Tickets</button>
+                <button 
+                    onClick={() => {
+                        startTransition(() => router.push('?show=my-tickets&date=current', { scroll: false }))
+                    }} 
+                    className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', selectedTab === 'current' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
+                >
+                    Current Tickets
+                </button>
+                <button 
+                    onClick={() => {
+                        startTransition(() => router.push('?show=my-tickets&date=past', { scroll: false }))
+                    }} 
+                    className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', selectedTab === 'past' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
+                >
+                    Past Tickets
+                </button>
             </div>
             <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12'>
                 {
                     selectedTab === 'current' ? (
                         isLoading ? <TicketsLoading /> : <CurrentTickets user={user} />
-                    ) : (
+                    ) : selectedTab === 'past' ? (
                         isLoading ? <TicketsLoading /> : <PastTickets user={user} />
+                    ) : (
+                        isLoading ? <TicketsLoading /> : <CurrentTickets user={user} />
                     )
                 }
             </div>
