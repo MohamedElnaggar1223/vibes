@@ -58,7 +58,8 @@ export default function ViewMyTickets({ user }: Props)
 
         return {
             currentTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! >= Timestamp.now().toDate()),
-            pastTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! <= Timestamp.now().toDate())
+            pastTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! <= Timestamp.now().toDate()),
+            events: eventsData,
         }
     })
 
@@ -85,11 +86,11 @@ export default function ViewMyTickets({ user }: Props)
             <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12'>
                 {
                     selectedTab === 'current' ? (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets user={user} />
+                        isLoading ? <TicketsLoading /> : <CurrentTickets tickets={data?.currentTickets!} events={data?.events!} />
                     ) : selectedTab === 'past' ? (
-                        isLoading ? <TicketsLoading /> : <PastTickets user={user} />
+                        isLoading ? <TicketsLoading /> : <PastTickets tickets={data?.pastTickets!} events={data?.events!} />
                     ) : (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets user={user} />
+                        isLoading ? <TicketsLoading /> : <CurrentTickets tickets={data?.currentTickets!} events={data?.events!} />
                     )
                 }
             </div>

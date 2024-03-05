@@ -6,31 +6,32 @@ export default function Loading()
         //         <p className='min-w-40 rounded-lg py-6 bg-[rgba(217,217,217,0.2)] animate-pulse'></p>
         //         <p className='min-w-40 rounded-lg py-6 bg-[rgba(217,217,217,0.2)] animate-pulse'></p>
         //     </div>
-            <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12'>                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+            <>                
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-36'>
+                <div className='bg-[rgba(217,217,217,0.2)] animate-pulse rounded-lg flex w-full min-h-44'>
                     <div></div>
                 </div>
-            </div>
+            </>
         // </div>
     )
 }
