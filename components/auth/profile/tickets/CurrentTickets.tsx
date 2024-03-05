@@ -8,6 +8,7 @@ type Props = {
 
 export default function CurrentTickets({ user }: Props)
 {
+    
     return (
         <Suspense fallback={<Loading />}>
             
