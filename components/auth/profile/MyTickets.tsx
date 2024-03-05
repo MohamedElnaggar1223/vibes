@@ -7,14 +7,20 @@ import { Timestamp } from "firebase/firestore"
 import { Loader2 } from "lucide-react"
 import { Suspense } from "react"
 import ViewMyTickets from "@/components/auth/profile/ViewMyTickets"
+import { decode } from "next-auth/jwt"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
-type Props = {
-    user: UserType
-}
-
-export default async function MyTickets({ user }: Props)
+export default async function MyTickets()
 {
     const admin = await initAdmin()
+
+    const cookiesData = cookies()
+    const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
+
+    const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
+
+    if(!user?.verified) return redirect('/sign-in')
 
     const ticketsPromise = user.tickets?.map(async (ticketId) => {
         const ticketData = await admin.firestore().collection('tickets')?.doc(ticketId).get()

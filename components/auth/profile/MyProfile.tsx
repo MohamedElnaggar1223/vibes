@@ -8,10 +8,9 @@ import { Loader2 } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import PersonalInformation from "./PersonalInformation"
 import ChangePassword from "./ChangePassword"
-import MyTickets from "./MyTickets"
 import InfoLoading from "./tickets/InfoLoading"
 import TicketsLoading from "./tickets/TicketsLoading"
-import Link from "next/link"
+import ViewMyTickets from "./ViewMyTickets"
 
 type Props = {
     user: UserType
@@ -97,9 +96,7 @@ export default function MyProfile({ user }: Props)
                         <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                     </Suspense>
                 ) : selectedTab === 'my-tickets' ? (
-                    <Suspense fallback={<>Loading...</>}>
-                        <MyTickets user={user} />
-                    </Suspense>
+                    <ViewMyTickets user={user} />
                 ) : (
                     <Suspense fallback={<InfoLoading />}>
                         <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />

@@ -5,20 +5,56 @@ import { Suspense, useState } from "react";
 import CurrentTickets from "./tickets/CurrentTickets";
 import PastTickets from "./tickets/PastTickets";
 import TicketsLoading from "./tickets/TicketsLoading";
+import useSWR from 'swr'
 import { TicketType } from "@/lib/types/ticketTypes";
+import { db } from "@/firebase/client/config";
+import { getDoc, doc, Timestamp } from "firebase/firestore";
+import { EventType } from "@/lib/types/eventTypes";
 
 type Props = {
     user: UserType,
-    currentTickets: TicketType[],
-    pastTickets: TicketType[],
 }
 
-export default function ViewMyTickets({ user, currentTickets, pastTickets }: Props)
+export default function ViewMyTickets({ user }: Props)
 {
     const [selectedTab, setSelectedTab] = useState('current')
 
-    console.log(currentTickets)
-    console.log(pastTickets)
+    const { data, isLoading, error } = useSWR('tickets', async (...args) => {
+        const ticketsPromise = user.tickets?.map(async (ticketId) => {
+            const ticketData = await getDoc(doc(db, 'tickets', ticketId))
+            const ticketFinalData = {
+                ...ticketData.data(),
+                createdAt: ticketData.data()?.createdAt?.toDate(),
+            } as TicketType
+            return ticketFinalData
+        })
+
+        const ticketsData = await Promise.all(ticketsPromise!)
+
+        const ticketsEvents = [] as string[]
+        ticketsData.forEach(ticket => !ticketsEvents.includes(ticket.eventId) && ticketsEvents.push(ticket.eventId))
+
+        const eventsPromise = ticketsEvents.map(async (eventId) => {
+            const eventData = await getDoc(doc(db, 'events', eventId))
+            const eventFinalData = {
+                ...eventData.data(),
+                createdAt: eventData.data()?.createdAt?.toDate(),
+                eventDate: eventData.data()?.eventDate?.toDate(),
+                eventTime: eventData.data()?.eventTime?.toDate(),
+                gatesOpen: eventData.data()?.gatesOpen?.toDate(),
+                gatesClose: eventData.data()?.gatesClose?.toDate(),
+                updatedAt: eventData.data()?.updatedAt?.toDate(),
+            } as EventType
+            return eventFinalData
+        })
+
+        const eventsData = await Promise.all(eventsPromise!)
+
+        return {
+            currentTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! >= Timestamp.now().toDate()),
+            pastTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! <= Timestamp.now().toDate())
+        }
+    })
 
     return (
         <div className='flex flex-1 flex-col items-center justify-center min-h-[60%] max-h-[60%]'>
@@ -29,13 +65,9 @@ export default function ViewMyTickets({ user, currentTickets, pastTickets }: Pro
             <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12'>
                 {
                     selectedTab === 'current' ? (
-                        <Suspense fallback={<TicketsLoading />}>
-                            <CurrentTickets user={user} />
-                        </Suspense>
+                        isLoading ? <TicketsLoading /> : <CurrentTickets user={user} />
                     ) : (
-                        <Suspense fallback={<TicketsLoading />}>
-                            <PastTickets user={user} />
-                        </Suspense>
+                        isLoading ? <TicketsLoading /> : <PastTickets user={user} />
                     )
                 }
             </div>
