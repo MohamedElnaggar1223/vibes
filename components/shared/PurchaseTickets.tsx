@@ -17,9 +17,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
+import { Timestamp, addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
-import useCountry from "@/hooks/useCountry"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 
@@ -27,6 +26,14 @@ type Props = {
     event: EventType,
     exchangeRate: ExchangeRate,
     user: UserType | null
+}
+
+function addValues(obj1: any, obj2: any) {
+    const tempObj = {...obj1}
+    Object.keys(obj2).forEach(key => {
+        tempObj[key] = (tempObj[key]?? 0) + obj2[key]
+    })
+    return tempObj
 }
 
 export default function PurchaseTickets({ event, exchangeRate, user }: Props) 
@@ -137,9 +144,11 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                 createdAt: Timestamp.now()
             }
             const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
-            await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })) })
+            await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
             await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(addedTicket.id) })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
+            const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
+            await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
             setLoading(false)
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
@@ -286,9 +295,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <button disabled className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                            <motion.button layout={true} disabled className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
                                                 Buy Now
-                                            </button>
+                                            </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>You must be signed in!</p>
@@ -299,9 +308,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <button onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
+                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                                                 Buy Now
-                                            </button>
+                                            </motion.button>
                                         </TooltipTrigger>
                                         {
                                             !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) &&

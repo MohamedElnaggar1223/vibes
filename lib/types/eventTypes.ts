@@ -39,6 +39,9 @@ export type EventType = {
         price: number,
         quantity: number
     },
+    ticketsSold: {},
+    totalRevenue: number,
+    parkingSold: number,
     updatedAt?: Date,
 }
 

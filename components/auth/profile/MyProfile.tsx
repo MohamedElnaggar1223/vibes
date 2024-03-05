@@ -1,16 +1,17 @@
 'use client'
 
 import { UserType } from "@/lib/types/userTypes"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, startTransition, useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent } from "../../ui/dialog"
 import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import PersonalInformation from "./PersonalInformation"
 import ChangePassword from "./ChangePassword"
 import MyTickets from "./MyTickets"
 import InfoLoading from "./tickets/InfoLoading"
 import TicketsLoading from "./tickets/TicketsLoading"
+import Link from "next/link"
 
 type Props = {
     user: UserType
@@ -21,7 +22,10 @@ export default function MyProfile({ user }: Props)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
-    const [selectedTab, setSelectedTab] = useState('personal')
+    // const [selectedTab, setSelectedTab] = useState('personal')
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const selectedTab = searchParams?.get('show') ?? 'personal'
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -49,17 +53,38 @@ export default function MyProfile({ user }: Props)
     return (
         <section className='flex w-full min-h-[90vh] max-h-[90vh] items-center justify-center gap-16 px-24'>
             <div className='flex flex-1 flex-col max-w-[19rem] items-center justify-center rounded-lg divide-y-[1px]'>
-                <div onClick={() => setSelectedTab('personal')} className='py-8 min-w-[19rem] flex items-center justify-center rounded-t-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'>
-                    <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'personal' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Personal Information</p>
+                <div 
+                    onClick={() => {
+                        startTransition(() => {
+                            router.push('?show=personal', { scroll: false })
+                        })
+                    }} 
+                    className='py-8 min-w-[19rem] flex items-center justify-center rounded-t-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'
+                >
+                    <p className={cn('font-poppins text-base font-normal text-white', !(selectedTab === 'change-password' || selectedTab === 'my-tickets')  && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Personal Information</p>
                 </div>
                 {
                     user.provider === 'credentials' &&
-                    <div onClick={() => setSelectedTab('password')} className='py-8 min-w-[19rem] flex items-center justify-center bg-[rgba(82,82,82,0.60)] cursor-pointer'>
-                        <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'password' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Change Password</p>
+                    <div 
+                        onClick={() => {
+                            startTransition(() => {
+                                router.push('?show=change-password', { scroll: false })
+                            })
+                        }} 
+                        className='py-8 min-w-[19rem] flex items-center justify-center bg-[rgba(82,82,82,0.60)] cursor-pointer'
+                    >
+                        <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'change-password' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Change Password</p>
                     </div>
                 }
-                <div onClick={() => setSelectedTab('tickets')} className='py-8 min-w-[19rem] flex items-center justify-center rounded-b-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'>
-                    <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'tickets' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>My Tickets</p>
+                <div 
+                    onClick={() => {
+                        startTransition(() => {
+                            router.push('?show=my-tickets', { scroll: false })
+                        })
+                    }} 
+                    className='py-8 min-w-[19rem] flex items-center justify-center rounded-b-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'
+                >
+                    <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'my-tickets' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>My Tickets</p>
                 </div>
             </div>
             {
@@ -67,10 +92,18 @@ export default function MyProfile({ user }: Props)
                     <Suspense fallback={<InfoLoading />}>
                         <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
                     </Suspense>
-                ) : selectedTab === 'password' ? (
-                    <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
+                ) : selectedTab === 'change-password' ? (
+                    <Suspense fallback={<>Loading...</>}>
+                        <ChangePassword user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
+                    </Suspense>
+                ) : selectedTab === 'my-tickets' ? (
+                    <Suspense fallback={<>Loading...</>}>
+                        <MyTickets user={user} />
+                    </Suspense>
                 ) : (
-                    <MyTickets user={user} />
+                    <Suspense fallback={<InfoLoading />}>
+                        <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />
+                    </Suspense>
                 )
             }
             

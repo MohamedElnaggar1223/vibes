@@ -6,5 +6,6 @@ export type UserType = {
     lastname: string,
     phoneNumber?: string,
     verified: boolean,
-    provider: string
+    provider: string,
+    tickets: string[] | undefined
 }
