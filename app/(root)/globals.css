@@ -106,3 +106,7 @@ body{
 ::-webkit-scrollbar-thumb:hover {
   background: #444; 
 }
+
+.qrcodeHeight svg {
+  height: 90%;
+}

@@ -13,8 +13,12 @@ export default function CurrentTickets({ tickets, events }: Props)
 {
 
     return (
-        <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12'>
-            {tickets.map(ticket => <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} />)}
-        </div>
+        <Suspense fallback={<Loading />}>            
+            {   
+                tickets.length ?
+                tickets.map(ticket => <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} />) :
+                <p className='h-44 w-full font-poppins text-white font-medium text-center flex items-center justify-center'>No tickets available!</p>
+            }
+        </Suspense>
     )
 }

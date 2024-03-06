@@ -14,7 +14,11 @@ export default function PastTickets({ tickets, events }: Props)
 
     return (
         <Suspense fallback={<Loading />}>
-            {tickets.map(ticket => <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} />)}
+            {   
+                tickets.length ?
+                tickets.map(ticket => <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} />) :
+                <p className='h-44 w-full font-poppins text-white font-medium text-center flex items-center justify-center'>No tickets available!</p>
+            }
         </Suspense>
     )
 }
