@@ -66,7 +66,7 @@ export default function ViewMyTickets({ user }: Props)
 
     return (
         <div className='flex flex-1 flex-col items-center justify-center min-h-[60%] max-h-[60%]'>
-            <div className='flex items-start justify-between px-12 gap-12 h-fit'>
+            <div className='flex items-start justify-evenly px-12 gap-12 h-fit w-full'>
                 <button 
                     onClick={() => {
                         setOptimisticSelectedTab('current')

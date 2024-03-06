@@ -21,6 +21,7 @@ import { Timestamp, addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, upd
 import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 type Props = {
     event: EventType,
@@ -41,6 +42,8 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const context = useContext(CountryContext)
     if(!context) return <Loader2 className='animate-spin' />
     const { country } = context
+
+    const router = useRouter()
 
     const [dialogOpen, setDialogOpen] = useState(false)
     const [eventData, setEventData] = useState(event)
@@ -153,6 +156,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
+            router.push(`/success/${addedTicket.id}`)
         }
         catch(e: any)
         {

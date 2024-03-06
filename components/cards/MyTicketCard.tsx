@@ -21,7 +21,7 @@ export default function MyTicketCard({ ticket, event }: Props)
                 height={176}
                 width={176}
                 alt={event.name}
-                className='min-w-44 min-h-44 object-contain'
+                className='min-w-44 min-h-44 object-fill'
             />
             <div className='flex gap-4 items-center justify-between w-full'>
                 <div className='flex flex-col gap-3 py-2'>
