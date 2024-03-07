@@ -68,7 +68,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                             // >
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] basis-1/3 overflow-visible', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999]' : 'blur-sm mt-14')}
+                                className={cn('max-h-[448px] max-w-[728px] basis-1/3 overflow-visible', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999]' : 'blur-sm mt-14')}
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
@@ -83,7 +83,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                                     className='rounded-lg object-cover h-full w-full flex items-center justify-center'
                                     width={728}
                                     height={448} 
-                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg min-w-[872px] max-w-[872px] min-h-[550px] max-h-[550px] z-[99999999]' : "rounded-lg object-cover h-full w-full max-w-[872px]"}
+                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg min-w-[150%] max-w-[150%] min-h-[125%] max-h-[125%] z-[99999999]' : "rounded-lg object-cover h-full w-full max-w-[872px]"}
                                     priority={true}
                                     layoutId={event.id}
                                     eventPage={false}
