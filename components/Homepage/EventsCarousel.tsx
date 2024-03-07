@@ -36,7 +36,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
 
     return (
         <AnimatePresence>
-            <section className='w-full flex flex-col'>
+            <section className='w-full flex flex-col overflow-x-hidden'>
                 <Carousel
                     opts={{
                         align: "start",
@@ -54,9 +54,21 @@ function EventsCarousel({ events, exchangeRate }: Props)
                 >
                     <CarouselContent className=''>
                         {events.map((event, index) => (
+                            // <CarouselItem 
+                            //     key={index} 
+                            //     className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10 cursor-pointer' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 max-w-[400px]', events.length === 1 && 'mx-auto basis-auto', (events.length === 3 || events.length === 4) && (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) && 'min-w-[800px]' )} 
+                            //     onClick={() => {
+                            //         if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                            //         else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                            //         api?.scrollTo(index === 0 ? events.length - 1 : index - 1)
+                            //         setTimeout(() => {
+                            //             setSelectedIndex(index === 0 ? events.length - 1 : index - 1)
+                            //         }, 500)
+                            //     }}
+                            // >
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10 cursor-pointer' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 max-w-[400px]', events.length === 1 && 'mx-auto basis-auto', (events.length === 3 || events.length === 4) && (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) && 'min-w-[800px]' )} 
+                                className={cn('max-h-[448px] basis-1/3 overflow-visible', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999]' : 'blur-sm mt-14')}
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
@@ -71,7 +83,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                                     className='rounded-lg object-cover h-full w-full flex items-center justify-center'
                                     width={728}
                                     height={448} 
-                                    imageClassName="rounded-lg object-cover h-full w-full max-w-[872px]"
+                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg min-w-[872px] max-w-[872px] min-h-[550px] max-h-[550px] z-[99999999]' : "rounded-lg object-cover h-full w-full max-w-[872px]"}
                                     priority={true}
                                     layoutId={event.id}
                                     eventPage={false}
@@ -80,7 +92,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                         ))}
                     </CarouselContent>
                 </Carousel>
-                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[-20px] z-10 text-white rounded-2xl'>
+                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-4 z-10 text-white rounded-2xl'>
                     <div className='flex justify-between items-center w-full'>
                         <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
                         <div className='flex flex-col gap-6 items-end'>
