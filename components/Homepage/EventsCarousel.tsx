@@ -44,11 +44,11 @@ function EventsCarousel({ events, exchangeRate }: Props)
                     }}
                     className={"min-w-full mt-24 overflow-visible z-50"}
                     plugins={[
-                        Autoplay({
-                            delay: 3000,
-                            playOnInit: true,
-                            stopOnInteraction: true,
-                        })
+                        // Autoplay({
+                        //     delay: 3000,
+                        //     playOnInit: true,
+                        //     stopOnInteraction: true,
+                        // })
                     ]}
                     setApi={setApi}
                 >
@@ -83,7 +83,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                                     className='rounded-lg object-cover h-full w-full flex items-center justify-center'
                                     width={728}
                                     height={448} 
-                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg min-w-[150%] max-w-[150%] min-h-[125%] max-h-[125%] z-[99999999]' : "rounded-lg object-cover h-full w-full max-w-[872px]"}
+                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg max-w-[calc(50vw-5rem)] min-h-[125%] max-lg:min-h-[220px] max-lg:min-w-[280px] max-h-[125%] z-[99999999]' : "max-lg:absolute max-lg:min-w-[180px] max-lg:min-h-[150px] rounded-lg object-cover h-full w-full max-w-[872px]"}
                                     priority={true}
                                     layoutId={event.id}
                                     eventPage={false}
@@ -92,23 +92,23 @@ function EventsCarousel({ events, exchangeRate }: Props)
                         ))}
                     </CarouselContent>
                 </Carousel>
-                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-4 z-10 text-white rounded-2xl'>
-                    <div className='flex justify-between items-center w-full'>
-                        <p className='font-poppins font-medium text-2xl'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
-                        <div className='flex flex-col gap-6 items-end'>
+                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl'>
+                    <div className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
+                        <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
+                        <div className='flex flex-col gap-2 lg:gap-6 items-end max-lg:w-full'>
                             <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</p>
                             <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
                                 Book Now
                             </button>
                         </div>
                     </div>
-                    <div className='flex gap-6 items-center justify-center flex-1 w-full'>
-                        <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36'>
-                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
-                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
-                            <p className='font-poppins font-extralight text-lg'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
+                    <div className='flex flex-col lg:flex-row lg:gap-6 items-center justify-center flex-1 w-full'>
+                        <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36 max-lg:w-full'>
+                            <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
+                            <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                            <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
                         </div>
-                        <div className='w-4 rotate-180 h-[172px] bg-[#7D40FF]' />
+                        <div className='w-4 rotate-0 lg:rotate-180 max-lg:h-[10px] max-lg:my-4 max-lg:w-[90%] h-[172px] bg-[#7D40FF]' />
                         <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
                     </div>
                 </div>

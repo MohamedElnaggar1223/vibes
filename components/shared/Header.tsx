@@ -8,7 +8,7 @@ export default async function Header()
     const session = await getServerSession()
 
     return (
-        <section className='py-2 px-20 min-w-full flex justify-between items-center sticky top-0 z-[9999] bg-black'>
+        <section className='py-2 lg:px-20 min-w-full flex justify-between items-center sticky top-0 z-[9999] bg-black'>
             <Link href='/'>
                 <Image
                     src="/assets/logo.png"
@@ -17,13 +17,9 @@ export default async function Header()
                     alt="logo"
                     className='cursor-pointer z-[9999]'
                     priority
-                    style={{
-                        width: '195px',
-                        height: '73px',
-                    }}
                 /> 
             </Link>
-            <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
+            <div className="flex gap-8 lg:gap-24 items-center z-[9999] max-lg:mr-4">
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Categories
                 </Link>

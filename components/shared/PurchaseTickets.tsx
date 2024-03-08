@@ -167,22 +167,22 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
 
     return (
         <AnimatePresence>
-            <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full'>
+            <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full max-lg:min-h-[80vh]'>
                 <div className='w-full flex justify-between items-center gap-4'>
-                    <div className='flex-1' />
-                    <div className='flex-auto flex items-center justify-center gap-4'>
-                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                    <div className='flex-1 max-lg:hidden' />
+                    <div className='flex-auto flex max-lg:justify-start items-center justify-center gap-4'>
+                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             Choose Your Tickets
                         </button>
                         {
                             availableParkingPasses?.quantity > 0 &&
-                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                                 Add Parking Pass
                             </button>
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-sm py-5 px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             Map
                         </button>
                     </div>
@@ -270,36 +270,36 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         </div>
                     ) : (
                         <div ref={parentRef} className='flex-1 w-full flex items-center justify-center'>
-                            <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white font-poppins font-semibold text-sm rounded-lg'>
+                            <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white text-center font-poppins font-semibold text-sm rounded-lg'>
                                 {"Choose Your Tickets & They’ll Appear Here"}
                             </div>
                         </div>
                     )
                     
                 }
-                <div className='w-full flex justify-between items-center py-2 px-8 bg-[#181C25] rounded-lg'>
-                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-base text-white'>Number of tickets</p>
-                        <p className='font-poppins text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
+                <div className='w-full flex justify-between gap-4 items-center px-4 py-2 lg:px-8 bg-[#181C25] rounded-lg'>
+                    <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                        <p className='font-poppins text-sm lg:text-base text-white text-center'>Number of tickets</p>
+                        <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
                     </div>
                     {
                         availableParkingPasses?.quantity > 0 &&
-                        <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                            <p className='font-poppins text-base text-white'>Parking Pass</p>
-                            <p className='font-poppins text-lg text-white font-semibold'>{purchasedParkingPass}</p>
+                        <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                            <p className='font-poppins text-sm lg:text-base text-white'>Parking Pass</p>
+                            <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{purchasedParkingPass}</p>
                         </div>
                     }
-                    <div className='flex flex-col items-center justify-between gap-4 mb-1'>
-                        <p className='font-poppins text-base text-white'>Total</p>
-                        <p className='font-poppins text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
+                    <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                        <p className='font-poppins text-sm lg:text-base text-white'>Total</p>
+                        <p className='font-poppins text-base lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
                     </div>
-                    <div className='flex flex-col items-center justify-center'>
+                    <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
                         {
                             user === null ? (
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <motion.button layout={true} disabled className='font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                        <TooltipTrigger asChild className="max-lg:flex-1">
+                                            <motion.button layout={true} disabled className=' max-lg:flex-1 font-poppins text-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
                                                 Buy Now
                                             </motion.button>
                                         </TooltipTrigger>
@@ -311,8 +311,8 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             ) : (
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
+                                        <TooltipTrigger asChild className="max-lg:flex-1">
+                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                                                 Buy Now
                                             </motion.button>
                                         </TooltipTrigger>

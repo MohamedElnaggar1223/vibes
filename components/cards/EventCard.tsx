@@ -17,10 +17,10 @@ export default async function EventCard({ event, exchangeRate }: Props)
         <CarouselItem key={event.id} className={cn('group relative max-h-[412px] max-w-[412px] h-full w-full')}>
             <ImageMotion
                 selectedEvent={event}
-                className='object-cover h-full w-full'
+                className='object-cover'
                 width={412}
                 height={412} 
-                imageClassName="object-cover h-full w-full"
+                imageClassName="object-cover"
                 priority={true}
                 layoutId={event.id}
                 eventPage={false}

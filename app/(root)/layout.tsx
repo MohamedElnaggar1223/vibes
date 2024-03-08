@@ -45,7 +45,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn('', poppins.variable)}>
+      <body className={cn('max-w-[100vw] overflow-x-hidden', poppins.variable)}>
         <Image
           src="/assets/background.svg"
           fill
