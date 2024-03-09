@@ -16,6 +16,12 @@ export default function CountryContextProvider({ children }: { children: React.R
         else setPreferedCountry(null)
     }, [coordinates])
 
+    useEffect(() => {
+        setTimeout(() => {
+            if(!(['EGP', 'AED', 'SAR'].includes(country ?? ''))) setCountry('AED')
+        }, 5000)
+    }, [])
+
     // const currentLocation = useMemo(() => {
     //     return navigator.geolocation.getCurrentPosition((data) => setCountry(data.coords))
     // }, [])

@@ -35,7 +35,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
             <div className='flex flex-col gap-2 w-full lg:w-[15%] text-white lg:mb-auto mt-2'>
                 <p className='font-poppins font-black text-3xl'>{title}</p>
                 <div className='w-1/3 lg:w-3/12 h-[2px] bg-white mb-4' />
-                <p className='w-1/3 font-poppins font-medium text-xs'>{subTitle}</p>
+                <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
             </div>
             <Carousel
                 opts={{

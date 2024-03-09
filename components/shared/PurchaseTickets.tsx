@@ -59,6 +59,13 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
     const [showMap, setShowMap] = useState(false)
+    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth)
+    
+    useEffect(() => {
+        const handleResize = () => setCurrentWidth(window.innerWidth)
+        window.addEventListener("resize", handleResize)
+        return () => window.removeEventListener("resize", handleResize)
+    }, [])
 
     const parentRef = useRef<HTMLDivElement>(null)
 
@@ -192,7 +199,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         <div ref={parentRef} className='flex-1'>
                             <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
                                 {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
-                                    <motion.div layoutId={ticket} className='relative px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
+                                    <motion.div layoutId={ticket} className='relative z-10 px-4 lg:px-36 flex justify-between my-6 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
                                         <p className='text-black font-poppins text-normal font-semibold flex-1'>{ticket}</p>
                                         {
                                             purchasedTickets[ticket] > 0 && (
@@ -223,9 +230,16 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             )
                                         }
                                         <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
-                                        <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
-                                            X
-                                        </div>
+                                        {currentWidth > 1080 ? (
+                                            <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                                X
+                                            </div>
+                                        ) : (
+
+                                            <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-20 h-8 bg-[rgba(222,0,0,0.5)] font-poppins rounded-lg top-[-28px] z-[5] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                                Delete
+                                            </div>
+                                        )}
                                     </motion.div>
                                 ))}
                                 {
