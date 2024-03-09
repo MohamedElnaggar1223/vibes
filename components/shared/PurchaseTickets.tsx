@@ -206,7 +206,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
                                                     {
                                                         purchasedTickets[ticket] > 1 &&
-                                                        <button 
+                                                        <button
                                                             className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                             onClick={(e) => {
                                                                 e.stopPropagation()

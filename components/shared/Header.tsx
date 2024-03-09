@@ -15,9 +15,9 @@ export default async function Header()
                     width={195}
                     height={73}
                     alt="logo"
-                    className='cursor-pointer z-[9999]'
+                    className='cursor-pointer z-[9999] max-lg:w-[120px] max-lg:h-[45px]'
                     priority
-                /> 
+                />
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999] max-lg:mr-4">
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
