@@ -143,7 +143,7 @@ export default function SignUp()
             <div className='flex flex-col justify-center items-center mt-3'>
                 <p className='font-poppins font-base mb-6 text-white'>Sign up</p>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                         <FormField
                             control={form.control}
                             name="firstname"
@@ -152,7 +152,7 @@ export default function SignUp()
                                     <FormControl>
                                         <input 
                                             placeholder="First Name" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                     </FormControl>
@@ -168,7 +168,7 @@ export default function SignUp()
                                     <FormControl>
                                         <input 
                                             placeholder="Last Name" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                     </FormControl>
@@ -184,7 +184,7 @@ export default function SignUp()
                                     <FormControl>
                                         <input 
                                             placeholder="Email" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                     </FormControl>
@@ -192,7 +192,7 @@ export default function SignUp()
                                 </FormItem>
                             )}
                         />
-                        <div className='w-screen max-w-[412px] flex gap-4'>
+                        <div className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
                             <FormField
                                 control={form.control}
                                 name="countryCode"
@@ -240,7 +240,7 @@ export default function SignUp()
                                         <input 
                                             placeholder="Password" 
                                             type='password'
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                     </FormControl>
@@ -257,7 +257,7 @@ export default function SignUp()
                                         <input 
                                             placeholder="Confirm Password" 
                                             type='password'
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                     </FormControl>

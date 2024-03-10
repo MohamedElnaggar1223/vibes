@@ -24,7 +24,7 @@ export default function MyTicketCard({ ticket, event }: Props)
                         height={176}
                         width={176}
                         alt={event.name}
-                        className='max-lg:min-w-40 lg:min-w-44 lg:min-h-44 object-fill rounded-lg'
+                        className='max-lg:min-w-40 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
                     />
                     <div className='flex flex-col gap-3 py-2'>
                         <p className='font-poppins font-bold text-lg lg:text-2xl text-white'>{event.name}</p>
