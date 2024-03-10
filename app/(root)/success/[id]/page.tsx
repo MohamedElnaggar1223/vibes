@@ -34,7 +34,7 @@ export default async function SuccessPage({ params }: Props)
                         alt='success'
                         className='mt-[-7rem]'
                     />
-                    <p className='font-poppins font-light text-white text-sm text-center mx-24 my-6'>Go to <Link href='/profile?show=my-tickets' className='underline'>My Tickets</Link> to view your purchased tickets or go back to <Link href='/' className='underline'>Hompeage</Link></p>
+                    <p className='font-poppins font-light text-white text-sm text-center mx-2 lg:mx-24 my-6'>Go to <Link href='/profile?show=my-tickets' className='underline'>My Tickets</Link> to view your purchased tickets or go back to <Link href='/' className='underline'>Hompeage</Link></p>
                 </div>
             </div>
         </section>

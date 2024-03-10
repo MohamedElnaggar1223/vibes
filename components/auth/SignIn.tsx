@@ -148,7 +148,7 @@ export default function SignIn()
         <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24'>
             <p className='font-poppins font-base mb-6 text-white'>Sign in</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                     <FormField
                         control={form.control}
                         name="email"
@@ -157,7 +157,7 @@ export default function SignIn()
                                 <FormControl>
                                     <input 
                                         placeholder="Email" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -174,7 +174,7 @@ export default function SignIn()
                                     <input 
                                         placeholder="Password" 
                                         type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -215,7 +215,7 @@ export default function SignIn()
                     </div>
                     <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign in</button>
                 </form>
-                <p className='text-white mt-2 font-poppins text-sm'>Don't have an account yet? <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign Up</span></p>
+                <p className='text-white mt-2 font-poppins text-sm text-center text-nowrap'>Don't have an account yet? <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign Up</span></p>
             </Form>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
