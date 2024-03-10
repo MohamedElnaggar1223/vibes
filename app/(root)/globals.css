@@ -3,7 +3,7 @@
 @tailwind utilities;
  
 body{
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @layer base {
@@ -80,7 +80,7 @@ body{
 }
 
 .bg-image {
-  @apply fixed z-[-9999] object-cover top-0 !important;
+  @apply fixed z-[-9999] object-cover min-h-[100dvh] top-0 !important;
 }
 
 .profile-span span {
