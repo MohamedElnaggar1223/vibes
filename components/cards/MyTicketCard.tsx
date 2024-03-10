@@ -2,7 +2,7 @@
 import { months } from "@/constants"
 import { EventType } from "@/lib/types/eventTypes"
 import { TicketType } from "@/lib/types/ticketTypes"
-import { getDaySuffix, formatTime } from "@/lib/utils"
+import { getDaySuffix, formatTime, cn } from "@/lib/utils"
 // import { QrCode } from "lucide-react"
 import QRCode from "react-qr-code"
 import Image from "next/image"
@@ -49,30 +49,15 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                     transition={{ duration: 0.6 }}
                     onAnimationComplete={() => setIsAnimating(false)}
                     ref={mainRef}
-                    className='flex max-lg:flex-col gap-2 lg:gap-8 items-center justify-between w-full h-fit flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner'
+                    className={cn('flex max-lg:flex-col gap-2 lg:gap-8 items-center justify-between w-full h-fit flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && 'animate-semiFlip')}
                 >
-                    {
-                        currentWidth < 1024 && first && !clicked && (
-                            <div style={{ minHeight: `${mainRef.current?.offsetHeight}px` }} className='absolute w-full h-full flex items-center justify-center text-white font-poppins top-0 left-0 z-50 bg-black bg-opacity-50 opacity-85 rounded-lg' >
-                                {/* <Image
-                                    src='/assets/clickme.gif'
-                                    width={32}
-                                    height={32}
-                                    alt='click me'
-                                    className='bg-transparent' 
-                                /> */}
-                                {/* <iframe src="https://lottie.host/embed/c6b24afb-0cf1-4a0f-8ac0-e53cc80baa7b/RvhLxpXsB7.json"></iframe> */}
-                                <iframe className='max-w-8 opacity-85' src="https://lottie.host/embed/a548b22c-7c25-48f6-9dd8-4a9ed9f50d6d/wYOdeqMmzf.json"></iframe>
-                            </div>
-                        )
-                    }
                     <div className='flex items-start lg:items-center justify-between gap-2 lg:gap-8'>
                         <Image
                             src={event.displayPageImage}
                             height={176}
                             width={176}
                             alt={event.name}
-                            className='max-lg:min-w-40 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
+                            className='max-lg:min-w-28 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
                         />
                         <div className='flex flex-col gap-3 py-2'>
                             <p className='font-poppins font-bold text-base lg:text-2xl text-white'>{event.name}</p>

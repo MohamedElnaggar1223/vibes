@@ -70,10 +70,25 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        'semiFlip': {
+          '0%': {
+            transform: 'rotateY(0deg)',
+          },
+          '10%': {
+            transform: 'rotateY(45deg)',
+          },
+          '20%': {
+            transform: 'rotateY(0deg)',
+          }, 
+          '100%': {
+            transform: 'rotateY(0deg)',
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'semiFlip': "semiFlip 3s ease-out infinite"
       },
       fontSize: {
         md: ['0.875rem', '1.125rem'],
