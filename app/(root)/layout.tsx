@@ -46,13 +46,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={cn('max-w-[100vw] overflow-x-hidden', poppins.variable)}>
-        <Image
+        {/* <Image
           src="/assets/background.svg"
           fill
           alt="background"
           className='bg-image'
           priority
-        />
+        /> */}
         <CountryContextProvider>
           <Header />
           <main className='px-6 md:px-20 min-h-screen flex'>

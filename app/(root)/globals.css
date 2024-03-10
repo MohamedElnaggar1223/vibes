@@ -4,6 +4,9 @@
  
 body{
   min-height: 100dvh;
+  background-image: url('/assets/background.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 @layer base {
