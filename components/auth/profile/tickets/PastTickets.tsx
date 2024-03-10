@@ -16,7 +16,11 @@ export default function PastTickets({ tickets, events }: Props)
         <Suspense fallback={<Loading />}>
             {   
                 tickets.length ?
-                tickets.map(ticket => <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} />) :
+                tickets.map((ticket, index) => (
+                    <div className='relative rounded-lg flex w-full max-lg:min-h-72 lg:min-h-44 lg:max-h-44 p-0 overflow-hidden gap-8'>
+                        <MyTicketCard key={ticket.id} ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} first={index === 0}  />
+                    </div>
+                )) :
                 <p className='h-44 w-full font-poppins text-white font-medium text-center flex items-center justify-center'>No tickets available!</p>
             }
         </Suspense>

@@ -49,9 +49,6 @@ function HeaderLinks({ setOpen }: Props)
         }
     }, [countryOpen])
 
-    console.log(countryOpen)
-    console.log(canLogOut)
-
     const defaultValue = useMemo(() => {
         //@ts-expect-error country
         return countries[country]

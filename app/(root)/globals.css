@@ -108,12 +108,24 @@ body{
 }
 
 .qrcodeHeight svg {
-  height: 90%;
+  height: 10rem;
+}
+
+.flipCardInner {
+  transform-style: preserve-3d;
+}
+
+.flipCard {
+  backface-visibility: hidden;
+}
+
+.flipCardBack {
+  transform: rotateY(180deg);
 }
 
 @media not all and (min-width: 1024px) {
   .qrcodeHeight svg {
-    height: 70%;
+    height: 7rem;
     width: fit-content;
   }
 }
