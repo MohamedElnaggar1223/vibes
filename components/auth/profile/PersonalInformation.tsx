@@ -80,7 +80,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
             <p className='mb-4 font-poppins text-white font-medium'>Account details</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                     <FormField
                         control={form.control}
                         name="firstname"
@@ -89,7 +89,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                 <FormControl>
                                     <input 
                                         placeholder="First Name" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                         {...field}
                                     />
                                 </FormControl>
@@ -105,7 +105,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                 <FormControl>
                                     <input 
                                         placeholder="Last Name" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                         {...field}
                                     />
                                 </FormControl>
@@ -123,7 +123,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                     <FormControl>
                                         <input 
                                             placeholder="Email" 
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                             {...field}
                                         />
                                     </FormControl>
@@ -143,7 +143,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                         <input 
                                             placeholder="Password" 
                                             type='password'
-                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                             {...field}
                                         />
                                     </FormControl>
@@ -152,7 +152,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             )}
                         />
                     }
-                    <div className='w-screen max-w-[412px] flex gap-4'>
+                    <div className='w-screen max-w-[412px] flex gap-4 max-sm:max-w-[340px]'>
                         <FormField
                             control={form.control}
                             name="countryCode"

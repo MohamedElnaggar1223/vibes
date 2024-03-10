@@ -65,7 +65,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
             <p className='mb-4 font-poppins text-white font-medium'>Change Password</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col justify-center items-center">
                     <FormField
                         control={form.control}
                         name="oldPassword"
@@ -75,7 +75,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                     <input 
                                         placeholder="Old Password" 
                                         type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -92,7 +92,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                     <input 
                                         placeholder="New Password" 
                                         type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -109,7 +109,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                     <input 
                                         placeholder="Confirm Password" 
                                         type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>

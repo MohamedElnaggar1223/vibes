@@ -59,7 +59,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
     const [showMap, setShowMap] = useState(false)
-    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth)
+    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
     
     useEffect(() => {
         const handleResize = () => setCurrentWidth(window.innerWidth)
@@ -230,7 +230,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             )
                                         }
                                         <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
-                                        {currentWidth > 1080 ? (
+                                        {currentWidth > 1024 ? (
                                             <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
                                             </div>

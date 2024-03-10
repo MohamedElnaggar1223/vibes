@@ -110,3 +110,10 @@ body{
 .qrcodeHeight svg {
   height: 90%;
 }
+
+@media not all and (min-width: 1024px) {
+  .qrcodeHeight svg {
+    height: 70%;
+    width: fit-content;
+  }
+}
