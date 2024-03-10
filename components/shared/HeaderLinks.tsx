@@ -5,7 +5,7 @@ import { auth } from "@/firebase/client/config"
 import { signOut } from "next-auth/react"
 import Image from "next/image"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { Dispatch, SetStateAction, useContext, useMemo, useState } from "react"
+import { Dispatch, SetStateAction, memo, useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CountryContext } from "@/providers/CountryProvider"
 import { Dialog, DialogContent } from "../ui/dialog"
@@ -15,7 +15,7 @@ type Props = {
     setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export default function HeaderLinks({ setOpen }: Props) 
+function HeaderLinks({ setOpen }: Props) 
 {
     const context = useContext(CountryContext)
     if(!context) return null
@@ -23,18 +23,34 @@ export default function HeaderLinks({ setOpen }: Props)
     const { country, setCountry } = context
 
     const [loading, setLoading] = useState(false)
+    const [countryOpen, setCountryOpen] = useState(false)
+    const [canLogOut, setCanLogOut] = useState(true)
 
     const router = useRouter()
 
     const countries = { 'SAR': 'KSA', 'AED': 'UAE', 'EGP': 'EG' }
 
     const handleLogout = async () => {
-        setOpen(false)
-        setLoading(true)
-        await auth.signOut()
-        await signOut()
-        setLoading(false)
+        if(canLogOut)
+        {
+            setOpen(false)
+            setLoading(true)
+            await auth.signOut()
+            await signOut()
+            setLoading(false)
+        }
     }
+
+    useEffect(() => {
+        if(countryOpen) setCanLogOut(false)
+        else
+        {
+            setTimeout(() => setCanLogOut(true), 500) 
+        }
+    }, [countryOpen])
+
+    console.log(countryOpen)
+    console.log(canLogOut)
 
     const defaultValue = useMemo(() => {
         //@ts-expect-error country
@@ -45,7 +61,7 @@ export default function HeaderLinks({ setOpen }: Props)
         <>
             <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center'>
                 Country
-                <Select defaultValue={defaultValue} onValueChange={(value) => {
+                <Select open={countryOpen} onOpenChange={setCountryOpen} defaultValue={defaultValue} onValueChange={(value) => {
                     //@ts-expect-error country
                     setCountry(Object.keys(countries).find(key => countries[key] === value))
                     //@ts-expect-error country
@@ -82,3 +98,6 @@ export default function HeaderLinks({ setOpen }: Props)
         </>
     )
 }
+
+const memoizedHeaderLinks = memo(HeaderLinks)
+export default memoizedHeaderLinks

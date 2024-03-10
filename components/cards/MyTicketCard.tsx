@@ -38,11 +38,11 @@ export default function MyTicketCard({ ticket, event }: Props)
                     </div>
                 </div>
                 <Separator className='w-[90%] lg:hidden h-[1px]' />
-                <div className='flex gap-8 items-center justify-between h-44 max-lg:px-4 max-lg:w-full lg:h-full'>
+                <div className='flex gap-8 items-center justify-between h-44 max-lg:px-4 max-lg:w-full lg:max-h-full'>
                     <div className='flex flex-col gap-0.5 lg:gap-3 lg:pb-4 lg:pt-10 h-full w-fit text-nowrap'>
                         {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
                     </div>
-                    <div className='flex h-full items-center justify-center qrcodeHeight w-fit'>
+                    <div className='flex h-full items-center justify-center qrcodeHeight max-lg:w-fit'>
                         {/* <QrCode values="sadawddwadaw" /> */}
                         <QRCode value={ticket.id} height='90%' />
                     </div>
