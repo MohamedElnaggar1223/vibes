@@ -60,27 +60,27 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                             className='max-lg:max-w-28 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
                         />
                         <div className='flex flex-col gap-3 py-2 max-lg:flex-1'>
-                            <p className='font-poppins font-bold text-base lg:text-2xl text-white'>{event.name}</p>
-                            <p className='font-poppins text-[0.65rem] leading-[1rem] lg:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
+                            <p className='font-poppins font-bold text-sm lg:text-2xl text-white'>{event.name}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] lg:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
                             <div className='w-full flex lg:justify-between items-center gap-0.5 lg:gap-6 max-lg:flex-wrap'>
-                                <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.venue} <span className='lg:hidden font-poppins text-[0.65rem] leading-[1rem] lg:text-base font-extralight text-white'>|</span></p>
-                                <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white max-lg:hidden'>|</p>
-                                <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
+                                <p className='font-poppins text-[0.6rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.venue} <span className='lg:hidden font-poppins text-[0.6rem] leading-[1rem] lg:text-base font-extralight text-white'>|</span></p>
+                                <p className='font-poppins text-[0.6rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white max-lg:hidden'>|</p>
+                                <p className='font-poppins text-[0.6rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
                             </div>
-                            <p className='font-poppins text-[0.65rem] leading-[1rem] lg:text-base font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] lg:text-base font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
                         </div>
                     </div>
                     <Separator className='w-[90%] lg:hidden h-[1px]' />
                     <div className='flex gap-8 items-center justify-between max-lg:px-12 max-lg:my-4 max-lg:w-full lg:max-h-full'>
                         <div className='flex lg:w-24 flex-col mr-auto text-left gap-0.5 lg:gap-3 lg:pb-4 lg:pt-10 h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-lg:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.6rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-lg:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
                         </div>
                         <div className='flex h-full items-center justify-center qrcodeHeight max-lg:hidden'>
                             {/* <QrCode values="sadawddwadaw" /> */}
                             <QRCode value={ticket.id} height='90%' />
                         </div>
                         <div className='lg:hidden flex text-right flex-col h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.6rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
                         </div>
                     </div>
                     {
