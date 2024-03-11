@@ -7,7 +7,7 @@ body{
   /* background-image: url('/assets/background.svg');
   background-repeat: no-repeat;
   background-size: cover; */
-  background-color: black;
+  background-color: transparent;
 }
 
 @layer base {
