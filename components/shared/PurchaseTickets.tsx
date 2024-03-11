@@ -175,21 +175,21 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     return (
         <AnimatePresence>
             <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full max-lg:min-h-[80vh]'>
-                <div className='w-full flex justify-between items-center gap-4'>
+                <div className='w-full flex justify-between items-center gap-1.5 lg:gap-4'>
                     <div className='flex-1 max-lg:hidden' />
-                    <div className='flex-auto flex max-lg:justify-start items-center justify-center gap-4'>
-                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                    <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
+                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             Choose Your Tickets
                         </button>
                         {
                             availableParkingPasses?.quantity > 0 &&
-                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                                 Add Parking Pass
                             </button>
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-sm px-4 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             Map
                         </button>
                     </div>
@@ -199,15 +199,15 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         <div ref={parentRef} className='flex-1'>
                             <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
                                 {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
-                                    <motion.div layoutId={ticket} className='relative z-10 px-4 lg:px-36 flex justify-between my-6 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
-                                        <p className='text-black font-poppins text-normal font-semibold flex-1'>{ticket}</p>
+                                    <motion.div layoutId={ticket} className='relative z-10 px-4 lg:px-36 flex justify-between max-lg:my-8 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{ticket}</p>
                                         {
                                             purchasedTickets[ticket] > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
                                                     {
                                                         purchasedTickets[ticket] > 1 &&
                                                         <button
-                                                            className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                            className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
                                                                 setPurchasedTickets(prev => ({...prev, [ticket]: prev[ticket] - 1}))}
@@ -218,7 +218,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                     }
                                                     <p className='text-black font-poppins text-sm font-semibold'>{purchasedTickets[ticket]}</p>
                                                     <button
-                                                        className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPurchasedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}
@@ -229,7 +229,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
                                         {currentWidth > 1024 ? (
                                             <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
@@ -244,15 +244,15 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 ))}
                                 {
                                     purchasedParkingPass > 0 &&
-                                    <motion.div layoutId={'parkinPass'} className='relative px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
-                                        <p className='text-black font-poppins text-normal font-semibold flex-1'>Parking pass</p>
+                                    <motion.div layoutId={'parkinPass'} className='relative px-4 lg:px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>Parking pass</p>
                                         {
                                             purchasedParkingPass > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
                                                     {
                                                         purchasedParkingPass > 1 &&
                                                         <button 
-                                                            className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                            className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
                                                                 setPurchasedParkingPass(prev => prev - 1)}
@@ -263,7 +263,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                     }
                                                     <p className='text-black font-poppins text-sm font-semibold'>{purchasedParkingPass}</p>
                                                     <button
-                                                        className='bg-black text-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)
@@ -274,10 +274,17 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins font-semibold flex-1 text-end'><FormattedPrice price={(availableParkingPasses?.price ?? 0) * purchasedParkingPass} exchangeRate={exchangeRate} /></p>
-                                        <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
-                                            X
-                                        </div>
+                                        <p className='text-black font-poppins font-semibold text-sm lg:text-base flex-1 text-end'><FormattedPrice price={(availableParkingPasses?.price ?? 0) * purchasedParkingPass} exchangeRate={exchangeRate} /></p>
+                                        {currentWidth > 1024 ? (
+                                            <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                                X
+                                            </div>
+                                        ) : (
+
+                                            <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-20 h-8 bg-[rgba(222,0,0,0.5)] font-poppins rounded-lg top-[-28px] z-[5] right-0 text-white text-center flex items-center justify-center text-xs'>
+                                                Delete
+                                            </div>
+                                        )}
                                     </motion.div>
                                 }
                             </div>
@@ -291,21 +298,21 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     )
                     
                 }
-                <div className='w-full flex justify-between gap-4 items-center px-4 py-2 lg:px-8 bg-[#181C25] rounded-lg'>
-                    <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                        <p className='font-poppins text-sm lg:text-base text-white text-center'>Number of tickets</p>
+                <div className='w-full h-[5.5rem] flex justify-between gap-4 items-center px-4 py-2 lg:px-8 bg-[#181C25] rounded-lg'>
+                    <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                        <p className='font-poppins text-center text-xs lg:text-base text-white'>Number of tickets</p>
                         <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
                     </div>
                     {
                         availableParkingPasses?.quantity > 0 &&
-                        <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                            <p className='font-poppins text-sm lg:text-base text-white'>Parking Pass</p>
+                        <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                            <p className='font-poppins text-center text-xs lg:text-base text-white'>Parking Pass</p>
                             <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{purchasedParkingPass}</p>
                         </div>
                     }
-                    <div className='flex flex-col items-center justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                        <p className='font-poppins text-sm lg:text-base text-white'>Total</p>
-                        <p className='font-poppins text-base lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
+                    <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
+                        <p className='font-poppins text-center text-xs lg:text-base text-white'>Total</p>
+                        <p className='font-poppins text-base mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
                     </div>
                     <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
                         {
@@ -314,7 +321,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} disabled className=' max-lg:flex-1 font-poppins text-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
-                                                Buy Now
+                                                {currentWidth < 1024 ? 'Buy' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -327,7 +334,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
-                                                Buy Now
+                                                {currentWidth < 1024 ? 'Buy' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         {
