@@ -49,20 +49,20 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                     transition={{ duration: 0.6 }}
                     onAnimationComplete={() => setIsAnimating(false)}
                     ref={mainRef}
-                    className={cn('flex max-lg:flex-col gap-2 lg:gap-8 items-center justify-between w-full h-fit flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && 'animate-semiFlip')}
+                    className={cn('flex max-lg:flex-col gap-2 lg:gap-8 items-center justify-between w-full h-fit flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && currentWidth < 1024 && 'animate-semiFlip')}
                 >
-                    <div className='flex items-start lg:items-center justify-between gap-2 lg:gap-8'>
+                    <div className='flex items-start max-lg:w-full lg:items-center justify-between gap-2 lg:gap-8'>
                         <Image
                             src={event.displayPageImage}
                             height={176}
                             width={176}
                             alt={event.name}
-                            className='max-lg:min-w-28 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
+                            className='max-lg:max-w-28 lg:min-w-44 lg:min-h-44 lg:h-full object-fill rounded-lg'
                         />
-                        <div className='flex flex-col gap-3 py-2'>
+                        <div className='flex flex-col gap-3 py-2 max-lg:flex-1'>
                             <p className='font-poppins font-bold text-base lg:text-2xl text-white'>{event.name}</p>
                             <p className='font-poppins text-[0.65rem] leading-[1rem] lg:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
-                            <div className='w-full flex justify-between items-center gap-0.5 lg:gap-6 max-lg:flex-wrap'>
+                            <div className='w-full flex lg:justify-between items-center gap-0.5 lg:gap-6 max-lg:flex-wrap'>
                                 <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.venue} <span className='lg:hidden font-poppins text-[0.65rem] leading-[1rem] lg:text-base font-extralight text-white'>|</span></p>
                                 <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white max-lg:hidden'>|</p>
                                 <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
@@ -73,14 +73,14 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                     <Separator className='w-[90%] lg:hidden h-[1px]' />
                     <div className='flex gap-8 items-center justify-between max-lg:px-12 max-lg:my-4 max-lg:w-full lg:max-h-full'>
                         <div className='flex lg:w-24 flex-col mr-auto text-left gap-0.5 lg:gap-3 lg:pb-4 lg:pt-10 h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-lg:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-lg:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
                         </div>
                         <div className='flex h-full items-center justify-center qrcodeHeight max-lg:hidden'>
                             {/* <QrCode values="sadawddwadaw" /> */}
                             <QRCode value={ticket.id} height='90%' />
                         </div>
                         <div className='lg:hidden flex text-right flex-col h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map(ticketKey => <p className='font-poppins text-[0.65rem] max-lg:leading-[1rem] lg:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
                         </div>
                     </div>
                     {
