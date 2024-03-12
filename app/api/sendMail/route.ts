@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
-import puppeteer from 'puppeteer'
+import chrome from 'chrome-aws-lambda'
+import puppeteer from 'puppeteer-core'
 
 
 const transporter = nodemailer.createTransport({
@@ -18,8 +19,11 @@ export async function POST(req: Request)
     const request = await req.json()
 
     const browser = await puppeteer.launch({
+        args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+        defaultViewport: chrome.defaultViewport,
+        executablePath: await chrome.executablePath,
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        ignoreHTTPSErrors: true,
     })
     const page = await browser.newPage()
 
