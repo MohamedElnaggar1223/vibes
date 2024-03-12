@@ -18,12 +18,12 @@ export async function POST(req: Request)
     const request = await req.json()
 
     const browser = await chromium.puppeteer.launch({
-        args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+        args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath,
-        headless: true,
+        headless: chromium.headless,
         ignoreHTTPSErrors: true,
-    })
+    });
     const page = await browser.newPage()
 
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
