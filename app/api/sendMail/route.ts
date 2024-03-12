@@ -21,7 +21,7 @@ export async function POST(req: Request)
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    const htmlString = `<h1>This is a Ticket Pdf</h1>`
+    const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
 
     await page.setContent(htmlString);
     // await page.goto('http://localhost:3000')
