@@ -73,7 +73,7 @@ export default function SignUp()
             .then(async (userCredentials) => {
                 const userRef = doc(db, "users", userCredentials.user.uid) 
                 //set verified to false when OTP
-                await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: true, provider: 'credentials', id: userCredentials.user.uid })
+                await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: true, provider: 'credentials', id: userCredentials.user.uid, tickets: [] })
                 await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
                 setLoading(false)
             })
