@@ -202,7 +202,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={eventData.seated} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             Map
                         </button>
                     </div>
