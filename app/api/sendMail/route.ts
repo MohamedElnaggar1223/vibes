@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import puppeteer from 'puppeteer'
-import chromium from 'chrome-aws-lambda'
+
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -17,13 +17,10 @@ export async function POST(req: Request)
 {
     const request = await req.json()
 
-    const browser = await chromium.puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-    });
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    })
     const page = await browser.newPage()
 
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
@@ -33,7 +30,7 @@ export async function POST(req: Request)
     await page.emulateMediaType('screen')
 
     const pdfBuffer = await page.pdf({
-        format: 'a4',
+        format: 'A4',
         printBackground: true,
         margin: {
             top: '2cm',
