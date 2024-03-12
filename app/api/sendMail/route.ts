@@ -25,6 +25,7 @@ export async function POST(req: Request)
         headless: true,
         ignoreHTTPSErrors: true,
     })
+    
     const page = await browser.newPage()
 
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
