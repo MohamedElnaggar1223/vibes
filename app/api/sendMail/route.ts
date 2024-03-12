@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import chrome from 'chrome-aws-lambda'
+import chrome from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
 
 
@@ -18,14 +18,16 @@ export async function POST(req: Request)
 {
     const request = await req.json()
 
+    chrome.setHeadlessMode = true;
+
     const browser = await puppeteer.launch({
-        args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+        args: chrome.args,
         defaultViewport: chrome.defaultViewport,
-        executablePath: await chrome.executablePath,
+        executablePath: await chrome.executablePath(),
         headless: true,
         ignoreHTTPSErrors: true,
     })
-    
+
     const page = await browser.newPage()
 
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
