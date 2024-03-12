@@ -1,7 +1,6 @@
-import { initAdmin } from '@/firebase/server/config'
 import nodemailer from 'nodemailer'
 import puppeteer from 'puppeteer'
-
+import chromium from 'chrome-aws-lambda'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -18,7 +17,13 @@ export async function POST(req: Request)
 {
     const request = await req.json()
 
-    const browser = await puppeteer.launch()
+    const browser = await chromium.puppeteer.launch({
+        args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+        ignoreHTTPSErrors: true,
+    })
     const page = await browser.newPage()
 
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
@@ -28,7 +33,7 @@ export async function POST(req: Request)
     await page.emulateMediaType('screen')
 
     const pdfBuffer = await page.pdf({
-        format: 'A4',
+        format: 'a4',
         printBackground: true,
         margin: {
             top: '2cm',
