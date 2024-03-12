@@ -7,6 +7,9 @@ const nextConfig = {
                 hostname: 'firebasestorage.googleapis.com'
             }
         ]
+    },
+    experimental: {
+        serverComponentsExternalPackages: ['chrome-aws-lambda', 'puppeteer-core']
     }
 };
 
