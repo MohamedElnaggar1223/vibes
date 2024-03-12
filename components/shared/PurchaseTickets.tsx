@@ -22,6 +22,7 @@ import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import TicketPdf from "../pdf/TicketPdf"
 
 type Props = {
     event: EventType,
@@ -164,9 +165,21 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
+            fetch('http://localhost:3000/api/sendMail', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "username": user?.firstname,
+                    "email": user?.email,
+                    "event": event.name,
+                    "ticket": addedTicket,
+                    //@ts-expect-error ticket
+                    "pdf": <TicketPdf ticketData={{...addedTicketObject, id: addedTicket.id }} />
+                })
+            })
         }
         catch(e: any)
         {
+            console.log(e)
             console.log(e.message)
             setLoading(false)
         }

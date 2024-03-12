@@ -4,7 +4,8 @@ import admin from 'firebase-admin'
 type FirebaseAdminAppParams = {
     projectId: string,
     clientEmail: string,
-    privateKey: string
+    privateKey: string,
+    storageBucket: string
 }
 
 function formatPrivateKey(key: string){
@@ -25,6 +26,7 @@ export async function createFirebaseAdminApp(params: FirebaseAdminAppParams){
     return admin.initializeApp({
         credential: cert,
         projectId: params.projectId,
+        storageBucket: params.storageBucket
     })
 }
 
@@ -32,7 +34,8 @@ export async function initAdmin() {
     const params = {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROJECT_ID!,
         clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CLIENT_EMAIL!,
-        privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PRIVATE_KEY!
+        privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PRIVATE_KEY!,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!
     }
 
     return createFirebaseAdminApp(params)
