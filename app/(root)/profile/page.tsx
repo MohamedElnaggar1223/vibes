@@ -4,6 +4,7 @@ import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import MyProfile from "@/components/auth/profile/MyProfile"
+import { revalidatePath } from "next/cache"
 
 export default async function Profile()
 {
@@ -14,6 +15,8 @@ export default async function Profile()
     const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
 
     if(!user?.verified) return redirect('/sign-in')
+
+    revalidatePath('/profile?show=my-tickets')
 
     return (
         <MyProfile user={user} />
