@@ -165,7 +165,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
-            fetch('http://localhost:3000/api/sendMail', {
+            fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
                 method: 'POST',
                 body: JSON.stringify({
                     "username": user?.firstname,
