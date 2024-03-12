@@ -9,7 +9,7 @@ const nextConfig = {
         ]
     },
     experimental: {
-        // serverComponentsExternalPackages: ['chrome-aws-lambda', 'puppeteer-core']
+        serverComponentsExternalPackages: ['@sparticuz/chromium', 'puppeteer-core']
     }
 };
 
