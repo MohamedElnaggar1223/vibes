@@ -21,8 +21,6 @@ function EventsCarousel({ events, exchangeRate }: Props)
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
 
-    console.log(events)
-
     const router = useRouter()
 
     useEffect(() => {

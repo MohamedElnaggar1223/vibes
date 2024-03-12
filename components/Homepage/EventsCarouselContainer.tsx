@@ -11,8 +11,6 @@ export default async function EventsCarouselContainer({ events }: Props)
 {
     if(!events) return <></>
 
-    console.log(events)
-
     const admin = await initAdmin()
     const eventsDocs = events?.map(async (event) => {
         const eventDoc = await admin.firestore().collection('events').doc(event).get()

@@ -18,9 +18,6 @@ export default function CountryContextProvider({ children }: { children: React.R
 
     useEffect(() => {
         setTimeout(() => {
-            console.log(country)
-            console.log(preferedCountry)
-            console.log(localStorage.getItem('country'))
             if(!(['EGP', 'AED', 'SAR'].includes(country ?? ''))) 
             {
                 if(!(['EGP', 'AED', 'SAR'].includes(localStorage.getItem('country')!))) setCountry('AED')

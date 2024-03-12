@@ -24,7 +24,14 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
             gatesClose: eventDoc.data()?.gatesClose?.toDate(),
         } as EventType
     })
-    const eventsData = await Promise.all(eventsDocs || [])
+    const eventsDataPromise = await Promise.all(eventsDocs || [])
+
+    const eventsData = eventsDataPromise.sort((a, b) => {
+        if(a.createdAt && b.createdAt) return a.createdAt.getTime() - b.createdAt.getTime()
+        else if(a.createdAt) return -1
+        else if(b.createdAt) return 1
+        else return 0
+    })
 
     const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
 
@@ -42,7 +49,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
                     align: "start",
                     loop: true,
                 }}
-                className="h-full max-lg:max-w-[100vw] lg:flex-1"
+                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12"
             >
                 <CarouselContent className=''>
                     {eventsData.map((event) => (
