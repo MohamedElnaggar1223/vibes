@@ -2,3 +2,22 @@
 @tailwind components;
 @tailwind utilities;
  
+@layer base {
+  :root {
+    --ds-gray-600-value: 0,0%,66%;
+    --ds-gray-600: hsla(var(--ds-gray-600-value),1)
+  }
+}
+
+.bg-image {
+  @apply absolute z-[-9999] object-cover min-w-[931px] !important;
+}
+
+.bg-image-inside {
+  @apply absolute z-[10] object-cover max-h-[162px] min-h-[162px] max-w-[423px] min-w-[423px] !important;
+}
+
+.qrcodeHeight svg {
+  height: 5.5rem;
+  width: fit-content;
+}

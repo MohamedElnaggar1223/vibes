@@ -33,7 +33,7 @@ export async function POST(req: Request)
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
 
     await page.setContent(htmlString);
-    // await page.goto('http://localhost:3000')
+    await page.goto(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/tickets/${request.ticket.id}` : `http://localhost:3000/tickets/${request.ticket.id}`)
     await page.emulateMediaType('screen')
 
     const pdfBuffer = await page.pdf({

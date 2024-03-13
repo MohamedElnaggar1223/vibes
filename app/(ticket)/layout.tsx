@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import localfont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { cookies } from "next/headers";
@@ -17,6 +18,8 @@ const poppins = Poppins({
   preload: true,
   adjustFontFallback: true,
 })
+
+const myFont = localfont({ src: '../../public/fonts/BeldaDidoneNormDemiItalic.ttf' })
 
 export const metadata: Metadata = {
   title: "Vibes",
@@ -39,7 +42,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn('', poppins.variable)}>
+      <body className={cn('', poppins.variable, myFont.className)}>
           <main className=''>
               {children}
           </main>
