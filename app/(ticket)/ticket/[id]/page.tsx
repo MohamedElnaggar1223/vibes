@@ -1,19 +1,19 @@
+'use client'
 import { months } from "@/constants"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType } from "@/lib/types/eventTypes"
 import { TicketType } from "@/lib/types/ticketTypes"
 import { formatTime, getDaySuffix } from "@/lib/utils"
 import Image from "next/image"
+import { useParams } from "next/navigation"
 import QRCode from "react-qr-code"
 
-type Props = {
-	params: {
-		id: string
-	}
-}
-
-export default async function TicketPagePdf({ params }: Props)
+export default async function TicketPagePdf()
 {	
+	const params = useParams<{id: string}>()
+
+	if(!params?.id) return null
+
 	const admin = await initAdmin()
 
 	const ticketData = await admin.firestore().collection('tickets').doc(params.id).get()
@@ -33,8 +33,6 @@ export default async function TicketPagePdf({ params }: Props)
 		gatesOpen: eventData.data()?.gatesOpen?.toDate(),
 		gatesClose: eventData.data()?.gatesClose?.toDate(),
 	} as EventType
-
-	console.log(event.eventDate)
 
 	return (
 		<section className='w-screen h-screen flex items-center justify-center'>
