@@ -36,8 +36,8 @@ export async function POST(req: Request)
         waitUntil: 'domcontentloaded'
     })
 
-    await page.waitForSelector('.bg-image')
-    await page.waitForSelector('.bg-image-inside')
+    // await page.waitForSelector('.bg-image')
+    // await page.waitForSelector('.bg-image-inside')
 
     await page.emulateMediaType('screen')
 
