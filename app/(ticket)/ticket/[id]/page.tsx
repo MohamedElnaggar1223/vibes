@@ -11,7 +11,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import QRCode from "react-qr-code"
 
-export default async function TicketPagePdf()
+export default function TicketPagePdf()
 {	
 	const params = useParams<{id: string}>()
 
