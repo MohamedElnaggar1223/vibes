@@ -4,7 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import Header from "@/components/shared/Header";
 import { cn } from "@/lib/utils";
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import Loading from "./loading";
 import { cookies } from "next/headers";
 import { decode } from "next-auth/jwt"
@@ -28,20 +28,25 @@ export const metadata: Metadata = {
   description: "Buy and sell your tickets online",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const getUserVerified = cache(async () => {
   const admin = await initAdmin()
   const cookiesData = cookies()
   const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
   if(token?.sub)
   {
     const user = (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType
-    if(!user?.verified) return redirect('/complete-profile')
+    return user
   }
+})
 
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+
+  const user = await getUserVerified()
+  if(!user?.verified) return redirect('/complete-profile')
 
   return (
     <html lang="en">
