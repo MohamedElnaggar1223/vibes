@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import chrome from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
+import { renderToPipeableStream } from 'react-dom/server'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',

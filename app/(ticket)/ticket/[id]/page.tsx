@@ -1,54 +1,40 @@
-'use client'
 import { months } from "@/constants"
-import { db } from "@/firebase/client/config"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType } from "@/lib/types/eventTypes"
 import { TicketType } from "@/lib/types/ticketTypes"
 import { formatTime, getDaySuffix } from "@/lib/utils"
-import { doc, getDoc } from "firebase/firestore"
 import Image from "next/image"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
 import QRCode from "react-qr-code"
 
-export default function TicketPagePdf()
+type Props = {
+	params: {
+		id: string
+	}
+}
+
+export default async function TicketPagePdf({ params }: Props)
 {	
-	const params = useParams<{id: string}>()
+	const admin = await initAdmin()
 
-	if(!params?.id) return null
+	const ticketData = await admin.firestore().collection('tickets').doc(params.id).get()
+	const eventData = await admin.firestore().collection('events').doc(ticketData.data()?.eventId).get()
 
-	const [ticket, setTicket] = useState<TicketType>()
-	const [event, setEvent] = useState<EventType>()
+	const ticket = {
+		...ticketData.data(),
+		createdAt: ticketData.data()?.createdAt.toDate(),
+	} as TicketType
 
-	useEffect(() => {
-		const fetchTicket = async () => {
-			const ticketDoc = doc(db, 'tickets', params.id)
-			const ticketSnapshot = await getDoc(ticketDoc)
-			setTicket({...ticketSnapshot.data(), id: ticketSnapshot.id} as TicketType)
-		}
+	const event = {
+		...eventData.data(),
+		createdAt: eventData.data()?.createdAt.toDate(),
+		eventTime: eventData.data()?.eventTime.toDate(),
+		eventDate: eventData.data()?.eventDate.toDate(),
+		updatedAt: eventData.data()?.updatedAt?.toDate(),
+		gatesOpen: eventData.data()?.gatesOpen?.toDate(),
+		gatesClose: eventData.data()?.gatesClose?.toDate(),
+	} as EventType
 
-		fetchTicket()
-	}, [])
-
-	useEffect(() => {
-		const fetchEvent = async () => {
-			const eventDoc = doc(db, 'events', ticket?.eventId!)
-			const eventSnapshot = await getDoc(eventDoc)
-			setEvent({
-				...eventSnapshot.data(),
-				createdAt: eventSnapshot.data()?.createdAt.toDate(),
-				eventTime: eventSnapshot.data()?.eventTime.toDate(),
-				eventDate: eventSnapshot.data()?.eventDate.toDate(),
-				updatedAt: eventSnapshot.data()?.updatedAt?.toDate(),
-				gatesOpen: eventSnapshot.data()?.gatesOpen?.toDate(),
-				gatesClose: eventSnapshot.data()?.gatesClose?.toDate(),
-			} as EventType) 
-		}
-
-		if(ticket) fetchEvent()
-	}, [ticket])
-
-	if(!ticket || !event) return null
+	console.log(event.eventDate)
 
 	return (
 		<section className='w-screen h-screen flex items-center justify-center'>
