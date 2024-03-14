@@ -37,7 +37,7 @@ export default async function TicketPagePdf({ params }: Props)
 	console.log(event.eventDate)
 
 	return (
-		<section className='w-screen h-screen flex items-center justify-center'>
+		<section className='w-screen h-screen flex items-center justify-center rotate-90'>
 			<div className={`relative flex items-center justify-center w-[931px] h-[384px] overflow-hidden`}>
 				<Image
 					src={event?.displayPageImage}
