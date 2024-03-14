@@ -24,7 +24,7 @@ export async function POST(req: Request)
         args: chrome.args,
         defaultViewport: chrome.defaultViewport,
         executablePath: await chrome.executablePath(),
-        headless: false,
+        headless: true,
     })
 
     const page = await browser.newPage()
@@ -37,7 +37,7 @@ export async function POST(req: Request)
     // await page.waitForSelector('.bg-image')
     // await page.waitForSelector('.bg-image-inside')
 
-    await page.emulateMediaType('screen')
+    // await page.emulateMediaType('screen')
 
     const pdfBuffer = await page.pdf({
         format: 'A4',
