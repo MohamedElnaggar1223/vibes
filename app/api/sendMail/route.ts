@@ -32,9 +32,7 @@ export async function POST(req: Request)
     const htmlString = `<h1>This is a Ticket Pdf for ${request.event}</h1>`
 
     // await page.setContent(htmlString);
-    await page.goto(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/ticket/${request.ticket}` : `http://localhost:3000/ticket/${request.ticket}`, {
-        waitUntil: 'domcontentloaded'
-    })
+    await page.goto(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/ticket/${request.ticket}` : `http://localhost:3000/ticket/${request.ticket}`)
 
     // await page.waitForSelector('.bg-image')
     // await page.waitForSelector('.bg-image-inside')
