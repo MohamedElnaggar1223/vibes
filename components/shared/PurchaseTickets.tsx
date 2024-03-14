@@ -165,28 +165,15 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
-            let maxRetries = 5
-            let attempts = 0
-            while(attempts < maxRetries)
-            {
-                attempts++
-                
-                try
-                {
-                    fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            "email": user?.email,
-                            "event": event.name,
-                            "ticket": addedTicket.id,
-                        })
-                    })
-                }
-                catch(e)
-                {
 
-                }
-            }
+            fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "email": user?.email,
+                    "event": event.name,
+                    "ticket": addedTicket.id,
+                })
+            })
         }
         catch(e: any)
         {
