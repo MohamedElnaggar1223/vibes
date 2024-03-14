@@ -33,8 +33,11 @@ export async function POST(req: Request)
 
     // await page.setContent(htmlString);
     await page.goto(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/ticket/${request.ticket}` : `http://localhost:3000/ticket/${request.ticket}`, {
-        waitUntil: ['domcontentloaded', 'load']
+        waitUntil: 'domcontentloaded'
     })
+
+    await page.waitForSelector('.bg-image')
+    await page.waitForSelector('.bg-image-inside')
 
     await page.emulateMediaType('screen')
 
