@@ -34,7 +34,7 @@ export async function POST(req: Request)
 
     await page.setContent(htmlString);
     await page.goto(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/ticket/${request.ticket.id}` : `http://localhost:3000/ticket/${request.ticket.id}`, {
-        waitUntil: 'networkidle2'
+        waitUntil: 'domcontentloaded'
     })
     await page.emulateMediaType('screen')
 
