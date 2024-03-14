@@ -20,14 +20,11 @@ export async function POST(req: Request)
 
     console.log(request.ticket, ' ticket')
 
-    chrome.setHeadlessMode = true;
-
     const browser = await puppeteer.launch({
         args: chrome.args,
         defaultViewport: chrome.defaultViewport,
         executablePath: await chrome.executablePath(),
-        headless: true,
-        ignoreHTTPSErrors: true,
+        headless: false,
     })
 
     const page = await browser.newPage()
