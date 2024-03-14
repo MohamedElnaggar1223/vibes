@@ -18,7 +18,7 @@ export async function POST(req: Request)
 {
     const request = await req.json()
 
-    console.log(request.ticket)
+    console.log(request.ticket, ' ticket')
 
     chrome.setHeadlessMode = true;
 
