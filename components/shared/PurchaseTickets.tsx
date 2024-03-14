@@ -171,9 +171,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     "username": user?.firstname,
                     "email": user?.email,
                     "event": event.name,
-                    "ticket": addedTicket,
-                    //@ts-expect-error ticket
-                    "pdf": <TicketPdf ticketData={{...addedTicketObject, id: addedTicket.id }} />
+                    "ticket": addedTicket.id,
                 })
             })
         }
