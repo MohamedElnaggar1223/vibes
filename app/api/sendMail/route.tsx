@@ -29,7 +29,7 @@ export async function POST(req: Request)
 
     console.log(request.ticket, ' ticket')
 
-    let attachments = []
+    let attachments = [] as any
 
     Object.keys(request.addedTicket.tickets).forEach(async (ticket: any) => {
         const noOfTickets = parseInt(request.addedTicket.tickets[ticket])
@@ -81,13 +81,7 @@ export async function POST(req: Request)
         from: 'maelnaggar1223@gmail.com',
         to: [request.email],
         subject: 'Test',
-        attachments: [
-            {
-                filename: 'Ticket.pdf',
-                content: pdfBuffer
-            },
-
-        ],
+        attachments: attachments
     }
 
     try
