@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import chrome from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
+import { revalidatePath } from 'next/cache'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -16,6 +17,8 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request)
 {
     const request = await req.json()
+
+    revalidatePath(`/ticket/${request.ticket}`)
 
     console.log(request.ticket, ' ticket')
 
