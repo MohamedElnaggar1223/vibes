@@ -57,6 +57,7 @@ export default async function TicketPagePdf({ params }: Props)
 								alt="background"
 								className='bg-image-inside'
 								priority
+								fetchPriority="high"
 							/>
 							<div className='absolute top-[0%] left-[-48px] w-[110px] h-[37px] rotate-[270deg] flex items-center justify-start bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] z-50'>
 								<p className='font-poppins font-extralight text-white text-[8px] ml-1 mt-3'>1 Person Entry</p>

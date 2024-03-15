@@ -19,6 +19,10 @@ export async function POST(req: Request)
 
     console.log(request.ticket, ' ticket')
 
+    // let attachments = []
+
+    // Object.keys(request.addedTicket.tickets)
+
     const browser = await puppeteer.launch({
         args: chrome.args,
         defaultViewport: chrome.defaultViewport,
@@ -62,6 +66,7 @@ export async function POST(req: Request)
                 filename: 'Ticket.pdf',
                 content: pdfBuffer
             },
+
         ],
     }
 

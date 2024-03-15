@@ -172,6 +172,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     "email": user?.email,
                     "event": event.name,
                     "ticket": addedTicket.id,
+                    "addedTicket": addedTicketObject
                 })
             })
         }
