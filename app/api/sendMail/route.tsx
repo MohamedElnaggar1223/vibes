@@ -14,11 +14,18 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+export async function GET(req: Request)
+{
+    const { searchParams } = new URL(req.url)
+
+    const ticketId = searchParams.get('ticketId')
+
+    revalidatePath(`/ticket/${ticketId}`)
+}
+
 export async function POST(req: Request)
 {
     const request = await req.json()
-
-    await revalidatePath(`/ticket/${request.ticket}`)
 
     console.log(request.ticket, ' ticket')
 

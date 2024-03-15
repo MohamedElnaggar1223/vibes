@@ -155,6 +155,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                 createdAt: Timestamp.now()
             }
             const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
+            fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${addedTicket.id}` : `http://localhost:3000/api/sendMail?ticketId=${addedTicket.id}`, {
+                method: 'GET',
+            })
             await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
             await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(addedTicket.id) })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
