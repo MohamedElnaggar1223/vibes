@@ -89,6 +89,7 @@ export default async function TicketPagePdf({ params }: Props)
 						alt="logo"
 						className='cursor-pointer z-[9999] max-lg:w-[120px] max-lg:h-[45px]'
 						priority
+						fetchPriority="high"
 					/>
 					<div className='flex items-center justify-center qrcodeHeight'>
 						{/* <QrCode values="sadawddwadaw" /> */}
