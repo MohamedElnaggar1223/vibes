@@ -18,7 +18,7 @@ export async function POST(req: Request)
 {
     const request = await req.json()
 
-    revalidatePath(`/ticket/${request.ticket}`)
+    await revalidatePath(`/ticket/${request.ticket}`)
 
     console.log(request.ticket, ' ticket')
 
