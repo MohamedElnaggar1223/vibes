@@ -31,7 +31,7 @@ export async function POST(req: Request)
 
     let attachments = [] as any
 
-    Object.keys(request.addedTicket.tickets).forEach(async (ticket: any) => {
+    const ticketsPdfs = Object.keys(request.addedTicket.tickets).map(async (ticket: any) => {
         const noOfTickets = parseInt(request.addedTicket.tickets[ticket])
         for(let i = 0; i < noOfTickets; i++)
         {
@@ -76,6 +76,7 @@ export async function POST(req: Request)
         }
     })
 
+    await Promise.all(ticketsPdfs)
 
     const mailOptions = {
         from: 'maelnaggar1223@gmail.com',
