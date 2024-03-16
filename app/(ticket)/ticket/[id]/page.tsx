@@ -9,10 +9,11 @@ import QRCode from "react-qr-code"
 type Props = {
 	params: {
 		id: string
-	}
+	},
+	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function TicketPagePdf({ params }: Props)
+export default async function TicketPagePdf({ params, searchParams }: Props)
 {	
 	const admin = await initAdmin()
 
@@ -33,8 +34,6 @@ export default async function TicketPagePdf({ params }: Props)
 		gatesOpen: eventData.data()?.gatesOpen?.toDate(),
 		gatesClose: eventData.data()?.gatesClose?.toDate(),
 	} as EventType
-
-	console.log(event.eventDate)
 
 	return (
 		<section className='w-screen h-screen flex items-center justify-center rotate-90'>
@@ -65,7 +64,7 @@ export default async function TicketPagePdf({ params }: Props)
 						</div>
 						<p className='text-white font-bold w-full text-center text-2xl'>{event.name}</p>
 						<div className='border-t-[4px] border-r-[4px] border-white w-[150px] h-[45px] flex items-center justify-center bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] z-50'>
-							<p className='font-poppins font-extralight text-white text-xs text-center'>{Object.keys(ticket.tickets)[0]}</p>
+							<p className='font-poppins font-extralight text-white text-xs text-center'>{searchParams.type}</p>
 						</div>
 					</div>
 					<div className='flex flex-col justify-between items-center py-6'>
