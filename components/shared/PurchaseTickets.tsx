@@ -169,11 +169,11 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
 
-            Object.keys(addedTicketObject.tickets).forEach((ticket: any) => {
+            const ticketsPdfs = Object.keys(addedTicketObject.tickets).forEach(async (ticket: any) => {
                 const noOfTickets = addedTicketObject.tickets[ticket]
                 for(let i = 0; i < noOfTickets; i++)
                 {
-                    fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
+                    await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
                         method: 'POST',
                         body: JSON.stringify({
                             "email": user?.email,
@@ -185,6 +185,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                 }
             })
             
+            await Promise.all(ticketsPdfs!)
         }
         catch(e: any)
         {
