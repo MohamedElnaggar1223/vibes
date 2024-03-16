@@ -46,7 +46,7 @@ export default async function RootLayout({
 }>) {
 
   const user = await getUser()
-  if(!user?.verified) return redirect('/complete-profile')
+  if(user && !user.verified) return redirect('/complete-profile')
 
   return (
     <html lang="en">
