@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogContent,
   } from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
+import { cn, sendMailPdfs } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import FormattedPrice from "./FormattedPrice"
@@ -169,15 +169,16 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
             
-            fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
-                method: 'POST',
-                body: JSON.stringify({
-                    "email": user?.email,
-                    "event": event.name,
-                    "ticket": addedTicket.id,
-                    "addedTicket": addedTicketObject
-                })
-            })
+            // fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
+            //     method: 'POST',
+            //     body: JSON.stringify({
+            //         "email": user?.email,
+            //         "event": event.name,
+            //         "ticket": addedTicket.id,
+            //         "addedTicket": addedTicketObject
+            //     })
+            // })
+            await sendMailPdfs({ email: user?.email, event: event.name, ticket: addedTicket.id, addedTicket: addedTicketObject })
         }
         catch(e: any)
         {
