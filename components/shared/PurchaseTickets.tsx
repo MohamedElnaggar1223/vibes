@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogContent,
   } from "@/components/ui/dialog"
-import { cn, sendMailPdfs } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import FormattedPrice from "./FormattedPrice"
@@ -22,7 +22,7 @@ import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import TicketPdf from "../pdf/TicketPdf"
+import { sendMailPdfs } from "@/lib/server"
 
 type Props = {
     event: EventType,
