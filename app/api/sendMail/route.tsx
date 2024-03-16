@@ -75,7 +75,7 @@ export async function POST(req: Request)
     })
 
     const mailOptions = {
-        from: 'maelnaggar1223@gmail.com',
+        from: 'Vibes',
         to: [request.email],
         subject: `Vibes ${request.event}-${request.addedTicket}`,
         attachments: attachments
