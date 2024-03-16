@@ -21,6 +21,10 @@ export async function GET(req: Request)
     const ticketId = searchParams.get('ticketId')
 
     revalidatePath(`/ticket/${ticketId}`)
+
+    return Response.json({
+        'test': 'test'
+    })    
 }
 
 export async function POST(req: Request)
