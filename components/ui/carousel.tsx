@@ -138,7 +138,7 @@ const Carousel = React.forwardRef<
         <div
           ref={ref}
           onKeyDownCapture={handleKeyDown}
-          className={cn("relative lg:w-screen lg:-ml-16", className)}
+          className={cn("relative lg:w-screen lg:-ml-[5.5rem]", className)}
           role="region"
           aria-roledescription="carousel"
           {...props}

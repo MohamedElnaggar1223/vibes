@@ -1,7 +1,11 @@
+'use client'
 import Image from "next/image";
+import { useState } from "react";
 
-export default function Search() 
+export default function SearchBar() 
 {
+    const [search, setSearch] = useState('')
+
     return (
         <div className='w-full max-w-[627px] bg-white flex gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image

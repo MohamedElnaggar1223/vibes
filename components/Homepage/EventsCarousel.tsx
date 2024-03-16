@@ -75,7 +75,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                             // >
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] max-w-[728px] basis-1/3 overflow-visible', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
+                                className={cn('max-h-[448px] max-w-[728px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
