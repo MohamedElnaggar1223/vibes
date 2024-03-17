@@ -1,9 +1,9 @@
 import { initAdmin } from "@/firebase/server/config"
 import { EventType } from "@/lib/types/eventTypes"
+import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 import SearchLoading from "./SearchLoading"
-import SearchImageCard from "./SearchImageCard"
 
 type Props = {
     search: string
@@ -34,7 +34,13 @@ export default async function Search({ search }: Props)
                             <Link
                                 href={`/events/${event.id}`}
                             >
-                                <SearchImageCard name={event.name} eventPageImage={event.eventPageImage} />
+                                <Image
+                                    src={event?.eventPageImage}
+                                    width={192} 
+                                    height={192} 
+                                    alt={event.name}
+                                    className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
+                                />
                             </Link>
                         </div>
                     ))}
