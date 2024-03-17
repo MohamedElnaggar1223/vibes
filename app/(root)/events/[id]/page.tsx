@@ -4,11 +4,11 @@ import { months } from "@/constants"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
 import { UserType } from "@/lib/types/userTypes"
-import { formatTime, getDaySuffix } from "@/lib/utils"
+import { formatTime, getDaySuffix, getExchangeRate } from "@/lib/utils"
 import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import { Suspense } from "react"
+import { Suspense, cache } from "react"
 import Loading from "./loading"
 
 type Props = {
@@ -17,10 +17,9 @@ type Props = {
     }
 }
 
-export default async function EventPage({ params }: Props) 
-{
+const getEvent = cache(async (id: string) => {
     const admin = await initAdmin()
-    const fetchedEvent = (await admin.firestore().collection('events').doc(params.id).get())
+    const fetchedEvent = (await admin.firestore().collection('events').doc(id).get())
     const selectedEvent = {
         ...fetchedEvent.data(),
         createdAt: fetchedEvent.data()?.createdAt.toDate(),
@@ -31,13 +30,27 @@ export default async function EventPage({ params }: Props)
         gatesClose: fetchedEvent.data()?.gatesClose?.toDate(),
     } as EventType
 
-    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
+    return selectedEvent
+})
 
+const getUser = cache(async () => {
+    const admin = await initAdmin()
     const cookiesData = cookies()
     const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
 
 
     const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
+
+    return user
+})
+
+export default async function EventPage({ params }: Props) 
+{
+    const selectedEvent = await getEvent(params.id)
+
+    const exchangeRate = await getExchangeRate()
+
+    const user = await getUser()
 
     return (
         <Suspense fallback={<Loading />}>

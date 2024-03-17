@@ -1,5 +1,8 @@
+import { initAdmin } from "@/firebase/server/config";
 import { type ClassValue, clsx } from "clsx"
+import { cache } from "react";
 import { twMerge } from "tailwind-merge"
+import { ExchangeRate } from "./types/eventTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -35,3 +38,10 @@ export const formatTime = (date: Date) => {
 
     return formattedTime
 }
+
+export const getExchangeRate = cache(async () => {
+    const admin = await initAdmin()
+    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
+
+    return exchangeRate
+})

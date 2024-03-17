@@ -2,6 +2,7 @@ import { Carousel, CarouselContent } from "../ui/carousel"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
 import EventCard from "../cards/EventCard"
+import { getExchangeRate } from "@/lib/utils"
 
 type Props = {
     title: string,
@@ -33,9 +34,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
         else return 0
     })
 
-    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
-
-    
+    const exchangeRate = await getExchangeRate()
 
     return (
         <section className='relative w-full flex flex-col items-center h-[412px] justify-center gap-4 lg:flex-row'>
