@@ -2,17 +2,16 @@ import { initAdmin } from "@/firebase/server/config"
 import { EventType } from "@/lib/types/eventTypes"
 import Image from "next/image"
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, cache } from "react"
 import SearchLoading from "./SearchLoading"
 
 type Props = {
     search: string
 }
 
-export default async function Search({ search }: Props)
-{
+const getEvents = cache(async () => {
     const admin = await initAdmin()
-    const eventsData = (await admin.firestore().collection('events').get()).docs.slice().filter(event => event.data().name.toLowerCase().includes(search.toLowerCase()))
+    const eventsData = (await admin.firestore().collection('events').get()).docs
     const eventsDocs = eventsData?.map(async (event) => {
         return {
             ...event.data(),
@@ -24,6 +23,14 @@ export default async function Search({ search }: Props)
 
     })
     const events = await Promise.all(eventsDocs || [])
+
+    return events
+})
+
+export default async function Search({ search }: Props)
+{
+    const eventsData = await getEvents()
+    const events = eventsData.filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
 
     return (
         <Suspense fallback={<SearchLoading />}>
