@@ -13,7 +13,12 @@ export default function SearchBar()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(search) router.push(`/?search=${search}`)
+        if(search) {
+            // router.push(`/?search=${search}`)
+            router.prefetch(`/?search=${search}`)
+            window.history.pushState({}, '', `/?search=${search}`)
+            window.history.go()
+        }
     }
 
     return (

@@ -20,7 +20,7 @@ export default function SignedInHeader()
     }, [open])
 
     useEffect(() => {
-        const handleResize = () => setCurrentWidth(window.innerWidth)
+        const handleResize = () => setCurrentWidth(window?.innerWidth!)
         window.addEventListener("resize", handleResize)
         return () => window.removeEventListener("resize", handleResize)
     }, [])
