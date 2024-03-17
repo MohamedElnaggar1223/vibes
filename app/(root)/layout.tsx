@@ -61,7 +61,7 @@ export default async function RootLayout({
         <CountryContextProvider>
           <Header />
           <main className='px-6 md:px-20 min-h-screen flex'>
-              {children}
+            {children}
           </main>
         </CountryContextProvider>
       </body>

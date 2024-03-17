@@ -10,6 +10,7 @@ type Props = {
 }
 
 const getEvents = cache(async () => {
+    // await new Promise(res => setTimeout(res, 10000))
     const admin = await initAdmin()
     const eventsData = (await admin.firestore().collection('events').get()).docs
     const eventsDocs = eventsData?.map(async (event) => {
