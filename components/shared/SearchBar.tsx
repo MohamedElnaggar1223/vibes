@@ -1,17 +1,19 @@
 'use client'
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function SearchBar() 
 {
-    const [search, setSearch] = useState('')
+    const searchParams = useSearchParams()
+
+    const [search, setSearch] = useState(searchParams?.get('search') || '')
 
     const router = useRouter()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(search) router.push(`/search?search=${search}`)
+        if(search) router.push(`/?search=${search}`)
     }
 
     return (
