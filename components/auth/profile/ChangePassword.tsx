@@ -11,12 +11,13 @@ import {
     FormMessage,
   } from "@/components/ui/form"
 import { UserChangePasswordSchema } from "@/lib/validations/user"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { auth } from "@/firebase/client/config"
 import { User, updatePassword } from "firebase/auth"
 import { authErrors } from "@/constants"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import { Eye, EyeOff } from "lucide-react"
 
 type Props = {
     user: UserType,
@@ -28,6 +29,10 @@ type Props = {
 export default function ChangePassword({ user, setError, setLoading, setSuccess }: Props) 
 {
     const router = useRouter()
+
+    const [oldPasswordVisible, setOldPasswordVisible] = useState(false)
+    const [newPasswordVisible, setNewPasswordVisible] = useState(false)
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
 
     const form = useForm<z.infer<typeof UserChangePasswordSchema>>({
         resolver: zodResolver(UserChangePasswordSchema),
@@ -72,12 +77,31 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                         render={({ field }) => (
                             <FormItem className="">
                                 <FormControl>
-                                    <input 
-                                        placeholder="Old Password" 
-                                        type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
-                                        {...field}
-                                    />
+                                    <div className="relative">
+                                        <input 
+                                            placeholder="Old Password" 
+                                            type={oldPasswordVisible ? 'text' : 'password'}
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                        {oldPasswordVisible ? (
+                                            <Eye 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setOldPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        ) : (
+                                            <EyeOff 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setOldPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        )}
+                                    </div>
                                 </FormControl>
                                 <FormMessage className="absolute font-poppins" />
                             </FormItem>
@@ -89,12 +113,31 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                         render={({ field }) => (
                             <FormItem className="">
                                 <FormControl>
-                                    <input 
-                                        placeholder="New Password" 
-                                        type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
-                                        {...field}
-                                    />
+                                    <div className="relative">
+                                        <input 
+                                            placeholder="New Password" 
+                                            type={newPasswordVisible ? 'text' : 'password'}
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                        {newPasswordVisible ? (
+                                            <Eye 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setNewPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        ) : (
+                                            <EyeOff 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setNewPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        )}
+                                    </div>
                                 </FormControl>
                                 <FormMessage className="absolute font-poppins" />
                             </FormItem>
@@ -106,12 +149,31 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                         render={({ field }) => (
                             <FormItem className="">
                                 <FormControl>
-                                    <input 
-                                        placeholder="Confirm Password" 
-                                        type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
-                                        {...field}
-                                    />
+                                    <div className="relative">
+                                        <input 
+                                            placeholder="New Password" 
+                                            type={confirmPasswordVisible ? 'text' : 'password'}
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                        {confirmPasswordVisible ? (
+                                            <Eye 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setConfirmPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        ) : (
+                                            <EyeOff 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setConfirmPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        )}
+                                    </div>
                                 </FormControl>
                                 <FormMessage className="absolute font-poppins" />
                             </FormItem>

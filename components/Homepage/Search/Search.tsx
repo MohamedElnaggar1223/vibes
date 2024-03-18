@@ -47,6 +47,7 @@ export default async function Search({ search }: Props)
                                 height={192} 
                                 alt={event.name}
                                 className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
+                                loading="lazy"
                             />
                         </Link>
                     </div>
