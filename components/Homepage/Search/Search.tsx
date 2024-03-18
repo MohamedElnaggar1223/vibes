@@ -10,7 +10,6 @@ type Props = {
 }
 
 const getEvents = cache(async () => {
-    // await new Promise(res => setTimeout(res, 10000))
     const admin = await initAdmin()
     const eventsData = (await admin.firestore().collection('events').get()).docs
     const eventsDocs = eventsData?.map(async (event) => {
@@ -34,27 +33,25 @@ export default async function Search({ search }: Props)
     const events = eventsData.filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
 
     return (
-        <Suspense fallback={<SearchLoading />}>
-            <section className='flex flex-col items-center justify-center w-full overflow-x-hidden flex-1 h-max'>
-                <p className='text-left font-poppins font-thin text-white text-xs mr-auto'>Showing ({events.length}) results</p>
-                <div className='w-full flex justify-between items-center gap-8 flex-wrap mb-auto mt-12'>
-                    {events.map(event => (
-                        <div key={event.id} className='min-w-48 min-h-48 rounded-lg overflow-hidden'>
-                            <Link
-                                href={`/events/${event.id}`}
-                            >
-                                <Image
-                                    src={event?.eventPageImage}
-                                    width={192} 
-                                    height={192} 
-                                    alt={event.name}
-                                    className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
-                                />
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
-        </Suspense>
+        <section className='flex flex-col items-center justify-center w-full overflow-x-hidden flex-1 h-max'>
+            <p className='text-left font-poppins font-thin text-white text-xs mr-auto'>Showing ({events.length}) results</p>
+            <div className='w-full flex justify-between items-center gap-8 flex-wrap mb-auto mt-12'>
+                {events.map(event => (
+                    <div key={event.id} className='min-w-48 min-h-48 rounded-lg overflow-hidden'>
+                        <Link
+                            href={`/events/${event.id}`}
+                        >
+                            <Image
+                                src={event?.eventPageImage}
+                                width={192} 
+                                height={192} 
+                                alt={event.name}
+                                className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
+                            />
+                        </Link>
+                    </div>
+                ))}
+            </div>
+        </section>
     )
 }
