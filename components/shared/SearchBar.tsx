@@ -2,12 +2,14 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { Separator } from "../ui/separator";
 
 export default function SearchBar() 
 {
     const searchParams = useSearchParams()
 
     const [search, setSearch] = useState(searchParams?.get('search') || '')
+    const [filtersOpen, setFiltersOpen] = useState(false)
 
     const router = useRouter()
 
@@ -19,7 +21,7 @@ export default function SearchBar()
     }
 
     return (
-        <div className='w-full max-w-[627px] bg-white flex gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
+        <div className='relative w-full max-w-[627px] bg-white flex shadow-lg z-20 gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}
@@ -45,7 +47,37 @@ export default function SearchBar()
                 height={20}
                 alt='search' 
                 className='ml-[-5px] cursor-pointer' 
+                onClick={() => setFiltersOpen(prev => !prev)}
             />
+            {filtersOpen && (
+                <div className='absolute w-screen max-w-[627px] z-10 bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
+                    <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2'>
+                        <p className='font-poppins font-light text-black'>Categories</p>
+                        <div className='flex gap-6 w-full'>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Sports</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Concerts</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Theatre & Comedy</p>
+                        </div>
+                        <Separator />
+                    </div>
+                    <div className='flex flex-col items-start justify-evenly w-[230px] bg-[#FAF9F9] gap-3 px-1.5 pt-2 pb-4'>
+                        <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
+                        <div className='flex gap-6 w-full items-center justify-between'>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Today</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Tomorrow</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Today</p>
+                        </div>
+                    </div>
+                    <div className='flex flex-col items-start justify-evenly w-[312px] gap-3'>
+                        <p className='font-poppins font-light text-black'>Country</p>
+                        <div className='flex gap-12 w-full items-center justify-start'>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>UAE</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>KSA</p>
+                            <p className='font-poppins font-extralight text-black cursor-pointer'>Egypt</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
