@@ -42,7 +42,7 @@ export default async function Search({ search }: Props)
                             href={`/events/${event.id}`}
                         >
                             <Image
-                                src={event?.eventPageImage}
+                                src={event?.displayPageImage}
                                 width={192} 
                                 height={192} 
                                 alt={event.name}
