@@ -11,8 +11,8 @@ export default function SearchBar()
 
     const router = useRouter()
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+        e?.preventDefault()
         if(search) {
             router.push(`/?search=${search}`)
         }
@@ -22,18 +22,19 @@ export default function SearchBar()
         <div className='w-full max-w-[627px] bg-white flex gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
-                width={28}
-                height={28}
+                width={24}
+                height={24}
                 alt='search'
                 className='mr-[-5px] cursor-pointer' 
+                onClick={() => handleSubmit()}
             />
             <form                    
-                className='flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins pl-8 py-1.5 outline-none' 
+                className='flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins pl-8 py-1.5 outline-none' 
                 onSubmit={handleSubmit}
             >
                 <input 
                     placeholder='Search our events'
-                    className='flex-1 p-0 text-[10px] font-poppins outline-none' 
+                    className='w-full flex-1 p-0 text-[10px] font-poppins outline-none' 
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />

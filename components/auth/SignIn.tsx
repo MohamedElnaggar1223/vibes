@@ -19,11 +19,13 @@ import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { authErrors } from "@/constants"
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function SignIn()
 {
     const router = useRouter()
 
+    const [passwordVisible, setPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
 
@@ -171,12 +173,31 @@ export default function SignIn()
                         render={({ field }) => (
                             <FormItem className="">
                                 <FormControl>
-                                    <input 
-                                        placeholder="Password" 
-                                        type='password'
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
-                                        {...field}
-                                    />
+                                    <div className="relative">
+                                        <input 
+                                            placeholder="Password" 
+                                            type={passwordVisible ? 'text' : 'password'}
+                                            className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
+                                            {...field}
+                                        />
+                                        {passwordVisible ? (
+                                            <Eye 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        ) : (
+                                            <EyeOff 
+                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setPasswordVisible(prev => !prev)
+                                                }} 
+                                            />
+                                        )}
+                                    </div>
                                 </FormControl>
                                 <FormMessage className="absolute font-poppins" />
                             </FormItem>
