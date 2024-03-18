@@ -35,7 +35,7 @@ export default async function Search({ search }: Props)
     return (
         <section className='flex flex-col items-center justify-center w-full overflow-x-hidden flex-1 h-max'>
             <p className='text-left font-poppins font-thin text-white text-xs mr-auto'>Showing ({events.length}) results</p>
-            <div className='w-full flex justify-between items-center gap-8 flex-wrap mb-auto mt-12'>
+            <div className='w-full flex justify-start items-center gap-8 flex-wrap mb-auto mt-12'>
                 {events.map(event => (
                     <div key={event.id} className='min-w-48 min-h-48 rounded-lg overflow-hidden'>
                         <Link
