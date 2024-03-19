@@ -97,13 +97,13 @@ export default function SearchBar()
                         </div>
                         <div className='flex flex-col items-start justify-evenly w-[275px] bg-[#FAF9F9] gap-3 px-1 pt-2 pb-4 max-sm:mx-auto'>
                             <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
-                            <div className='flex gap-4 w-full items-center justify-between'>
+                            <div className='flex gap-0.5 w-full items-center justify-between'>
                                 <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer w-fit', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
                                 <p onClick={() => setDate(tomorrow)} className={cn('font-poppins font-extralight cursor-pointer w-fit', date?.getDate() === tomorrow?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Tomorrow</p>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <div
-                                            className="flex items-center gap-2 cursor-pointer justify-center w-fit"
+                                            className="flex items-center gap-1 cursor-pointer justify-center w-fit"
                                         >
                                         <CalendarIcon className="h-4 w-4 cursor-pointer" />
                                         {date ? <span className='font-poppins font-extralight'>{format(date, "PPP")}</span> : <span className='font-poppins font-extralight text-nowrap'>Select date</span>}
