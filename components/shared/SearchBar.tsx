@@ -120,7 +120,7 @@ export default function SearchBar()
                                 </Popover>
                             </div>
                         </div>
-                        <div className='flex flex-col items-start justify-evenly w-[312px] gap-3 max-sm:mx-auto'>
+                        <div className='flex flex-col sm:mt-2 items-start justify-evenly w-[312px] gap-3 max-sm:mx-auto'>
                             <p className='font-poppins font-light text-black'>Country</p>
                             <div className='flex gap-12 w-full items-center justify-start'>
                                 <p onClick={() => setCountry(prev => prev !== 'UAE' ? 'UAE' : '')} className={cn('font-poppins font-extralight cursor-pointer', country === 'UAE' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>UAE</p>
