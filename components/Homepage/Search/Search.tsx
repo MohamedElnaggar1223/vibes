@@ -36,8 +36,6 @@ const getEvents = cache(async () => {
 
 export default async function Search({ search, date, category, country, categories }: Props)
 {
-    if(!search) return null
-
     const countries = {
         'KSA': 'Saudi Arabia',
         'UAE': 'United Arab Emirates',
@@ -46,7 +44,7 @@ export default async function Search({ search, date, category, country, categori
 
     const eventsData = await getEvents()
     const events = eventsData
-                    .filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
+                    .filter(event => search ? event.name.toLowerCase().includes(search.toLowerCase()) : true)
                     .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
                     .filter(event => category ? event.categoryID === categories.find(cat => cat.category === (category === 'TheatreComedy' ? 'Theatre & comedy' : category))?.id : true)
                     .filter(event => country ? (event.country === countries[country]) : true)

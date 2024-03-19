@@ -33,7 +33,7 @@ export default async function Home({ searchParams }: Props)
 		<section className='flex flex-col items-center justify-center w-full overflow-x-hidden' key={Math.random()}>
 			<SearchBar />
 			{
-				search ? (
+				(search || date || country || category) ? (
 					<Suspense fallback={<SearchLoading />}>
 						<Search search={search} date={date} category={category} country={country} categories={categories} />
 					</Suspense>
