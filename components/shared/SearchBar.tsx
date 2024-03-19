@@ -104,8 +104,8 @@ export default function SearchBar()
                                     <div
                                         className="flex items-center gap-2 cursor-pointer justify-center w-fit"
                                     >
-                                    <CalendarIcon className="h-6 w-6 cursor-pointer" />
-                                    {date ? format(date, "PPP") : <span>Select date</span>}
+                                    <CalendarIcon className="h-5 w-5 cursor-pointer" />
+                                    {date ? format(date, "PPP") : <span className='font-poppins font-extralight'>Select date</span>}
                                     </div>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0 z-[9999999999]">
