@@ -95,7 +95,7 @@ export default function SearchBar()
                             </div>
                             <Separator />
                         </div>
-                        <div className='flex flex-col items-start justify-evenly w-[267px] bg-[#FAF9F9] gap-3 px-1 pt-2 pb-4 max-sm:mx-auto'>
+                        <div className='flex flex-col items-start justify-evenly w-[275px] bg-[#FAF9F9] gap-3 px-1 pt-2 pb-4 max-sm:mx-auto'>
                             <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
                             <div className='flex gap-4 w-full items-center justify-between'>
                                 <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
