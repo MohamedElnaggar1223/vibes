@@ -1,8 +1,13 @@
 'use client'
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Separator } from "../ui/separator";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { format, parseISO } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils";
 
 export default function SearchBar() 
 {
@@ -10,15 +15,43 @@ export default function SearchBar()
 
     const [search, setSearch] = useState(searchParams?.get('search') || '')
     const [filtersOpen, setFiltersOpen] = useState(false)
+    const [category, setCategory] = useState(searchParams?.get('category') || '')
+    const [date, setDate] = useState<Date | undefined>(!!searchParams?.get('date') ? parseISO(searchParams?.get('date')!) : undefined)
+    const [country, setCountry] = useState(searchParams?.get('country') || '')
+
+    const todaysDate = new Date()
+    const tomorrow = new Date(todaysDate)
+    tomorrow.setDate(todaysDate.getDate() + 1)
 
     const router = useRouter()
 
     const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault()
-        if(search) {
-            router.push(`/?search=${search}`)
-        }
+        let query = ''
+        if(search) query += `search=${search}&`
+        if(category) query += `category=${category}&`
+        if(date) query += `date=${date.toISOString()}&`
+        if(country) query += `country=${country}`
+        if(query) router.push(`/?${query}`)
     }
+
+    const dropdownRef = useRef<HTMLDivElement>(null)
+    const dropdownIconRef = useRef<HTMLImageElement>(null)
+
+    useEffect(() => {
+        const handleOutsideClick = (event: any) => {
+            if(event.target === dropdownIconRef.current) return
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setFiltersOpen(false)
+            }
+        };
+
+        document.addEventListener('click', handleOutsideClick)
+
+        return () => {
+            document.removeEventListener('click', handleOutsideClick)
+        };
+    }, []);
 
     return (
         <div className='relative w-full max-w-[627px] bg-white flex shadow-lg z-[9999999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
@@ -48,32 +81,50 @@ export default function SearchBar()
                 alt='search' 
                 className='ml-[-5px] cursor-pointer' 
                 onClick={() => setFiltersOpen(prev => !prev)}
+                ref={dropdownIconRef}
             />
             {filtersOpen && (
-                <div className='absolute w-screen max-w-[627px] z-[999999999] bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
+                <div ref={dropdownRef} className='absolute w-screen max-w-[627px] z-[999999999] bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
                     <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2'>
                         <p className='font-poppins font-light text-black'>Categories</p>
                         <div className='flex gap-6 w-full'>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Sports</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Concerts</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Theatre & Comedy</p>
+                            <p onClick={() => setCategory(prev => prev !== 'Sports' ? 'Sports' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Sports' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Sports</p>
+                            <p onClick={() => setCategory(prev => prev !== 'Concerts' ? 'Concerts' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Concerts' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Concerts</p>
+                            <p onClick={() => setCategory(prev => prev !== 'Theatre&Comedy' ? 'Theatre&Comedy' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Theatre&Comedy' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Theatre & Comedy</p>
                         </div>
                         <Separator />
                     </div>
-                    <div className='flex flex-col items-start justify-evenly w-[230px] bg-[#FAF9F9] gap-3 px-1.5 pt-2 pb-4'>
+                    <div className='flex flex-col items-start justify-evenly w-[237px] bg-[#FAF9F9] gap-3 px-1.5 pt-2 pb-4'>
                         <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
                         <div className='flex gap-6 w-full items-center justify-between'>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Today</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Tomorrow</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Today</p>
+                            <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
+                            <p onClick={() => setDate(tomorrow)} className={cn('font-poppins font-extralight cursor-pointer', date?.getDate() === tomorrow?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Tomorrow</p>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <div
+                                        className="flex items-center gap-2 cursor-pointer justify-center w-fit"
+                                    >
+                                    <CalendarIcon className="h-6 w-6 cursor-pointer" />
+                                    {date ? format(date, "PPP") : <span>Select date</span>}
+                                    </div>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 z-[9999999999]">
+                                    <Calendar
+                                        mode="single"
+                                        selected={date}
+                                        onSelect={setDate}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
                         </div>
                     </div>
                     <div className='flex flex-col items-start justify-evenly w-[312px] gap-3'>
                         <p className='font-poppins font-light text-black'>Country</p>
                         <div className='flex gap-12 w-full items-center justify-start'>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>UAE</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>KSA</p>
-                            <p className='font-poppins font-extralight text-black cursor-pointer'>Egypt</p>
+                            <p onClick={() => setCountry(prev => prev !== 'UAE' ? 'UAE' : '')} className={cn('font-poppins font-extralight cursor-pointer', country === 'UAE' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>UAE</p>
+                            <p onClick={() => setCountry(prev => prev !== 'KSA' ? 'KSA' : '')} className={cn('font-poppins font-extralight cursor-pointer', country === 'KSA' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>KSA</p>
+                            <p onClick={() => setCountry(prev => prev !== 'Egypt' ? 'Egypt' : '')} className={cn('font-poppins font-extralight cursor-pointer', country === 'Egypt' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Egypt</p>
                         </div>
                     </div>
                 </div>
