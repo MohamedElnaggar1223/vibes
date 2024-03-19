@@ -54,7 +54,7 @@ export default function SearchBar()
     }, []);
 
     return (
-        <div className='relative w-full max-w-[627px] bg-white flex shadow-lg z-[9999999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
+        <div className='relative w-full max-w-[637px] bg-white flex shadow-lg z-[9999999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}
@@ -84,7 +84,7 @@ export default function SearchBar()
                 ref={dropdownIconRef}
             />
             {filtersOpen && (
-                <div ref={dropdownRef} className='absolute w-screen max-w-[627px] z-[999999999] bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
+                <div ref={dropdownRef} className='absolute w-screen max-w-[637px] z-[999999999] bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
                     <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2'>
                         <p className='font-poppins font-light text-black'>Categories</p>
                         <div className='flex gap-6 w-full'>
@@ -94,7 +94,7 @@ export default function SearchBar()
                         </div>
                         <Separator />
                     </div>
-                    <div className='flex flex-col items-start justify-evenly w-[237px] bg-[#FAF9F9] gap-3 px-1.5 pt-2 pb-4'>
+                    <div className='flex flex-col items-start justify-evenly w-[245px] bg-[#FAF9F9] gap-3 px-1.5 pt-2 pb-4'>
                         <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
                         <div className='flex gap-6 w-full items-center justify-between'>
                             <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
