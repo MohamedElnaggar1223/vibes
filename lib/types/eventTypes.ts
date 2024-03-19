@@ -52,3 +52,11 @@ export type ExchangeRate = {
     USDToEGP: number,
     updatedAt: Date,
 }
+
+export type Category = {
+    id: string,
+    createdAt: Date,
+    category: string,
+    color: number,
+    events: string[],
+}

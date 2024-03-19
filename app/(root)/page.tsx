@@ -4,7 +4,7 @@ import SearchLoading from "@/components/Homepage/Search/SearchLoading";
 import CarouselCategory from "@/components/shared/CarouselCategory";
 import SearchBar from "@/components/shared/SearchBar";
 import { initAdmin } from "@/firebase/server/config";
-import { Display } from "@/lib/types/eventTypes";
+import { Category, Display } from "@/lib/types/eventTypes";
 import { Suspense } from "react";
 
 type Props = {
@@ -15,6 +15,7 @@ export default async function Home({ searchParams }: Props)
 {
 	const admin = await initAdmin()
 	const displaysData = (await admin.firestore().collection('displays').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Display[]
+	const categories = (await admin.firestore().collection('categories').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Category[]
 
 	const displays = displaysData.sort((a, b) => {
         if(a.createdAt && b.createdAt) return a.createdAt.getTime() - b.createdAt.getTime()
@@ -23,7 +24,10 @@ export default async function Home({ searchParams }: Props)
         else return 0
     })
 
-	const search = searchParams.search
+	const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
+	const date = typeof searchParams.date === 'string' ? searchParams.date : undefined
+	const country = typeof searchParams.country === 'string' && (searchParams.country === 'UAE' || searchParams.country === 'Egypt' || searchParams.country === 'KSA') ? searchParams.country : undefined
+	const category = typeof searchParams.category === 'string' ? searchParams.category : undefined
 	
 	return (
 		<section className='flex flex-col items-center justify-center w-full overflow-x-hidden' key={Math.random()}>
@@ -31,7 +35,7 @@ export default async function Home({ searchParams }: Props)
 			{
 				search ? (
 					<Suspense fallback={<SearchLoading />}>
-						<Search search={search as string} />
+						<Search search={search} date={date} category={category} country={country} categories={categories} />
 					</Suspense>
 				) : (
 					<>

@@ -90,7 +90,7 @@ export default function SearchBar()
                         <div className='flex gap-6 w-full'>
                             <p onClick={() => setCategory(prev => prev !== 'Sports' ? 'Sports' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Sports' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Sports</p>
                             <p onClick={() => setCategory(prev => prev !== 'Concerts' ? 'Concerts' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Concerts' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Concerts</p>
-                            <p onClick={() => setCategory(prev => prev !== 'Theatre&Comedy' ? 'Theatre&Comedy' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Theatre&Comedy' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Theatre & Comedy</p>
+                            <p onClick={() => setCategory(prev => prev !== 'TheatreComedy' ? 'TheatreComedy' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'TheatreComedy' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Theatre & Comedy</p>
                         </div>
                         <Separator />
                     </div>

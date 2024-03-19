@@ -1,12 +1,19 @@
 import { initAdmin } from "@/firebase/server/config"
-import { EventType } from "@/lib/types/eventTypes"
+import { Category, EventType } from "@/lib/types/eventTypes"
 import Image from "next/image"
 import Link from "next/link"
-import { Suspense, cache } from "react"
-import SearchLoading from "./SearchLoading"
+import { cache } from "react"
 
 type Props = {
-    search: string
+    search: string | undefined,
+    date: string | undefined,
+    category: string | undefined,
+    country: 
+        'KSA' |
+        'UAE' |
+        'Egypt' 
+     | undefined,
+    categories: Category[]
 }
 
 const getEvents = cache(async () => {
@@ -27,10 +34,22 @@ const getEvents = cache(async () => {
     return events
 })
 
-export default async function Search({ search }: Props)
+export default async function Search({ search, date, category, country, categories }: Props)
 {
+    if(!search) return null
+
+    const countries = {
+        'KSA': 'Saudi Arabia',
+        'UAE': 'United Arab Emirates',
+        'Egypt': 'Egypt'
+    }
+
     const eventsData = await getEvents()
-    const events = eventsData.filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
+    const events = eventsData
+                    .filter(event => event.name.toLowerCase().includes(search.toLowerCase()))
+                    .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
+                    .filter(event => category ? event.categoryID === categories.find(cat => cat.category === (category === 'TheatreComedy' ? 'Theatre & comedy' : category))?.id : true)
+                    .filter(event => country ? (event.country === countries[country]) : true)
 
     return (
         <section className='flex flex-col items-center justify-center w-full overflow-x-hidden flex-1 h-max'>
