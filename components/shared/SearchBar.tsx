@@ -85,7 +85,7 @@ export default function SearchBar()
             />
             {filtersOpen && (
                 <div ref={dropdownRef} className='absolute w-screen max-w-[637px] z-[999999999] bg-[#FFFEFE] flex flex-wrap text-sm top-[95%] gap-4 px-8 py-4'>
-                    <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2'>
+                    <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2 max-sm:mx-auto'>
                         <p className='font-poppins font-light text-black'>Categories</p>
                         <div className='flex gap-6 w-full'>
                             <p onClick={() => setCategory(prev => prev !== 'Sports' ? 'Sports' : '')} className={cn('font-poppins font-extralight cursor-pointer', category === 'Sports' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Sports</p>
@@ -94,7 +94,7 @@ export default function SearchBar()
                         </div>
                         <Separator />
                     </div>
-                    <div className='flex flex-col items-start justify-evenly w-[257px] bg-[#FAF9F9] gap-3 px-1 pt-2 pb-4'>
+                    <div className='flex flex-col items-start justify-evenly w-[257px] bg-[#FAF9F9] gap-3 px-1 pt-2 pb-4 max-sm:mx-auto'>
                         <p className='font-poppins font-light text-black w-full text-center'>Choose Date</p>
                         <div className='flex gap-4 w-full items-center justify-between'>
                             <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
@@ -119,7 +119,7 @@ export default function SearchBar()
                             </Popover>
                         </div>
                     </div>
-                    <div className='flex flex-col items-start justify-evenly w-[312px] gap-3'>
+                    <div className='flex flex-col items-start justify-evenly w-[312px] gap-3 max-sm:mx-auto'>
                         <p className='font-poppins font-light text-black'>Country</p>
                         <div className='flex gap-12 w-full items-center justify-start'>
                             <p onClick={() => setCountry(prev => prev !== 'UAE' ? 'UAE' : '')} className={cn('font-poppins font-extralight cursor-pointer', country === 'UAE' ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>UAE</p>
