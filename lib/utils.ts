@@ -2,7 +2,7 @@ import { initAdmin } from "@/firebase/server/config";
 import { type ClassValue, clsx } from "clsx"
 import { cache } from "react";
 import { twMerge } from "tailwind-merge"
-import { ExchangeRate } from "./types/eventTypes";
+import { Category, EventType, ExchangeRate } from "./types/eventTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -44,4 +44,29 @@ export const getExchangeRate = cache(async () => {
     const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
 
     return exchangeRate
+})
+
+export const getCategories = cache(async () => {
+    const admin = await initAdmin()
+    const categories = (await admin.firestore().collection('categories').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Category[]
+
+    return categories
+})
+
+export const getEvents = cache(async () => {
+    const admin = await initAdmin()
+    const eventsData = (await admin.firestore().collection('events').get()).docs
+    const eventsDocs = eventsData?.map(async (event) => {
+        return {
+            ...event.data(),
+            createdAt: event.data()?.createdAt.toDate(),
+            eventTime: event.data()?.eventTime.toDate(),
+            eventDate: event.data()?.eventDate.toDate(),
+            updatedAt: event.data()?.updatedAt?.toDate(),
+        } as EventType
+
+    })
+    const events = await Promise.all(eventsDocs || [])
+
+    return events
 })

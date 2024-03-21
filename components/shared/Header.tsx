@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import SignedInHeader from "./SignedInHeader";
+import CategoriesHeaderLink from "./CategoriesHeaderLink";
 
 export default async function Header() 
 {
@@ -20,10 +21,8 @@ export default async function Header()
                 />
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999] max-lg:mr-4">
+                <CategoriesHeaderLink />
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
-                    Categories
-                </Link>
-                <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Sell Your Tickets
                 </Link> */}
                 <Link href='/' className='text-white font-poppins text-lg font-semibold z-[9999]'>
