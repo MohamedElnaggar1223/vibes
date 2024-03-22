@@ -27,7 +27,9 @@ export default async function Categorie({ category, events, country, date }: Pro
                         .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
                         .filter(event => country ? (event.country === countries[country]) : true)
 
-    return (
+
+    if(catEvents.length === 0) return null
+    else return (
         <div className='flex flex-1 flex-col gap-4 mt-6'>
             <div className='flex flex-col gap-0.5'>
                 <p className='font-poppins text-white text-base font-semibold'>{category.category} <span className='font-extralight text-sm'>({catEvents.length})</span></p>

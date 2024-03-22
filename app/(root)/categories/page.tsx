@@ -9,6 +9,12 @@ type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
 }
 
+const countries = {
+    'KSA': 'Saudi Arabia',
+    'UAE': 'United Arab Emirates',
+    'Egypt': 'Egypt'
+}
+
 export default async function CategoriesPage({ searchParams }: Props) 
 {
     const categories = await getCategories()
@@ -23,13 +29,22 @@ export default async function CategoriesPage({ searchParams }: Props)
                 <p className='font-poppins text-white font-light'>Filters</p>
                 <CategoriesFilters />
             </div>
-            <Suspense fallback={<EventsLoading />}>
-                <div className='flex flex-col flex-1 gap-8'>
-                    {categories.map(category => (
-                        <Categorie category={category} events={events} country={country} date={date} /> 
-                    ))}
-                </div>
-            </Suspense>
+            {
+                events
+                .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
+                .filter(event => country ? (event.country === countries[country]) : true)
+                .length === 0 ? (
+                    <p className='flex items-center justify-center text-white text-lg text-center font-poppins font-semibold h-52 flex-1'>No Events Found!</p>
+                ) : (
+                    <Suspense fallback={<EventsLoading />}>
+                        <div className='flex flex-col flex-1 gap-8'>
+                            {categories.map(category => (
+                                <Categorie category={category} events={events} country={country} date={date} /> 
+                            ))}
+                        </div>
+                    </Suspense>
+                )
+            }
         </section>
     )
 }
