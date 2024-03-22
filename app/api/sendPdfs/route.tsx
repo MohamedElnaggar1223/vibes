@@ -33,7 +33,6 @@ export async function POST(req: Request)
                 const dirRef = await admin.storage().bucket().getFiles()
                 const ticketsFiles = dirRef[0].slice().filter(file => file.name.includes(`${event.ticketFilesPath}/${Object.keys(purchasedTickets)[index]}`))
 
-                // dirRef[0].forEach(file => console.log(file.name))
                 for(let i = 0; i < ticketQuantity; i++) 
                 {
                     const pdfData = await ticketsFiles[i].download()
@@ -45,25 +44,6 @@ export async function POST(req: Request)
                     await ticketsFiles[i].delete()
                 }
     
-                // const listRef = ref(storage, `${event.ticketFilesPath}/${Object.keys(purchasedTickets)[index]}`)
-                // listAll(listRef)
-                //     .then(async (res) => {
-                //         res.items.forEach((itemRef) => console.log(itemRef))
-                //         for(let i = 0; i < ticketQuantity; i++) 
-                //         {
-                //             const pdfRef = ref(storage, res.items[i].fullPath)
-                //             await getDownloadURL(pdfRef)
-                //                 .then(url => {
-                //                     attachments.push({
-                //                         filename: `Vibes ${Object.keys(purchasedTickets)[index]}`,
-                //                         content: url
-                //                     })
-                //                 })
-                //             await deleteObject(pdfRef)
-                //         }
-                //     }).catch((error) => {
-                //         console.log(error)
-                //     })
             }
         })
     
