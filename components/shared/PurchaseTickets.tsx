@@ -22,7 +22,7 @@ import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import TicketPdf from "../pdf/TicketPdf"
+import { getStorage, ref, listAll } from "firebase/storage";
 
 type Props = {
     event: EventType,
@@ -169,23 +169,36 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
             setPurchasedParkingPass(0)
             router.push(`/success/${addedTicket.id}`)
 
-            const ticketsPdfs = Object.keys(addedTicketObject.tickets).forEach(async (ticket: any) => {
-                const noOfTickets = addedTicketObject.tickets[ticket]
-                for(let i = 0; i < noOfTickets; i++)
-                {
-                    await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            "email": user?.email,
-                            "event": event.name,
-                            "ticket": addedTicket.id,
-                            "addedTicket": ticket
+            if(!event.uploadedTickets)
+            {
+                const ticketsPdfs = Object.keys(addedTicketObject.tickets).forEach(async (ticket: any) => {
+                    const noOfTickets = addedTicketObject.tickets[ticket]
+                    for(let i = 0; i < noOfTickets; i++)
+                    {
+                        await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendMail' : 'http://localhost:3000/api/sendMail', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                "email": user?.email,
+                                "event": event.name,
+                                "ticket": addedTicket.id,
+                                "addedTicket": ticket
+                            })
                         })
+                    }
+                })
+                await Promise.all(ticketsPdfs!)
+            }
+            else
+            {
+                await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendPdfs' : 'http://localhost:3000/api/sendPdfs', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "email": user?.email,
+                        "event": event,
+                        "purchasedTickets": purchasedTickets,
                     })
-                }
-            })
-            
-            await Promise.all(ticketsPdfs!)
+                })
+            }
         }
         catch(e: any)
         {

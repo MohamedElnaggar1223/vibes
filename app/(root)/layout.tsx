@@ -4,14 +4,12 @@ import "./globals.css";
 import Image from "next/image";
 import Header from "@/components/shared/Header";
 import { cn } from "@/lib/utils";
-import { Suspense, cache } from "react";
-import Loading from "./loading";
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { decode } from "next-auth/jwt"
 import { UserType } from "@/lib/types/userTypes";
 import { redirect } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
-import {  } from 'next/navigation'
 import CountryContextProvider from "@/providers/CountryProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 

@@ -43,6 +43,8 @@ export type EventType = {
     totalRevenue: number,
     parkingSold: number,
     updatedAt?: Date,
+    uploadedTickets: boolean,
+    ticketFilesPath: string,
 }
 
 export type ExchangeRate = {
