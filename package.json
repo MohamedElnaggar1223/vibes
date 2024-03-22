@@ -19,6 +19,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-pdf/renderer": "^3.3.8",
     "@sparticuz/chromium": "^122.0.0",
+    "@vercel/speed-insights": "^1.0.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
