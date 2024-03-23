@@ -37,10 +37,10 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
     const exchangeRate = await getExchangeRate()
 
     return (
-        <section className='relative w-full flex flex-col items-center h-[412px] justify-center gap-4 lg:flex-row'>
-            <div className='flex flex-col gap-2 w-full lg:w-[15%] text-white lg:mb-auto mt-2'>
-                <p className='font-poppins font-black text-3xl'>{title}</p>
-                <div className='w-1/3 lg:w-3/12 h-[2px] bg-white mb-4' />
+        <section className='relative w-full flex items-center h-52 lg:h-[412px] justify-center gap-4 flex-row'>
+            <div className='flex flex-col gap-2 w-[45%] lg:w-[15%] text-white mb-auto mt-2'>
+                <p className='font-poppins font-black text-2xl lg:text-3xl'>{title}</p>
+                <div className='w-2/3 lg:w-3/12 h-[2px] bg-white mb-4' />
                 <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
             </div>
             <Carousel
@@ -48,7 +48,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
                     align: "start",
                     loop: true,
                 }}
-                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12"
+                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
             >
                 <CarouselContent className=''>
                     {eventsData.map((event) => (

@@ -127,7 +127,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                             <div className='flex gap-4 items-center justify-between flex-1 w-full my-6'>
                                 <div className='flex gap-2 flex-1'>
                                     <div className='min-w-2.5 rotate-180 min-h-full bg-[#7D40FF]' />
-                                    <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36 flex-1'>
+                                    <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-28 flex-1'>
                                         <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
                                         <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
                                         <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>

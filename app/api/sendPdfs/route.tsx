@@ -1,6 +1,5 @@
 import { initAdmin } from '@/firebase/server/config'
 import { EventType } from '@/lib/types/eventTypes'
-import { getStorage, listAll, ref, getDownloadURL, deleteObject } from 'firebase/storage'
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({

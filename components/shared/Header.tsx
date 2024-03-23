@@ -9,7 +9,7 @@ export default async function Header()
     const session = await getServerSession()
 
     return (
-        <section className='py-2 lg:px-20 min-w-full flex justify-between items-center sticky top-0 z-[9999] bg-black'>
+        <section className='py-2 lg:px-20 min-w-full flex justify-between items-center sticky top-0 z-[99999999999] bg-black'>
             <Link href='/'>
                 <Image
                     src="/assets/logo.png"
@@ -25,13 +25,13 @@ export default async function Header()
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='/' className='text-white font-poppins text-lg font-semibold z-[9999]'>
+                <Link href='/' className='text-white font-poppins text-base md:text-lg font-semibold z-[9999]'>
                     AR
                 </Link>
                 {
                     !session?.user ? (
                         <Link href='/sign-in'>
-                            <button className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-6 py-2 text-white z-[9999]'>
+                            <button className='font-poppins text-base md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white z-[9999]'>
                                 Sign in
                             </button>
                         </Link>

@@ -60,11 +60,11 @@ export default function SearchBar()
                 width={24}
                 height={24}
                 alt='search'
-                className='mr-[-5px] cursor-pointer' 
+                className='mr-[-5px] cursor-pointer max-lg:w-[20px] max-lg:h-[20px]' 
                 onClick={() => handleSubmit()}
             />
             <form                    
-                className='flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins pl-8 py-1.5 outline-none' 
+                className='flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins pl-8 py-0.5 md:py-1.5 outline-none' 
                 onSubmit={handleSubmit}
             >
                 <input 
@@ -79,7 +79,7 @@ export default function SearchBar()
                 width={20}
                 height={20}
                 alt='search' 
-                className='ml-[-5px] cursor-pointer' 
+                className='ml-[-5px] cursor-pointer max-lg:w-[16px] max-lg:h-[16px]' 
                 onClick={() => setFiltersOpen(prev => !prev)}
                 ref={dropdownIconRef}
             />

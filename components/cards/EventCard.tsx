@@ -14,7 +14,7 @@ type Props = {
 export default async function EventCard({ event, exchangeRate }: Props) 
 {
     return (
-        <CarouselItem key={event.id} className={cn('group relative max-h-[412px] max-w-[412px] h-full w-full')}>
+        <CarouselItem key={event.id} className={cn('group relative max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px] h-full w-full')}>
             <ImageMotion
                 selectedEvent={event}
                 className='object-cover'
