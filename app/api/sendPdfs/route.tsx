@@ -29,8 +29,13 @@ export async function POST(req: Request)
         const pdfs = Object.values(purchasedTickets).map(async (ticketQuantity, index) => {
             if(ticketQuantity > 0)
             {
+                console.log(purchasedTickets)
+
                 const dirRef = await admin.storage().bucket().getFiles()
                 const ticketsFiles = dirRef[0].slice().filter(file => file.name.includes(`${event.ticketFilesPath}/${Object.keys(purchasedTickets)[index]}`))
+
+                console.log(`${event.ticketFilesPath}/${Object.keys(purchasedTickets)[index]}`)
+                dirRef[0].forEach(file => console.log(file.name))
 
                 for(let i = 0; i < ticketQuantity; i++) 
                 {
