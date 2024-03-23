@@ -42,7 +42,6 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
             <Carousel
                 opts={{
                     align: "start",
-                    loop: true,
                 }}
                 className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
             >
