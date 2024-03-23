@@ -1,4 +1,4 @@
-import { Carousel, CarouselContent } from "../ui/carousel"
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
 import EventCard from "../cards/EventCard"
@@ -38,11 +38,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
 
     return (
         <section className='relative w-full flex items-center h-52 lg:h-[412px] justify-center gap-4 flex-row'>
-            <div className='flex flex-col gap-2 w-[45%] lg:w-[15%] text-white mb-auto mt-2'>
-                <p className='font-poppins font-black text-2xl lg:text-3xl'>{title}</p>
-                <div className='w-2/3 lg:w-3/12 h-[2px] bg-white mb-4' />
-                <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
-            </div>
+            
             <Carousel
                 opts={{
                     align: "start",
@@ -51,6 +47,13 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
                 className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
             >
                 <CarouselContent className=''>
+                    <CarouselItem className='max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px]'>
+                        <div className='flex flex-col gap-2 text-white mb-auto mt-2'>
+                            <p className='font-poppins font-black text-xl lg:text-3xl'>{title}</p>
+                            <div className='w-2/3 lg:w-3/12 h-[2px] bg-white mb-4' />
+                            <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
+                        </div>
+                    </CarouselItem>
                     {eventsData.map((event) => (
                         <EventCard key={event.id} event={event} exchangeRate={exchangeRate} />
                     ))}

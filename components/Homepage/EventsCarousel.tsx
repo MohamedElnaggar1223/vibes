@@ -123,24 +123,24 @@ function EventsCarousel({ events, exchangeRate }: Props)
                         </>
                     ) : (
                         <>
-                            <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
+                            <p className='font-poppins font-medium text-lg lg:text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
                             <div className='flex gap-4 items-center justify-between flex-1 w-full my-6'>
                                 <div className='flex gap-2 flex-1'>
                                     <div className='min-w-2.5 rotate-180 min-h-full bg-[#7D40FF]' />
-                                    <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-28 flex-1'>
-                                        <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
-                                        <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
-                                        <p className='font-poppins font-extralight text-base text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
+                                    <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-24 flex-1'>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end justify-end h-full'>
-                                    <p className='font-poppins text-base font-extralight flex flex-col'><span>starting from</span> <span className='font-medium text-right'>{selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</span></p>
-                                    <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
+                                    <p className='font-poppins text-sm lg:text-base font-extralight flex flex-col'><span>starting from</span> <span className='font-medium text-right'>{selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</span></p>
+                                    <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-sm lg:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
                                         Book Now
                                     </button>
                                 </div>
                             </div>
-                            <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
+                            <p className='font-poppins font-extralight text-sm lg:text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
                         </>
                     )
                     }
