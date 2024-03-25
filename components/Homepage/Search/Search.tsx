@@ -38,7 +38,7 @@ export default async function Search({ search, date, category, country, categori
             <p className='text-left font-poppins font-thin text-white text-xs mr-auto mt-3'>Showing ({events.length}) results</p>
             <div className='w-full flex justify-start items-center gap-8 flex-wrap mb-auto mt-12 max-md:justify-center'>
                 {events.map(event => (
-                    <div key={event.id} className='min-w-48 min-h-48 rounded-lg overflow-hidden'>
+                    <div key={event.id} className='max-lg:max-w-32 max-lg:min-h-32 lg:min-w-48 lg:min-h-48 rounded-lg overflow-hidden'>
                         <Link
                             href={`/events/${event.id}`}
                         >
@@ -47,7 +47,7 @@ export default async function Search({ search, date, category, country, categori
                                 width={192} 
                                 height={192} 
                                 alt={event.name}
-                                className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
+                                className='object-cover max-lg:max-w-32 max-lg:min-h-32 lg:min-w-48 lg:min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
                                 loading="lazy"
                             />
                         </Link>
