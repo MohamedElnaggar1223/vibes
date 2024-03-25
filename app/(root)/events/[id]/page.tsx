@@ -68,24 +68,24 @@ export default async function EventPage({ params }: Props)
                         eventPage={true}
                     />
                     <div className='flex flex-col p-3 gap-4 flex-1'>
-                        <p className='font-poppins text-2xl font-bold text-white'>{selectedEvent?.name}</p>
+                        <p className='font-poppins text-lg lg:text-2xl font-bold text-white'>{selectedEvent?.name}</p>
                         <div className='w-full flex justify-between items-center'>
-                            <p className='font-poppins text-md font-extralight text-white'>{selectedEvent?.venue}</p>
-                            <p className='font-poppins text-md font-extralight text-white mr-4'>{selectedEvent?.city}, {selectedEvent?.country}</p>
+                            <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent?.venue}</p>
+                            <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{selectedEvent?.city}, {selectedEvent?.country}</p>
                         </div>
-                        <p className='font-poppins text-md font-extralight text-white'>{`${months[selectedEvent.eventDate?.getMonth()]}, ${getDaySuffix(selectedEvent.eventDate?.getDate())}, ${selectedEvent.eventDate?.getFullYear()}`} | {formatTime(selectedEvent.eventTime)} {selectedEvent.timeZone}</p>
-                        <p className='font-poppins text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${formatTime(selectedEvent.gatesClose)}`}</p>
+                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{`${months[selectedEvent.eventDate?.getMonth()]}, ${getDaySuffix(selectedEvent.eventDate?.getDate())}, ${selectedEvent.eventDate?.getFullYear()}`} | {formatTime(selectedEvent.eventTime)} {selectedEvent.timeZone}</p>
+                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${formatTime(selectedEvent.gatesClose)}`}</p>
                         <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
                             <p className='font-poppins text-xs font-extralight text-white'>{selectedEvent.description}</p>
                         </div>
                         <div className='flex flex-col items-start justify-end w-full gap-6 mb-4 mt-auto flex-1'>
-                            {selectedEvent.eventDisclaimers.map(disclaimer => {
+                            {selectedEvent.eventDisclaimers.map((disclaimer, index) => {
                                 const disclaimerText = disclaimer.icon.split('.')[0]
                                 const disclaimerSvg = disclaimerText === 'disclaimer1' ? '/assets/mask.svg' : '/assets/nochildren.svg'
                                 const width = disclaimerText === 'disclaimer1' ? 32 : 28
                                 const height = disclaimerText === 'disclaimer1' ? 20 : 28
                                 return (
-                                    <div className='flex gap-2 justify-evenly items-center w-full'>
+                                    <div key={index} className='flex gap-2 justify-evenly items-center w-full'>
                                         <div className='w-1/6 flex items-center justify-center'>
                                             <Image
                                                 src={disclaimerSvg}
@@ -94,7 +94,7 @@ export default async function EventPage({ params }: Props)
                                                 alt={disclaimerText}
                                             />
                                         </div>
-                                        <p className='font-poppins text-xs font-extralight text-white w-full'>{disclaimer.disclaimer}</p>
+                                        <p className='font-poppins leading-4 text-[0.65rem] lg:text-xs font-extralight text-white w-full'>{disclaimer.disclaimer}</p>
                                     </div>
                                 )
                             })}

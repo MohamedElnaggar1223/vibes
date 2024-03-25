@@ -54,7 +54,7 @@ export default function SearchBar()
     }, []);
 
     return (
-        <div className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[9999999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
+        <div className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}
@@ -84,7 +84,7 @@ export default function SearchBar()
                 ref={dropdownIconRef}
             />
             {filtersOpen && (
-                <div ref={dropdownRef} className='absolute w-screen max-w-[647px] z-[999999999] bg-[#FFFEFE] flex flex-col text-sm top-[95%] gap-4 px-8 py-4'>
+                <div onClick={(e) => e.stopPropagation()} ref={dropdownRef} className='absolute w-screen max-w-[647px] z-[999999999] bg-[#FFFEFE] flex flex-col text-sm top-[95%] gap-4 px-8 py-4'>
                     <div className='flex flex-wrap'>
                         <div className='flex flex-col items-start justify-evenly w-[300px] gap-3 pt-2 max-sm:mx-auto'>
                             <p className='font-poppins font-light text-black'>Categories</p>

@@ -60,8 +60,12 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
     const [showMap, setShowMap] = useState(false)
-    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
-    
+    const [currentWidth, setCurrentWidth] = useState<number>()
+
+    useEffect(() => {
+        if(window) setCurrentWidth(window?.innerWidth!)
+    }, [])
+
     useEffect(() => {
         const handleResize = () => setCurrentWidth(window.innerWidth)
         window.addEventListener("resize", handleResize)
@@ -266,7 +270,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             )
                                         }
                                         <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
-                                        {currentWidth > 1024 ? (
+                                        {(currentWidth ?? 0) > 1024 ? (
                                             <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
                                             </div>
@@ -311,7 +315,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             )
                                         }
                                         <p className='text-black font-poppins font-semibold text-sm lg:text-base flex-1 text-end'><FormattedPrice price={(availableParkingPasses?.price ?? 0) * purchasedParkingPass} exchangeRate={exchangeRate} /></p>
-                                        {currentWidth > 1024 ? (
+                                        {(currentWidth ?? 0) > 1024 ? (
                                             <div onClick={() => setPurchasedParkingPass(0)} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
                                             </div>
@@ -327,7 +331,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         </div>
                     ) : (
                         <div ref={parentRef} className='flex-1 w-full flex items-center justify-center'>
-                            <div className='py-6 px-14 bg-[rgba(255,255,255,0.15)] text-white text-center font-poppins font-semibold text-sm rounded-lg'>
+                            <div className='py-6 px-2.5 lg:px-14 bg-[rgba(255,255,255,0.15)] text-white text-center font-poppins font-semibold text-sm rounded-lg'>
                                 {"Choose Your Tickets & They’ll Appear Here"}
                             </div>
                         </div>
@@ -357,7 +361,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} disabled className=' max-lg:flex-1 font-poppins text-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
-                                                {currentWidth < 1024 ? 'Buy' : 'Buy Now'}
+                                                {(currentWidth ?? 0) < 1024 ? 'Buy' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -370,7 +374,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
-                                                {currentWidth < 1024 ? 'Buy' : 'Buy Now'}
+                                                {(currentWidth ?? 0) < 1024 ? 'Buy' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         {

@@ -20,11 +20,15 @@ export default function MyProfile({ user }: Props)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
-    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
     // const [selectedTab, setSelectedTab] = useState('personal')
     const searchParams = useSearchParams()
     const router = useRouter()
     const selectedTab = searchParams?.get('show') ?? 'personal'
+    const [currentWidth, setCurrentWidth] = useState<number>()
+
+    useEffect(() => {
+        if(window) setCurrentWidth(window?.innerWidth!)
+    }, [])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +62,7 @@ export default function MyProfile({ user }: Props)
     return (
         <section className='flex w-full min-h-[90vh] max-h-[90vh] items-center justify-center lg:gap-16 lg:px-24'>
             {
-                currentWidth > 1024 && (
+                (currentWidth ?? 0) > 1024 && (
                     <div className='flex flex-1 flex-col max-w-[19rem] items-center justify-center rounded-lg divide-y-[1px]'>
                         <div 
                             onClick={() => {

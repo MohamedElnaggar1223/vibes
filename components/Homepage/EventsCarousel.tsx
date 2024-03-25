@@ -19,9 +19,13 @@ function EventsCarousel({ events, exchangeRate }: Props)
 {
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
+    const [currentWidth, setCurrentWidth] = useState<number>()
 
     const router = useRouter()
+
+    useEffect(() => {
+        if(window) setCurrentWidth(window?.innerWidth!)
+    }, [])
 
     useEffect(() => {
         if (!api) {
@@ -100,7 +104,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                     </CarouselContent>
                 </Carousel>
                 <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl'>
-                    {currentWidth > 1024 ? (
+                    {(currentWidth ?? 0) > 1024 ? (
                         <>
                             <div className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
                                 <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>

@@ -24,9 +24,9 @@ export default async function CategoriesPage({ searchParams }: Props)
     const country = typeof searchParams.country === 'string' && (searchParams.country === 'UAE' || searchParams.country === 'Egypt' || searchParams.country === 'KSA') ? searchParams.country : undefined
 
     return (
-        <section className='flex flex-1 w-full gap-6 items-start justify-start' key={Math.random()}>
-            <div className='flex flex-col mt-16 gap-2 w-48'>
-                <p className='font-poppins text-white font-light'>Filters</p>
+        <section className='flex max-lg:flex-col flex-1 w-full gap-6 items-center lg:items-start justify-start' key={Math.random()}>
+            <div className='flex lg:flex-col mt-2 lg:mt-16 gap-2 w-full lg:w-48'>
+                <p className='font-poppins text-white font-light max-lg:hidden'>Filters</p>
                 <CategoriesFilters />
             </div>
             {
@@ -39,7 +39,7 @@ export default async function CategoriesPage({ searchParams }: Props)
                     <Suspense fallback={<EventsLoading />}>
                         <div className='flex flex-col flex-1 gap-8'>
                             {categories.map(category => (
-                                <Categorie category={category} events={events} country={country} date={date} /> 
+                                <Categorie key={category.id} category={category} events={events} country={country} date={date} /> 
                             ))}
                         </div>
                     </Suspense>

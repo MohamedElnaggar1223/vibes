@@ -13,7 +13,11 @@ export default function SignedInHeader()
 
     const [open, setOpen] = useState(false)
     const [accountMenu, setAccountMenu] = useState(false)
-    const [currentWidth, setCurrentWidth] = useState(window?.innerWidth!)
+    const [currentWidth, setCurrentWidth] = useState<number>()
+
+    useEffect(() => {
+        if(window) setCurrentWidth(window?.innerWidth!)
+    }, [])
 
     useEffect(() => {
         if(!open) setAccountMenu(false)
@@ -27,7 +31,7 @@ export default function SignedInHeader()
 
     return (
         <Select onOpenChange={setOpen} open={open}>
-            <SelectTrigger className={cn("w-[140px] border-none bg-transparent text-white font-poppins text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
+            <SelectTrigger className={cn("w-[100px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
                 <SelectValue placeholder="Profile" />
             </SelectTrigger>
             <SelectContent className='z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md right-[5%] lg:right-[35%] p-0'>
@@ -36,7 +40,7 @@ export default function SignedInHeader()
                         !accountMenu ? (
                             <>
                                 {
-                                    currentWidth < 1024 ? (
+                                    (currentWidth ?? 0) < 1024 ? (
                                         <span 
                                             onClick={() => {
                                                 setAccountMenu(true)   

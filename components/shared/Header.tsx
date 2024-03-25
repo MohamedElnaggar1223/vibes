@@ -16,22 +16,22 @@ export default async function Header()
                     width={195}
                     height={73}
                     alt="logo"
-                    className='cursor-pointer z-[9999] max-lg:w-[120px] max-lg:h-[45px]'
+                    className='cursor-pointer max-lg:w-[120px] max-lg:h-[45px]'
                     priority
                 />
             </Link>
-            <div className="flex gap-6 lg:gap-24 items-center z-[9999] max-lg:mr-4">
+            <div className="flex gap-6 lg:gap-24 items-center max-lg:mr-4">
                 <CategoriesHeaderLink />
-                {/* <Link href='/' className='text-white font-poppins text-lg font-[300] z-[9999]'>
+                {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='/' className='text-white font-poppins text-sm md:text-lg font-semibold z-[9999]'>
+                <Link href='/' className='text-white font-poppins text-sm md:text-lg font-semibold'>
                     AR
                 </Link>
                 {
                     !session?.user ? (
                         <Link href='/sign-in'>
-                            <button className='font-poppins text-sm md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white z-[9999]'>
+                            <button className='font-poppins text-sm md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white'>
                                 Sign in
                             </button>
                         </Link>

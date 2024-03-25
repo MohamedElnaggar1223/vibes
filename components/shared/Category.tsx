@@ -32,12 +32,12 @@ export default async function Categorie({ category, events, country, date }: Pro
     else return (
         <div className='flex flex-1 flex-col gap-4 mt-6'>
             <div className='flex flex-col gap-0.5'>
-                <p className='font-poppins text-white text-base font-semibold'>{category.category} <span className='font-extralight text-sm'>({catEvents.length})</span></p>
+                <p className='font-poppins text-white text-md lg:text-base font-semibold'>{category.category} <span className='font-extralight text-sm'>({catEvents.length})</span></p>
                 <div className='w-10 h-px bg-white' />
             </div>
-            <div className='w-full flex justify-start items-center gap-8 flex-wrap max-md:justify-center'>
+            <div className='w-full flex justify-start lg:items-center gap-2 lg:gap-8 flex-wrap max-md:justify-start'>
                 {catEvents.map(event => (
-                    <div key={event.id} className='min-w-48 min-h-48 rounded-lg overflow-hidden'>
+                    <div key={event.id} className='min-w-32 min-h-32 lg:min-w-48 lg:min-h-48 rounded-lg overflow-hidden'>
                         <Link
                             href={`/events/${event.id}`}
                         >
@@ -46,7 +46,7 @@ export default async function Categorie({ category, events, country, date }: Pro
                                 width={192} 
                                 height={192} 
                                 alt={event.name}
-                                className='object-cover min-w-48 min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
+                                className='object-cover max-lg:max-w-32 max-lg:max-h-32 min-w-32 min-h-32 lg:min-w-48 lg:min-h-48 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg'
                                 loading="lazy"
                             />
                         </Link>

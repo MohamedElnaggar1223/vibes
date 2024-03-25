@@ -15,16 +15,18 @@ export default async function EventCard({ event, exchangeRate }: Props)
 {
     return (
         <CarouselItem key={event.id} className={cn('group relative max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px] h-full w-full')}>
-            <ImageMotion
-                selectedEvent={event}
-                className='object-cover'
-                width={412}
-                height={412} 
-                imageClassName="object-cover"
-                priority={true}
-                layoutId={event.id}
-                eventPage={false}
-            />
+            <Link href={`/events/${event.id}`}>
+                <ImageMotion
+                    selectedEvent={event}
+                    className='object-cover'
+                    width={412}
+                    height={412} 
+                    imageClassName="object-cover"
+                    priority={true}
+                    layoutId={event.id}
+                    eventPage={false}
+                />
+            </Link>
             <div className='absolute max-lg:hidden flex z-[9999] bg-gradient-to-t from-black from-30% via-black/75 to-slate-900/25 w-[calc(100%-1rem)] h-full opacity-0 text-lg group-hover:opacity-100 bottom-0 right-[0%] duration-300 cursor-pointer'>
                 <Link href={`/events/${event.id}`} className='absolute w-full h-full'/>
                 <div className='flex flex-col gap-4 text-white mt-auto w-full h-fit pr-6 pb-3'>
