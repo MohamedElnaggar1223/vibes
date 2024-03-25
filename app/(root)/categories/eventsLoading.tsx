@@ -1,7 +1,7 @@
 export default function EventsLoading() 
 {
     return (
-        <div className='flex flex-row lg:flex-col flex-1 gap-8'>
+        <div className='flex flex-col flex-1 gap-8'>
             {[...Array(6)].map((_, i) => (
                 <div key={i} className='flex flex-1 flex-col gap-4 mt-6'>
                     <div className='w-32 h-[24px] bg-[#6F6F6F] animate-pulse rounded-lg' />

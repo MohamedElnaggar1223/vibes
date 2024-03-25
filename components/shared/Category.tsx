@@ -35,7 +35,7 @@ export default async function Categorie({ category, events, country, date }: Pro
                 <p className='font-poppins text-white text-md lg:text-base font-semibold'>{category.category} <span className='font-extralight text-sm'>({catEvents.length})</span></p>
                 <div className='w-10 h-px bg-white' />
             </div>
-            <div className='w-full flex justify-start lg:items-center gap-2 lg:gap-8 flex-wrap max-md:justify-start'>
+            <div className='w-full flex justify-start lg:items-center gap-6 lg:gap-8 flex-wrap max-md:justify-start'>
                 {catEvents.map(event => (
                     <div key={event.id} className='min-w-32 min-h-32 lg:min-w-48 lg:min-h-48 rounded-lg overflow-hidden'>
                         <Link
