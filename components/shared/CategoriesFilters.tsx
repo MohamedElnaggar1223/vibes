@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, FilterX } from "lucide-react";
 import Image from "next/image";
 
 export default function CategoriesFilters()
@@ -78,8 +78,9 @@ export default function CategoriesFilters()
                     setCountry('')
                     setDate(undefined)
                     router.push('/categories')
-                }} className='rounded-md self-center px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] ml-4 cursor-pointer text-xs w-24'>
-                    Clear Filters
+                }} className='rounded-md self-center px-1 lg:px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] lg:ml-4 cursor-pointer text-xs w-16 lg:w-24'>
+                    <span className='max-lg:hidden'>Clear Filters</span>
+                    <FilterX className='lg:hidden w-6' />
                 </button>
             )}
         </>
