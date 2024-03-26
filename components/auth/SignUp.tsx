@@ -141,7 +141,7 @@ export default function SignUp()
     }
 
     return (
-        <section className='min-h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24 pt-12 overflow-auto'>
+        <section className='min-h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 overflow-auto max-lg:w-screen max-lg:max-w-[100vw]'>
             <div className='flex flex-col justify-center items-center mt-3'>
                 <p className='font-poppins font-base mb-6 text-white'>Sign up</p>
                 <Form {...form}>

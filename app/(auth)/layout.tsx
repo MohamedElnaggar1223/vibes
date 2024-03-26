@@ -36,9 +36,9 @@ export default async function RootLayout({
           priority
           quality={100}
         />
-        <main className='min-h-screen'>
+        <main className='min-h-screen max-lg:max-w-[100vw] max-lg:overflow-hidden'>
             <AuthHeader />
-            <section className='h-full flex'>
+            <section className='h-full flex max-lg:max-w-[100vw]'>
               <section className='min-h-full pt-28 flex flex-col justify-between px-20 w-full bg-svg max-md:hidden'>
                 <Image
                   src="/assets/gradients.svg"

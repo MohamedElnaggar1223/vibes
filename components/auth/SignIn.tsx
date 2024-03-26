@@ -147,7 +147,7 @@ export default function SignIn()
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24'>
+        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 max-lg:max-w-[100vw] max-lg:w-screen'>
             <p className='font-poppins font-base mb-6 text-white'>Sign in</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">

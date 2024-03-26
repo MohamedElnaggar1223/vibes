@@ -18,6 +18,7 @@ export default function SearchBar()
     const [category, setCategory] = useState(searchParams?.get('category') || '')
     const [date, setDate] = useState<Date | undefined>(!!searchParams?.get('date') ? parseISO(searchParams?.get('date')!) : undefined)
     const [country, setCountry] = useState(searchParams?.get('country') || '')
+    const [calendarOpen, setCalendarOpen] = useState(false)
 
     const todaysDate = new Date()
     const tomorrow = new Date(todaysDate)
@@ -52,6 +53,11 @@ export default function SearchBar()
             document.removeEventListener('click', handleOutsideClick)
         };
     }, []);
+
+    const handleSelectDate = (date: Date | undefined) => {
+        setDate(date);
+        setCalendarOpen(false)
+    }
 
     return (
         <div className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
@@ -100,7 +106,7 @@ export default function SearchBar()
                             <div className='flex gap-0.5 w-full items-center justify-between'>
                                 <p onClick={() => setDate(todaysDate)} className={cn('font-poppins font-extralight cursor-pointer w-fit', date?.getDate() === todaysDate?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Today</p>
                                 <p onClick={() => setDate(tomorrow)} className={cn('font-poppins font-extralight cursor-pointer w-fit', date?.getDate() === tomorrow?.getDate() ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-black')}>Tomorrow</p>
-                                <Popover>
+                                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                                     <PopoverTrigger asChild>
                                         <div
                                             className="flex items-center gap-1 cursor-pointer justify-center w-fit"
@@ -113,7 +119,7 @@ export default function SearchBar()
                                         <Calendar
                                             mode="single"
                                             selected={date}
-                                            onSelect={setDate}
+                                            onSelect={handleSelectDate}
                                             initialFocus
                                         />
                                     </PopoverContent>
