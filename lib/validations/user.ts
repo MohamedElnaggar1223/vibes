@@ -3,6 +3,7 @@ import { auth, db } from '@/firebase/client/config'
 import { collection, query, where, getDocs, and } from 'firebase/firestore'
 import { countryCodes } from '@/constants'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { UserType } from '../types/userTypes'
 
 export const UserSignUpSchema = z.object({
     firstname: z.string().min(2, { message: 'First name must be more than 1 character' }).max(255),
@@ -118,3 +119,16 @@ export const UserChangePasswordSchema = z.object({
 }, { message: 'Wrong password!', path: ['oldPassword'] })
 .refine(context => context.newPassword === context.confirmNewPassword, { message: 'Passwords must match', path: ['confirmNewPassword'] })
 .refine(values => values.newPassword!== values.oldPassword, { message: 'New password must be different from old password', path: ['newPassword'] })
+
+export const UserForgotPasswordSchema = z.object({
+    email: z.string().email({ message: 'Invalid email' })
+})
+.refine(async (values) => {
+    const userCollection = collection(db, 'users')
+    const userQuery = query(userCollection, where('email', '==', values.email))
+    const userSnapshot = await getDocs(userQuery)
+    if(userSnapshot.size > 0 && (userSnapshot.docs[0].data() as UserType).provider === 'credentials') {
+        return true
+    }
+    return false
+}, { message: 'Email does not exist', path: ['email'] })

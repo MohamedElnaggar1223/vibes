@@ -62,7 +62,7 @@ export default function CompleteProfileData({ user }: Props)
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 px-24 pt-12'>
+        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen'>
             <p className='font-poppins font-base mb-6 text-white'>Complete Your Profile</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -74,7 +74,7 @@ export default function CompleteProfileData({ user }: Props)
                                 <FormControl>
                                     <input 
                                         placeholder="First Name" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -90,7 +90,7 @@ export default function CompleteProfileData({ user }: Props)
                                 <FormControl>
                                     <input 
                                         placeholder="Last Name" 
-                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md'
+                                        className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
                                 </FormControl>
@@ -98,7 +98,7 @@ export default function CompleteProfileData({ user }: Props)
                             </FormItem>
                         )}
                     />
-                    <div className='w-screen max-w-[412px] flex gap-4'>
+                    <div className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
                         {
                             !user.countryCode &&
                             <FormField
