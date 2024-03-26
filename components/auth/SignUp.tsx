@@ -338,7 +338,7 @@ export default function SignUp()
                         </div>
                         <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign up</button>
                     </form>
-                    <p className='text-white mt-2 font-poppins text-sm'>Already have an account? <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign In</span></p>
+                    <p className='text-white mt-2 font-poppins text-sm mb-3'>Already have an account? <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign In</span></p>
                 </Form>
             </div>
             <Dialog open={loading}>

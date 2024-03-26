@@ -80,7 +80,7 @@ export default function CategoriesFilters()
                     router.push('/categories')
                 }} className='rounded-md self-center px-1 lg:px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] lg:ml-4 cursor-pointer text-xs w-16 lg:w-24'>
                     <span className='max-lg:hidden'>Clear Filters</span>
-                    <FilterX className='lg:hidden w-6' />
+                    <FilterX className='lg:hidden w-5 h-5' />
                 </button>
             )}
         </>

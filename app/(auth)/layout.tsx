@@ -32,14 +32,14 @@ export default async function RootLayout({
           src="/assets/authBackground.png"
           fill
           alt="background"
-          className='bg-image'
+          className='bg-image max-md:hidden'
           priority
           quality={100}
         />
         <main className='min-h-screen'>
             <AuthHeader />
             <section className='h-full flex'>
-              <section className='min-h-full pt-28 flex flex-col justify-between px-20 w-full bg-svg'>
+              <section className='min-h-full pt-28 flex flex-col justify-between px-20 w-full bg-svg max-md:hidden'>
                 <Image
                   src="/assets/gradients.svg"
                   fill

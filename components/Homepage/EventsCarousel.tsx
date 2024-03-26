@@ -47,7 +47,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
 
     return (
         <AnimatePresence>
-            <section className='w-full flex flex-col overflow-x-hidden'>
+            <section className='w-full flex flex-col overflow-x-hidden max-lg:mt-5'>
                 <Carousel
                     opts={{
                         align: "start",
