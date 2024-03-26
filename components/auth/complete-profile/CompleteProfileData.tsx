@@ -56,7 +56,7 @@ export default function CompleteProfileData({ user }: Props)
 
     const onSubmit = async (values: z.infer<typeof UserCompleteProfileSchema>) => {
         setLoading(true)
-        await updateDoc(doc(db, "users", user?.id ?? ''), {...values, verified: true})
+        await updateDoc(doc(db, "users", user?.id ?? ''), {...values})
         router.refresh()
         setLoading(false)
     }
@@ -78,7 +78,7 @@ export default function CompleteProfileData({ user }: Props)
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -94,7 +94,7 @@ export default function CompleteProfileData({ user }: Props)
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -117,7 +117,7 @@ export default function CompleteProfileData({ user }: Props)
                                                 </div>
                                             </div>
                                         </FormControl>
-                                        <FormMessage className="absolute font-poppins" />
+                                        <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                     </FormItem>
                                 )}
                             />
@@ -137,7 +137,7 @@ export default function CompleteProfileData({ user }: Props)
                                                 onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
                                             />
                                         </FormControl>
-                                        <FormMessage className="absolute font-poppins" />
+                                        <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                     </FormItem>
                                 )}
                             />

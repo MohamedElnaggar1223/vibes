@@ -93,7 +93,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -109,7 +109,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -127,7 +127,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -147,7 +147,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -169,7 +169,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                             </div>
                                         </div>
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -186,7 +186,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                             onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />

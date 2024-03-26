@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import AuthHeader from "@/components/shared/AuthHeader";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -73,6 +74,7 @@ export default async function RootLayout({
               </section>
               <Suspense>
                 {children}
+                <Toaster />
               </Suspense>
             </section>
         </main>

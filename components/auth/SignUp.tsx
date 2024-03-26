@@ -75,7 +75,7 @@ export default function SignUp()
             .then(async (userCredentials) => {
                 const userRef = doc(db, "users", userCredentials.user.uid) 
                 //set verified to false when OTP
-                await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: true, provider: 'credentials', id: userCredentials.user.uid, tickets: [] })
+                await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: false, provider: 'credentials', id: userCredentials.user.uid, tickets: [] })
                 await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
                 setLoading(false)
             })
@@ -158,7 +158,7 @@ export default function SignUp()
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -174,7 +174,7 @@ export default function SignUp()
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -190,7 +190,7 @@ export default function SignUp()
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -211,7 +211,7 @@ export default function SignUp()
                                                 </div>
                                             </div>
                                         </FormControl>
-                                        <FormMessage className="absolute font-poppins" />
+                                        <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                     </FormItem>
                                 )}
                             />
@@ -228,7 +228,7 @@ export default function SignUp()
                                                 onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
                                             />
                                         </FormControl>
-                                        <FormMessage className="absolute font-poppins" />
+                                        <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                     </FormItem>
                                 )}
                             />
@@ -265,7 +265,7 @@ export default function SignUp()
                                             )}
                                         </div>
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />
@@ -301,7 +301,7 @@ export default function SignUp()
                                             )}
                                         </div>
                                     </FormControl>
-                                    <FormMessage className="absolute font-poppins" />
+                                    <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 </FormItem>
                             )}
                         />

@@ -66,7 +66,7 @@ export default function ForgotPassword()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 {success && (
                                     <div className='w-full flex gap-2 items-center justify-start'>
                                         <Image

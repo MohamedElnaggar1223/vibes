@@ -163,7 +163,7 @@ export default function SignIn()
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -199,7 +199,7 @@ export default function SignIn()
                                         )}
                                     </div>
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                                 <p onClick={() => router.push('/forgot-password')} className='text-white font-poppins text-sm font-light w-full flex justify-end cursor-pointer'>Forgot Password?</p>
                             </FormItem>
                         )}

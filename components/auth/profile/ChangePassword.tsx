@@ -103,7 +103,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         )}
                                     </div>
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -139,7 +139,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         )}
                                     </div>
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
@@ -175,7 +175,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         )}
                                     </div>
                                 </FormControl>
-                                <FormMessage className="absolute font-poppins" />
+                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
                             </FormItem>
                         )}
                     />
