@@ -214,7 +214,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
 
     return (
         <AnimatePresence>
-            <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full max-lg:min-h-[80vh]'>
+            <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full max-lg:min-h-[80vh] max-lg:mb-4'>
                 <div className='w-full flex justify-between items-center gap-1.5 lg:gap-4'>
                     <div className='flex-1 max-lg:hidden' />
                     <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
