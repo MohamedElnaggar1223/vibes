@@ -20,7 +20,7 @@ import { z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
 
 type Props = {
     user: UserType;
@@ -67,24 +67,45 @@ export default function CompleteProfileOTP({ user }: Props)
         },
     })
 
-    useEffect(() => {
-        if(auth)
+    // useEffect(() => {
+    //     if(auth)
+    //     {
+    //         try
+    //         {
+    //             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    //                 'size': 'invisible',
+    //                 'callback': (response: any) => {
+    //                     handleSendCode()
+    //                 },
+    //             })
+    //         }
+    //         catch(e)
+    //         {
+    //             setError('Something went wrong! Please try again.')
+    //         }
+    //     }
+    // }, [auth])
+
+    const initiateRecaptcha = async () => {
+        try
         {
-            try
-            {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': (response: any) => {
-                        handleSendCode()
-                    },
-                })
-            }
-            catch(e)
-            {
-                setError('Something went wrong! Please try again.')
-            }
+            await signOut(auth)
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'normal',
+                'callback': async (response: any) => {
+                    await handleSendCode()
+                    await window.recaptchaVerifier?.clear()
+                },
+                'expired-callback': () => {
+                }
+            })
+            window.recaptchaVerifier.render()
         }
-    }, [auth])
+        catch(e)
+        {
+            setError('Something went wrong! Please try again.')
+        }
+    }
     
     const handleSendCode = async () => {
         try
@@ -100,29 +121,27 @@ export default function CompleteProfileOTP({ user }: Props)
                     />
                 ),
                 title: 'Code Sent Successfully!',
-            })
+            })            
 
             const appVerifier = window.recaptchaVerifier
             const fullPhoneNumber = `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`
-
-            signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier!)
+            await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier!)
             .then((confirmationResult) => {
-                console.log('OTP sent')
                 window.confirmationResult = confirmationResult
             })
             .catch((error) => {
                 console.log(error)
-                setError('Something went wrong! Please try again. 1111')
+                setError('Something went wrong! Please try again.')
             })
         }
         catch(e)
         {
-            setError('Something went wrong! Please try again. 222')
+            setError('Something went wrong! Please try again.')
         }
     }
     
     const handleSubmitOtp = async (otp: string) => {
-        window.confirmationResult?.confirm(otp).then(async (result: any) => {
+        await window.confirmationResult?.confirm(otp).then(async (result: any) => {
             await updateDoc(doc(db, "users", user.id!), { verified: true })
         })
     }
@@ -135,7 +154,7 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e)
         {
-            setError('Invalid OTP! Please try again.33333')
+            setError('Invalid OTP! Please try again')
         }
         router.refresh()
         setLoading(false)
@@ -147,7 +166,6 @@ export default function CompleteProfileOTP({ user }: Props)
         
     return (
         <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen'>
-            <div className='hidden' id="recaptcha-container" /> 
             <p className='font-poppins font-base mb-6 text-white'>Verify You Phone Number</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -181,8 +199,9 @@ export default function CompleteProfileOTP({ user }: Props)
                             {/* <span onClick={handleSendCode} className={('flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10')}>Resend Code ({timer})</span> */}
                         </>
                     ) : (
-                        <span onClick={handleSendCode} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Send Code</span>
-                    )}
+                        <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Send Code</span>
+                        )}
+                <div id="recaptcha-container" /> 
                 </form>
             </Form>
             <Dialog open={loading}>
