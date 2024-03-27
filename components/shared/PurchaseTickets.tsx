@@ -23,6 +23,7 @@ import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { getStorage, ref, listAll } from "firebase/storage";
+import { set } from "date-fns"
 
 type Props = {
     event: EventType,
@@ -47,6 +48,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const router = useRouter()
 
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [buyToolTip, setButToolTip] = useState(false)
     const [eventData, setEventData] = useState(event)
     const availableTickets = useMemo(() => {
         return eventData.tickets
@@ -358,9 +360,17 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         {
                             user === null ? (
                                 <TooltipProvider delayDuration={100}>
-                                    <Tooltip>
+                                    <Tooltip open={buyToolTip} onOpenChange={setButToolTip}>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
-                                            <motion.button layout={true} disabled className=' max-lg:flex-1 font-poppins text-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'>
+                                            <motion.button 
+                                                onClick={() => {
+                                                    setButToolTip(true)
+                                                    setTimeout(() => setButToolTip(false), 2000)
+                                                }}  
+                                                layout={true} 
+                                                disabled={(currentWidth ?? 0) > 1024} 
+                                                className=' max-lg:flex-1 font-poppins text-sm lgtext-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
+                                            >
                                                 {(currentWidth ?? 0) < 1024 ? 'Buy' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
