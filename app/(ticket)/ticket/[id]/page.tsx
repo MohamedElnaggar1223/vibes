@@ -5,6 +5,7 @@ import { TicketType } from "@/lib/types/ticketTypes"
 import { formatTime, getDaySuffix } from "@/lib/utils"
 import Image from "next/image"
 import QRCode from "react-qr-code"
+import ClientDates from "./clientdates"
 
 type Props = {
 	params: {
@@ -71,7 +72,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 						<p className='text-white font-bold w-full text-center text-xl'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`}</p>
 						<p className='text-white font-bold w-full text-center text-xl'>{event.city}, {event.country}</p>
 						<div className='h-14 w-px bg-[rgba(255,255,255,0.5)]' />
-						<p className='text-[rgba(255,255,255,0.5)] font-semibold w-full text-center text-sm'>{formatTime(event.eventTime)} {event.timeZone}</p>
+						<ClientDates selectedEvent={event} className='text-[rgba(255,255,255,0.5)] font-semibold w-full text-center text-sm' />
 						<p className='text-white font-semibold w-full text-center text-sm'>at</p>
 						<p className='text-[rgba(255,255,255,0.5)] font-semibold w-full text-center text-sm'>{event.venue}</p>
 						<p className='text-[rgba(255,255,255,0.5)] font-semibold w-full text-center text-xs mt-2'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `Gates close ${formatTime(event.gatesClose)}`}</p>

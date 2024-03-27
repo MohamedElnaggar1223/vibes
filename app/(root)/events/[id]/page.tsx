@@ -74,7 +74,7 @@ export default async function EventPage({ params }: Props)
                             <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent?.venue}</p>
                             <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{selectedEvent?.city}, {selectedEvent?.country}</p>
                         </div>
-                        <ClientDates selectedEvent={selectedEvent} />
+                        <ClientDates selectedEvent={selectedEvent} className='font-poppins text-xs lg:text-md font-extralight text-white' />
                         <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${formatTime(selectedEvent.gatesClose)}`}</p>
                         <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
                             <p className='font-poppins text-xs font-extralight text-white'>{selectedEvent.description}</p>
