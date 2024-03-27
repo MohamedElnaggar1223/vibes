@@ -91,6 +91,10 @@ body{
   @apply fixed z-[-4] h-full w-fit top-[6rem] left-24 !important
 }
 
+.forgotpass {
+  @apply max-lg:mt-6 !important
+}
+
 * {
   min-width: 0;
 }

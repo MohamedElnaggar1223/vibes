@@ -167,30 +167,36 @@ export default function CompleteProfileOTP({ user }: Props)
             <p className='font-poppins font-base mb-6 text-white'>Verify You Phone Number</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
-                    <FormField
-                        control={form.control}
-                        name="otp"
-                        render={({ field }) => (
-                            <FormItem className="">
-                                <FormControl>
-                                    <InputOTP pattern={NUMS_ONLY.source} maxLength={6} {...field}>
-                                        <InputOTPGroup>
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={0} />
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={1} />
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={2} />
-                                        </InputOTPGroup>
-                                        <InputOTPSeparator className='text-white' />
-                                        <InputOTPGroup>
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={3} />
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={4} />
-                                            <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={5} />
-                                        </InputOTPGroup>
-                                    </InputOTP>
-                                </FormControl>
-                                <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
-                            </FormItem>
-                        )}
-                    />
+                    {
+                        sentOtp ? (
+                            <FormField
+                                control={form.control}
+                                name="otp"
+                                render={({ field }) => (
+                                    <FormItem className="">
+                                        <FormControl>
+                                            <InputOTP pattern={NUMS_ONLY.source} maxLength={6} {...field}>
+                                                <InputOTPGroup>
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={0} />
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={1} />
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={2} />
+                                                </InputOTPGroup>
+                                                <InputOTPSeparator className='text-white' />
+                                                <InputOTPGroup>
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={3} />
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={4} />
+                                                    <InputOTPSlot className="bg-white w-12 h-12 text-xl" index={5} />
+                                                </InputOTPGroup>
+                                            </InputOTP>
+                                        </FormControl>
+                                        <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
+                                    </FormItem>
+                                )}
+                            />
+                        ) : (
+                            <p className='font-poppins text-md mb-6 text-white'>A Code Will Be Sent To {user.countryCode}{user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}</p>
+                        )
+                    }
                     {sentOtp ? (
                         <>
                             <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Verify</button>
