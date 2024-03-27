@@ -89,7 +89,18 @@ export default function CompleteProfileOTP({ user }: Props)
     const initiateRecaptcha = async () => {
         try
         {
-            await signOut(auth)
+            setSentOtp(true)
+            toast({ 
+                action: (
+                    <Image
+                        src='/assets/check.svg'
+                        width={25} 
+                        height={25}
+                        alt='check' 
+                    />
+                ),
+                title: 'Code Sent Successfully!',
+            })  
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                 'size': 'normal',
                 'callback': async (response: any) => {
@@ -110,19 +121,6 @@ export default function CompleteProfileOTP({ user }: Props)
     const handleSendCode = async () => {
         try
         {
-            setSentOtp(true)
-            toast({ 
-                action: (
-                    <Image
-                        src='/assets/check.svg'
-                        width={25} 
-                        height={25}
-                        alt='check' 
-                    />
-                ),
-                title: 'Code Sent Successfully!',
-            })            
-
             const appVerifier = window.recaptchaVerifier
             const fullPhoneNumber = `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`
             await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier!)
