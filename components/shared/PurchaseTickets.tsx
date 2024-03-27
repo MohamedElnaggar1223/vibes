@@ -371,7 +371,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 disabled={(currentWidth ?? 0) > 1024} 
                                                 className=' max-lg:flex-1 font-poppins text-sm lgtext-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
-                                                {(currentWidth ?? 0) < 1024 ? 'Buy' : 'Buy Now'}
+                                                {(currentWidth ?? 0) < 1024 ? 'Buy Now' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -384,7 +384,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
-                                                {(currentWidth ?? 0) < 1024 ? 'Buy' : 'Buy Now'}
+                                                {(currentWidth ?? 0) < 1024 ? 'Buy Now' : 'Buy Now'}
                                             </motion.button>
                                         </TooltipTrigger>
                                         {
@@ -400,9 +400,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     </div>
                 </div>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                    <DialogContent className='flex flex-col w-full max-w-[627px] p-0 bg-[#181C25] border-none'>
+                    <DialogContent className='flex flex-col w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
                         <div className='flex flex-col w-full max-w-[627px]'>
-                            <div className='py-6 text-white font-poppins font-semibold bg-[#232834] items-center text-center rounded-t-lg'>
+                            <div className='py-6 text-white font-poppins max-lg:text-base font-semibold bg-[#232834] items-center text-center rounded-t-lg'>
                                 Choose one or more type of tickets
                             </div>
                             <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
@@ -416,7 +416,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             else e.stopPropagation()
                                         }}
                                     >
-                                        <p className='text-white font-poppins text-normal font-normal flex-1'>
+                                        <p className='text-white font-poppins max-lg:text-sm lg:text-base font-normal flex-1'>
                                             {ticket}
                                             {
                                                 availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass === 'Included' &&
@@ -429,7 +429,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                             selectedTickets[ticket] > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
                                                     <button 
-                                                        className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        className='bg-white max-lg:text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setSelectedTickets(prev => ({...prev, [ticket]: prev[ticket] - 1}))}
@@ -437,9 +437,9 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                     >
                                                         -
                                                     </button>
-                                                    <p className='text-white font-poppins text-sm font-semibold'>{selectedTickets[ticket]}</p>
+                                                    <p className='text-white font-poppins text-xs lg:text-sm font-semibold'>{selectedTickets[ticket]}</p>
                                                     <button 
-                                                        className='bg-white text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
+                                                        className='bg-white max-lg:text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setSelectedTickets(prev => ({...prev, [ticket]: (availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity ?? 0) >= prev[ticket] + 1 ? prev[ticket] + 1 : prev[ticket]}))}
@@ -453,10 +453,10 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                         {
                                             availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity === 0 &&
                                             <div className='flex items-center justify-center bg-transparent border-none outline-none'>
-                                                <p className='font-poppins font-normal text-white text-center text-base'>Sold out!</p>
+                                                <p className='font-poppins font-normal text-white text-center max-lg:text-sm lg:text-base'>Sold out!</p>
                                             </div>
                                         }
-                                        <p className='text-white font-poppins text-normal font-light flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
+                                        <p className='text-white font-poppins max-lg:text-sm lg:text-base font-light flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
                                     </div>
                                 ))}
                             </div>
