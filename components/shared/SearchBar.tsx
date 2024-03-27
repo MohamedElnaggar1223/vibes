@@ -144,6 +144,7 @@ export default function SearchBar()
                                 setCountry('')
                                 setDate(undefined)
                                 setCategory('')
+                                router.push(`/?search=${search}`)
                                 // handleSubmit()
                             }} className='rounded-lg px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] ml-4 cursor-pointer'>
                                 Clear Filters

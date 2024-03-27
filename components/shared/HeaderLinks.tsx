@@ -56,7 +56,7 @@ function HeaderLinks({ setOpen }: Props)
 
     return (
         <>
-            <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center'>
+            <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center z-[99999999999999999]'>
                 Country
                 <Select open={countryOpen} onOpenChange={setCountryOpen} defaultValue={defaultValue} onValueChange={(value) => {
                     //@ts-expect-error country
@@ -65,10 +65,10 @@ function HeaderLinks({ setOpen }: Props)
                     localStorage.setItem('country', Object.keys(countries).find(key => countries[key] === value))
                     router.refresh()
                 }}>
-                    <SelectTrigger className="w-[140px] border-none bg-black text-white font-poppins text-base font-medium z-[999999] outline-none">
+                    <SelectTrigger className="w-[140px] border-none bg-black text-white font-poppins text-base font-medium outline-none">
                         <SelectValue placeholder={defaultValue} />
                     </SelectTrigger>
-                    <SelectContent className='z-[9999999] bg-black w-[80px] rounded-b-md p-0'>
+                    <SelectContent className='z-[999999999999999999] bg-black w-[80px] rounded-b-md p-0'>
                         <SelectGroup className='bg-black flex flex-col items-center justify-center'>
                             <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="KSA">KSA</SelectItem>
                             <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="EG">EG</SelectItem>

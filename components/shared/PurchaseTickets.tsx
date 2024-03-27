@@ -22,8 +22,6 @@ import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { getStorage, ref, listAll } from "firebase/storage";
-import { set } from "date-fns"
 
 type Props = {
     event: EventType,
