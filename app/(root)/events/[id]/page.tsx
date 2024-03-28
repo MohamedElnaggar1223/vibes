@@ -30,9 +30,19 @@ const getEvent = cache(async (id: string) => {
         gatesOpen: fetchedEvent.data()?.gatesOpen?.toDate(),
         gatesClose: fetchedEvent.data()?.gatesClose?.toDate(),
     } as EventType
-
+    
     return selectedEvent
 })
+
+export async function generateMetadata({ params }: Props) 
+{
+    const selectedEvent = await getEvent(params.id)
+
+    return {
+        title: `${selectedEvent?.name} - Vibes`,
+        description: selectedEvent?.description,
+    }
+}
 
 const getUser = cache(async () => {
     const admin = await initAdmin()

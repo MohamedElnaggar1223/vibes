@@ -6,6 +6,17 @@ import { redirect } from "next/navigation"
 import MyProfile from "@/components/auth/profile/MyProfile"
 import { revalidatePath } from "next/cache"
 
+type Props = {
+    searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata({ searchParams }: Props) 
+{
+    return {
+        title: `${typeof searchParams.show !== 'string' ? 'My Profile' : searchParams.show === 'personal' ? 'My Profile' : searchParams.show === 'change-password' ? 'Change Password' : searchParams.show === 'my-tickets' ? 'My Tickets' : 'My Profile'} - Vibes`,
+    }
+}
+
 export default async function Profile()
 {
     const admin = await initAdmin()

@@ -1,9 +1,15 @@
+import type { Metadata } from 'next'
 import CategoriesFilters from "@/components/shared/CategoriesFilters";
 import Categorie from "@/components/shared/Category";
 import { getCategories, getEvents } from "@/lib/utils";
 import { Suspense } from "react";
 import Loading from "./loading";
 import EventsLoading from "./eventsLoading";
+
+export const metadata: Metadata = {
+    title: 'Categories - Vibes',
+    description: 'Find the best events in KSA, UAE, or Egypt!',
+}
 
 type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
