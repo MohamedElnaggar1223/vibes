@@ -49,6 +49,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <meta name="google-site-verification" content="irnPUXjZLm_rx9_Xs0zW_MaO1dC4yFnVfVSGBb0wjZw" />
       <body className={cn('max-w-[100vw] overflow-x-hidden', poppins.variable)}>
         <Image
           src="/assets/background.svg"
