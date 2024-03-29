@@ -81,7 +81,7 @@ export default function ResetPassword({ oobCode }: Props)
                 <>
                     <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Reset Your Password</p>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-5 flex flex-col justify-center items-center">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-7 flex flex-col justify-center items-center">
                             <FormField
                                 control={form.control}
                                 name="newPassword"
