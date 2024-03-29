@@ -58,7 +58,8 @@ export default function ResetPassword({ oobCode }: Props)
                     setSuccess('Password reset successful!')
                     setTimeout(() => {
                         router.push('/sign-in')
-                    }, 3000)
+                        router.refresh()
+                    }, 2500)
                 })
                 .catch((error) => {
                     setLoading(false)
@@ -89,7 +90,7 @@ export default function ResetPassword({ oobCode }: Props)
                                         <FormControl>
                                             <div className="relative">
                                                 <input 
-                                                    placeholder="Old Password" 
+                                                    placeholder="Password" 
                                                     type={passwordVisible ? 'text' : 'password'}
                                                     className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                     {...field}
@@ -125,7 +126,7 @@ export default function ResetPassword({ oobCode }: Props)
                                         <FormControl>
                                             <div className="relative">
                                                 <input 
-                                                    placeholder="Old Password" 
+                                                    placeholder="Confirm Password" 
                                                     type={confirmPasswordVisible ? 'text' : 'password'}
                                                     className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                     {...field}
