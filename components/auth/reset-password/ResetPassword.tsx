@@ -56,10 +56,6 @@ export default function ResetPassword({ oobCode }: Props)
                 .then(() => {
                     setLoading(false)
                     setSuccess('Password reset successful!')
-                    setTimeout(() => {
-                        router.push('/sign-in')
-                        router.refresh()
-                    }, 2500)
                 })
                 .catch((error) => {
                     setLoading(false)
@@ -76,7 +72,10 @@ export default function ResetPassword({ oobCode }: Props)
                 className='mb-4'
             />
             {success !== '' ? (
-                <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Password reset successful!</p>
+                <>
+                    <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Password reset successful!</p>
+                    <button onClick={() => router.push('/sign-in')} className='cursor-pointer rounded-md font-light py-5 px-10 w-full text-white font-poppins bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]'>Sign In</button>
+                </>
             ) : (
                 <>
                     <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Reset Your Password</p>

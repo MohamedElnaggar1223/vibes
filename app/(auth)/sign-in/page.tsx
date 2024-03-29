@@ -9,7 +9,6 @@ import { Suspense } from "react"
 
 export default async function SignInPage()
 {
-    revalidatePath('/sign-in')
     const admin = await initAdmin()
     const cookiesData = cookies()
     const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
