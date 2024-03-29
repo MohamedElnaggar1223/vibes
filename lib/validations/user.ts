@@ -132,3 +132,9 @@ export const UserForgotPasswordSchema = z.object({
     }
     return false
 }, { message: 'Email does not exist', path: ['email'] })
+
+export const UserResetPasswordSchema = z.object({
+    newPassword: z.string().min(8, { message: '• Password must be at least 8 characters' }),
+    confirmNewPassword: z.string().min(8, { message: '• Password must be at least 8 characters' }),
+})
+.refine(context => context.newPassword === context.confirmNewPassword, { message: '• Passwords must match', path: ['confirmNewPassword'] })
