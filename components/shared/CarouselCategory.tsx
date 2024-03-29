@@ -37,7 +37,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
     const exchangeRate = await getExchangeRate()
 
     return (
-        <section className='relative w-full flex items-center h-52 lg:h-[412px] justify-center gap-4 flex-row'>
+        <section className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row'>
             
             <Carousel
                 opts={{

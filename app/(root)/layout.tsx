@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
 import CountryContextProvider from "@/providers/CountryProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Footer from "@/components/shared/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default async function RootLayout({
             {children}
             <SpeedInsights />
           </main>
+          <Footer />
         </CountryContextProvider>
       </body>
     </html>
