@@ -74,7 +74,7 @@ export default function ResetPassword({ oobCode }: Props)
             {success !== '' ? (
                 <>
                     <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Password reset successful!</p>
-                    <button onClick={() => router.push('/sign-in')} className='cursor-pointer rounded-md font-light py-5 px-10 w-full text-white font-poppins bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]'>Sign In</button>
+                    <button onClick={() => router.push('/sign-in')} className='cursor-pointer rounded-md font-light py-5 px-10 w-screen max-w-[412px] max-sm:max-w-[340px] text-white font-poppins bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]'>Log In</button>
                 </>
             ) : (
                 <>
