@@ -13,7 +13,7 @@ type Props = {
 
 export default async function Header({ params }: Props) 
 {
-    const { t } = await initTranslations(params?.locale ?? 'ar', ['homepage', 'common'], )
+    const { t } = await initTranslations(params?.locale ?? 'en', ['homepage', 'common'], )
     const session = await getServerSession()
 
     return (
