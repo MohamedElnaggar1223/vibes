@@ -8,7 +8,6 @@ import { decode } from "next-auth/jwt"
 import { UserType } from "@/lib/types/userTypes";
 import { redirect } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
-import {  } from 'next/navigation'
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,7 +18,7 @@ const poppins = Poppins({
   adjustFontFallback: true,
 })
 
-const myFont = localfont({ src: '../../public/fonts/BeldaDidoneNormDemiItalic.ttf' })
+const myFont = localfont({ src: '../../../public/fonts/BeldaDidoneNormDemiItalic.ttf' })
 
 export const metadata: Metadata = {
   title: "Vibes",
