@@ -9,6 +9,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { months } from "@/constants";
 import FormattedPrice from "../shared/FormattedPrice";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     events: EventType[],
@@ -17,6 +18,8 @@ type Props = {
 
 function EventsCarousel({ events, exchangeRate }: Props) 
 {
+    const { t } = useTranslation()
+
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [currentWidth, setCurrentWidth] = useState<number>()
@@ -107,7 +110,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                     {(currentWidth ?? 0) > 1024 ? (
                         <>
                             <div className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
-                                <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
+                                <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? t('eventTitle', {eventTitle: events[0].name}) :  t('eventTitle', {eventTitle: events[selectedIndex + 1].name})}</p>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end max-lg:w-full'>
                                     <p className='font-poppins text-base font-extralight'>starting from {selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</p>
                                     <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>

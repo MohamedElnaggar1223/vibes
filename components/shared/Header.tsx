@@ -3,9 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import SignedInHeader from "./SignedInHeader";
 import CategoriesHeaderLink from "./CategoriesHeaderLink";
+import { initTranslations } from "@/lib/utils";
 
-export default async function Header() 
+type Props = {
+    params: {
+        locale?: string
+    }
+}
+
+export default async function Header({ params }: Props) 
 {
+    const { t } = await initTranslations(params?.locale ?? 'ar', ['homepage', 'common'], )
     const session = await getServerSession()
 
     return (
@@ -25,14 +33,14 @@ export default async function Header()
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='/' className='text-white font-poppins text-sm md:text-lg font-semibold'>
-                    AR
+                <Link href={params.locale === 'en' ? '/ar' : '/en' } className='text-white font-poppins text-sm md:text-lg font-semibold'>
+                    {params.locale === 'en' ? 'AR' : 'EN' }
                 </Link>
                 {
                     !session?.user ? (
                         <Link href='/sign-in'>
                             <button className='font-poppins text-sm md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white'>
-                                Sign in
+                                {t('common:sign-in')}
                             </button>
                         </Link>
                     ) : (

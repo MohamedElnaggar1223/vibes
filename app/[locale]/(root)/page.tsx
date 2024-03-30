@@ -9,10 +9,13 @@ import { getCategories } from "@/lib/utils";
 import { Suspense } from "react";
 
 type Props = {
+	params: {
+		locale?: string
+	}
 	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function Home({ searchParams }: Props)
+export default async function Home({ searchParams, params }: Props)
 {
 	const admin = await initAdmin()
 	const displaysData = (await admin.firestore().collection('displays').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Display[]

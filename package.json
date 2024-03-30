@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "i18nexus pull && next dev",
+    "build": "i18nexus pull && next build",
+    "start": "i18nexus pull && next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -30,10 +30,13 @@
     "firebase-admin": "^12.0.0",
     "firebase-functions": "^4.8.1",
     "framer-motion": "^11.0.5",
+    "i18next": "^23.10.1",
+    "i18next-resources-to-backend": "^1.2.0",
     "input-otp": "^1.2.3",
     "lucide-react": "^0.335.0",
     "next": "14.1.0",
     "next-auth": "^4.24.6",
+    "next-i18n-router": "^5.4.0",
     "nodemailer": "^6.9.12",
     "puppeteer": "^22.4.1",
     "puppeteer-core": "^22.4.1",
@@ -41,6 +44,7 @@
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
+    "react-i18next": "^14.1.0",
     "react-qr-code": "^2.0.12",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.1",
@@ -54,6 +58,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "i18nexus-cli": "^3.3.1",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"

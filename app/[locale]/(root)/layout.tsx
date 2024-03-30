@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
 import Header from "@/components/shared/Header";
-import { cn } from "@/lib/utils";
+import { cn, initTranslations } from "@/lib/utils";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { decode } from "next-auth/jwt"
@@ -13,6 +13,8 @@ import { initAdmin } from "@/firebase/server/config";
 import CountryContextProvider from "@/providers/CountryProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Footer from "@/components/shared/Footer";
+import { i18nConfig } from "@/i18nConfig";
+import TranslationsProvider from "@/providers/TranslationsProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,6 +24,10 @@ const poppins = Poppins({
   preload: true,
   adjustFontFallback: true,
 })
+
+export function generateStaticParams() {
+  return i18nConfig.locales.map(locale => ({ locale }));
+}
 
 export const metadata: Metadata = {
   title: "Vibes",
@@ -41,15 +47,21 @@ const getUser = cache(async () => {
 
 export default async function RootLayout({
   children,
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: {
+    locale?: string;
+  }
 }>) {
 
   const user = await getUser()
   if(user && !user.verified) return redirect('/complete-profile')
 
+  const { resources } = await initTranslations(params.locale ?? 'en', ['homepage', 'common'])
+
   return (
-    <html lang="en">
+    <html lang={params.locale}>
       <meta name="google-site-verification" content="irnPUXjZLm_rx9_Xs0zW_MaO1dC4yFnVfVSGBb0wjZw" />
       <body className={cn('max-w-[100vw] overflow-x-hidden', poppins.variable)}>
         <Image
@@ -59,14 +71,16 @@ export default async function RootLayout({
           className='bg-image'
           priority
         />
-        <CountryContextProvider>
-          <Header />
-          <main className='px-6 md:px-20 min-h-screen flex'>
-            {children}
-            <SpeedInsights />
-          </main>
-          <Footer />
-        </CountryContextProvider>
+        <TranslationsProvider locale={params.locale!} resources={resources} namespaces={['homepage', 'common']}>
+          <CountryContextProvider>
+            <Header params={params} />
+            <main className='px-6 md:px-20 min-h-screen flex'>
+              {children}
+              <SpeedInsights />
+            </main>
+            <Footer />
+          </CountryContextProvider>
+        </TranslationsProvider>
       </body>
     </html>
   );
