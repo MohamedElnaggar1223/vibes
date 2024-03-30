@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: Props)
 				) : (
 					<>
 						<EventsCarouselContainer events={displays.find(display => display.display === 'Top Events')?.events} />
-						<section className='flex flex-col max-lg:gap-24 gap-4 my-36 w-full'>
+						<section className='flex flex-col max-lg:gap-24 gap-4 my-8 lg:my-36 w-full'>
 							{displays.slice().filter(display => display.events.length > 0 && display.display !== 'Top Events').map(display => (
 								<CarouselCategory key={display.id} title={display.display} subTitle={display.description} events={display.events} />
 							))}
