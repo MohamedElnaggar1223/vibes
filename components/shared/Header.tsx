@@ -33,7 +33,7 @@ export default async function Header({ params }: Props)
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='/' locale={params.locale === 'en' ? 'ar' : 'en'} className='text-white font-poppins text-sm md:text-lg font-semibold'>
+                <Link replace={true} href='/' locale={params.locale === 'en' ? 'ar' : 'en'} className='text-white font-poppins text-sm md:text-lg font-semibold'>
                     {params.locale === 'en' ? 'AR' : 'EN' }
                 </Link>
                 {
