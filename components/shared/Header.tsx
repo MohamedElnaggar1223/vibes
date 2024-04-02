@@ -4,6 +4,7 @@ import Link from "next/link";
 import SignedInHeader from "./SignedInHeader";
 import CategoriesHeaderLink from "./CategoriesHeaderLink";
 import { initTranslations } from "@/lib/utils";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 type Props = {
     params: {
@@ -33,9 +34,7 @@ export default async function Header({ params }: Props)
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href={params.locale === 'en' ? '/ar' : '/en' } locale={false} replace={true} className='text-white font-poppins text-sm md:text-lg font-semibold'>
-                    {params.locale === 'en' ? 'AR' : 'EN' }
-                </Link>
+                <LocaleSwitcher params={params} />
                 {
                     !session?.user ? (
                         <Link href='/sign-in'>
