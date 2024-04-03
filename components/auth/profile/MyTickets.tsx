@@ -11,6 +11,8 @@ import { db } from "@/firebase/client/config";
 import { getDoc, doc, Timestamp } from "firebase/firestore";
 import { EventType } from "@/lib/types/eventTypes";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import { usePathname } from "next/navigation";
 
 type Props = {
     user: UserType,
@@ -22,6 +24,10 @@ export default function ViewMyTickets({ user }: Props)
 
     const router = useRouter()
     const searchParams = useSearchParams()
+
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const selectedTab = searchParams?.get('date') ?? 'current'
     const [optimisticSelectedTab, setOptimisticSelectedTab] = useOptimistic(selectedTab, (_, nextTab: string) => nextTab)
@@ -74,7 +80,7 @@ export default function ViewMyTickets({ user }: Props)
                     }} 
                     className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', optimisticSelectedTab === 'current' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
                 >
-                    Current Tickets
+                    {t('auth:currentTickets')}
                 </button>
                 <button 
                     onClick={() => {
@@ -83,17 +89,17 @@ export default function ViewMyTickets({ user }: Props)
                     }} 
                     className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', optimisticSelectedTab === 'past' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
                 >
-                    Past Tickets
+                    {t('auth:pastTickets')}
                 </button>
             </div>
             <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12 lg:gap-12'>
                 {
                     optimisticSelectedTab === 'current' ? (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets tickets={data?.currentTickets!} events={data?.events!} />
+                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.currentTickets!} events={data?.events!} />
                     ) : selectedTab === 'past' ? (
                         isLoading ? <TicketsLoading /> : <PastTickets tickets={data?.pastTickets!} events={data?.events!} />
                     ) : (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets tickets={data?.currentTickets!} events={data?.events!} />
+                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.currentTickets!} events={data?.events!} />
                     )
                 }
             </div>

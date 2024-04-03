@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { CountryContext } from "@/providers/CountryProvider"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { Loader2 } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     setOpen: Dispatch<SetStateAction<boolean>>
@@ -25,6 +26,8 @@ function HeaderLinks({ setOpen }: Props)
     const [loading, setLoading] = useState(false)
     const [countryOpen, setCountryOpen] = useState(false)
     const [canLogOut, setCanLogOut] = useState(true)
+
+    const { t } = useTranslation()
 
     const router = useRouter()
 
@@ -57,7 +60,7 @@ function HeaderLinks({ setOpen }: Props)
     return (
         <>
             <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center z-[99999999999999999]'>
-                Country
+                {t('selectCountry')}
                 <Select open={countryOpen} onOpenChange={setCountryOpen} defaultValue={defaultValue} onValueChange={(value) => {
                     //@ts-expect-error country
                     setCountry(Object.keys(countries).find(key => countries[key] === value))
@@ -70,9 +73,9 @@ function HeaderLinks({ setOpen }: Props)
                     </SelectTrigger>
                     <SelectContent className='z-[999999999999999999] bg-black w-[80px] rounded-b-md p-0'>
                         <SelectGroup className='bg-black flex flex-col items-center justify-center'>
-                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="KSA">KSA</SelectItem>
-                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="EG">EG</SelectItem>
-                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="UAE">UAE</SelectItem>
+                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="KSA">{t('KSA')}</SelectItem>
+                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="EG">{t('EG')}</SelectItem>
+                            <SelectItem className='bg-black text-white font-poppins cursor-pointer' value="UAE">{t('UAE')}</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -85,7 +88,7 @@ function HeaderLinks({ setOpen }: Props)
                     height={16} 
                     alt='logout'
                 />
-                Logout
+                {t('logOut')}
             </span>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>

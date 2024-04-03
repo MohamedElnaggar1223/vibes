@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-    searchParams: { [key: string]: string | string[] | undefined }
+    searchParams: { [key: string]: string | string[] | undefined },
+    params: {
+        locale?: string | undefined
+    }
 }
 
 const countries = {
@@ -21,7 +24,7 @@ const countries = {
     'Egypt': 'Egypt'
 }
 
-export default async function CategoriesPage({ searchParams }: Props) 
+export default async function CategoriesPage({ searchParams, params }: Props) 
 {
     const categories = await getCategories()
     const events = await getEvents()
@@ -30,10 +33,10 @@ export default async function CategoriesPage({ searchParams }: Props)
     const country = typeof searchParams.country === 'string' && (searchParams.country === 'UAE' || searchParams.country === 'Egypt' || searchParams.country === 'KSA') ? searchParams.country : undefined
 
     return (
-        <section className='flex max-lg:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start' key={Math.random()}>
+        <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex max-lg:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16' key={Math.random()}>
             <div className='flex lg:flex-col mt-2 lg:mt-16 gap-2 w-full lg:w-48'>
                 <p className='font-poppins text-white font-light max-lg:hidden'>Filters</p>
-                <CategoriesFilters />
+                <CategoriesFilters locale={params.locale} />
             </div>
             {
                 events

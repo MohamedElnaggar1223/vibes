@@ -35,7 +35,7 @@ export default async function Home({ searchParams, params }: Props)
 	
 	return (
 		<section className='flex flex-col items-center justify-center w-full overflow-x-hidden' key={Math.random()}>
-			<SearchBar />
+			<SearchBar locale={params.locale} />
 			{
 				(search || date || country || category) ? (
 					<Suspense fallback={<SearchLoading />}>
@@ -46,7 +46,7 @@ export default async function Home({ searchParams, params }: Props)
 						<EventsCarouselContainer events={displays.find(display => display.display === 'Top Events')?.events} />
 						<section className='flex flex-col max-lg:gap-24 gap-4 my-8 lg:my-36 w-full'>
 							{displays.slice().filter(display => display.events.length > 0 && display.display !== 'Top Events').map(display => (
-								<CarouselCategory key={display.id} title={display.display} subTitle={display.description} events={display.events} />
+								<CarouselCategory locale={params.locale} key={display.id} title={display.display} subTitle={display.description} events={display.events} />
 							))}
 						</section>
 					</>

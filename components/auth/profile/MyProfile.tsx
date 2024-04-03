@@ -5,11 +5,12 @@ import { Suspense, startTransition, useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent } from "../../ui/dialog"
 import { Loader2 } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import PersonalInformation from "./PersonalInformation"
 import ChangePassword from "./ChangePassword"
 import InfoLoading from "./tickets/InfoLoading"
 import MyTickets from "./MyTickets"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     user: UserType
@@ -25,6 +26,9 @@ export default function MyProfile({ user }: Props)
     const router = useRouter()
     const selectedTab = searchParams?.get('show') ?? 'personal'
     const [currentWidth, setCurrentWidth] = useState<number>()
+
+    const { t } = useTranslation()
+    const pathname = usePathname()
 
     useEffect(() => {
         if(window) setCurrentWidth(window?.innerWidth!)
@@ -60,7 +64,7 @@ export default function MyProfile({ user }: Props)
     }, [])
 
     return (
-        <section className='flex w-full min-h-[90vh] max-h-[90vh] items-center justify-center lg:gap-16 lg:px-24'>
+        <section dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex w-full min-h-[90vh] max-h-[90vh] items-center justify-center lg:gap-16 lg:px-24'>
             {
                 (currentWidth ?? 0) > 1024 && (
                     <div className='flex flex-1 flex-col max-w-[19rem] items-center justify-center rounded-lg divide-y-[1px]'>
@@ -72,7 +76,7 @@ export default function MyProfile({ user }: Props)
                             }} 
                             className='py-8 min-w-[19rem] flex items-center justify-center rounded-t-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'
                         >
-                            <p className={cn('font-poppins text-base font-normal text-white', !(selectedTab === 'change-password' || selectedTab === 'my-tickets')  && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Personal Information</p>
+                            <p className={cn('font-poppins text-base font-normal text-white', !(selectedTab === 'change-password' || selectedTab === 'my-tickets')  && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('personalInformation')}</p>
                         </div>
                         {
                             user.provider === 'credentials' &&
@@ -84,7 +88,7 @@ export default function MyProfile({ user }: Props)
                                 }} 
                                 className='py-8 min-w-[19rem] flex items-center justify-center bg-[rgba(82,82,82,0.60)] cursor-pointer'
                             >
-                                <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'change-password' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>Change Password</p>
+                                <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'change-password' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('changePassword')}</p>
                             </div>
                         }
                         <div 
@@ -95,7 +99,7 @@ export default function MyProfile({ user }: Props)
                             }} 
                             className='py-8 min-w-[19rem] flex items-center justify-center rounded-b-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'
                         >
-                            <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'my-tickets' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>My Tickets</p>
+                            <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'my-tickets' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('myTickets')}</p>
                         </div>
                     </div>
                 )

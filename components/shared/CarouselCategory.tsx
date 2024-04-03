@@ -5,12 +5,13 @@ import EventCard from "../cards/EventCard"
 import { getExchangeRate } from "@/lib/utils"
 
 type Props = {
+    locale?: string | undefined
     title: string,
     subTitle: string,
     events: string[]
 }
 
-export default async function CarouselCategory({ title, subTitle, events }: Props) 
+export default async function CarouselCategory({ locale, title, subTitle, events }: Props) 
 {
     const admin = await initAdmin()
     const eventsDocs = events?.map(async (event) => {
@@ -37,8 +38,7 @@ export default async function CarouselCategory({ title, subTitle, events }: Prop
     const exchangeRate = await getExchangeRate()
 
     return (
-        <section className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row'>
-            
+        <section dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row'>
             <Carousel
                 opts={{
                     align: "start",

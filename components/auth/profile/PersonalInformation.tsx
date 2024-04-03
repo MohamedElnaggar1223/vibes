@@ -18,6 +18,7 @@ import { User, signInWithEmailAndPassword, updateEmail } from "firebase/auth"
 import { authErrors, countryCodes } from "@/constants"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     user: UserType,
@@ -29,6 +30,8 @@ type Props = {
 export default function PersonalInformation({ user, setError, setLoading, setSuccess }: Props) 
 {
     const router = useRouter()
+
+    const { t } = useTranslation()
 
     const form = useForm<z.infer<typeof UserUpdateProfileSchema>>({
         resolver: zodResolver(UserUpdateProfileSchema),
@@ -78,7 +81,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
 
     return (
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
-            <p className='mb-4 font-poppins text-white font-medium'>Account details</p>
+            <p className='mb-4 font-poppins text-white font-medium'>{t('accountDetails')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                     <FormField
@@ -160,7 +163,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                 <FormItem className="">
                                     <FormControl>
                                         <div className='relative'>
-                                            <select {...field} className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-2 outline-none rounded-md z-10 appearance-none'>
+                                            <select dir='ltr' {...field} className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-2 outline-none rounded-md z-10 appearance-none'>
                                                 {countryCodes.map((countryCode, index) => (<option key={index} value={countryCode}>{countryCode}</option>))}
                                             </select>
                                             <div className='h-14 bg-[rgba(0,0,0,0.25)] rotate-180 w-[2px] top-1 left-[60%] absolute z-20' />
@@ -191,7 +194,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             )}
                         />
                     </div>
-                    <button disabled={unChanged} type="submit" className={cn('rounded-md font-light py-5 px-10 w-full text-white font-poppins', unChanged ? 'bg-[#878787]' : 'cursor-pointer bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>Confirm Changes</button>
+                    <button disabled={unChanged} type="submit" className={cn('rounded-md font-light py-5 px-10 w-full text-white font-poppins', unChanged ? 'bg-[#878787]' : 'cursor-pointer bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>{t('auth:confirmChanges')}</button>
                 </form>
             </Form>
         </div>

@@ -8,7 +8,11 @@ import { Calendar } from "../ui/calendar";
 import { CalendarIcon, FilterX } from "lucide-react";
 import Image from "next/image";
 
-export default function CategoriesFilters()
+type Props = {
+    locale?: string | undefined
+}
+
+export default function CategoriesFilters({ locale }: Props)
 {
     const searchParams = useSearchParams()
     const router = useRouter()
@@ -28,7 +32,7 @@ export default function CategoriesFilters()
 
     return (
         <>
-            <Select value={country} onValueChange={setCountry}>
+            <Select dir={locale === 'ar' ? 'rtl' : 'ltr'} value={country} onValueChange={setCountry}>
                 <SelectTrigger>
                     <SelectValue placeholder="Country" />
                 </SelectTrigger>

@@ -8,6 +8,7 @@ body{
   background-repeat: no-repeat;
   background-size: cover; */
   background-color: black;
+  zoom: 1 !important;
 }
 
 @layer base {
@@ -112,7 +113,10 @@ body{
 }
 
 .qrcodeHeight svg {
-  height: 10rem;
+  height: 7rem;
+  width: 7rem;
+  margin-right: 16px;
+  max-width: fit-content;
 }
 
 .flipCardInner {
@@ -130,6 +134,6 @@ body{
 @media not all and (min-width: 1024px) {
   .qrcodeHeight svg {
     height: 7rem;
-    width: fit-content;
+    max-width: fit-content;
   }
 }

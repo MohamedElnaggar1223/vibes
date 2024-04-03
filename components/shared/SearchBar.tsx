@@ -9,7 +9,11 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils";
 
-export default function SearchBar() 
+type Props = {
+    locale?: string | undefined
+}
+
+export default function SearchBar({ locale }: Props) 
 {
     const searchParams = useSearchParams()
 
@@ -60,7 +64,7 @@ export default function SearchBar()
     }
 
     return (
-        <div className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
+        <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}
@@ -70,7 +74,7 @@ export default function SearchBar()
                 onClick={() => handleSubmit()}
             />
             <form                    
-                className='flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins pl-8 py-0.5 md:py-1.5 outline-none' 
+                className={cn('flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins py-0.5 md:py-1.5 outline-none', locale === 'ar' ? 'pr-8' : 'pl-8')} 
                 onSubmit={handleSubmit}
             >
                 <input 

@@ -20,11 +20,17 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
+import { useTranslation } from "react-i18next"
 
 export default function SignUp()
 {
     const router = useRouter()
+    const pathname = usePathname()
 
+    const { t } = useTranslation()
+ 
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -141,9 +147,9 @@ export default function SignUp()
     }
 
     return (
-        <section className='min-h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 overflow-auto max-lg:w-screen max-lg:max-w-[100vw]'>
+        <section className={cn('min-h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 overflow-auto max-lg:w-screen max-lg:max-w-[100vw]', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
             <div className='flex flex-col justify-center items-center mt-3'>
-                <p className='font-poppins font-base mb-6 text-white'>Sign up</p>
+                <p className='font-poppins font-base mb-6 text-white'>{t('auth:signUp')}</p>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                         <FormField
@@ -153,7 +159,7 @@ export default function SignUp()
                                 <FormItem className="">
                                     <FormControl>
                                         <input 
-                                            placeholder="First Name" 
+                                            placeholder={t('auth:firstname')} 
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
@@ -169,7 +175,7 @@ export default function SignUp()
                                 <FormItem className="">
                                     <FormControl>
                                         <input 
-                                            placeholder="Last Name" 
+                                            placeholder={t('auth:lastname')}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
@@ -185,7 +191,7 @@ export default function SignUp()
                                 <FormItem className="">
                                     <FormControl>
                                         <input 
-                                            placeholder="Email" 
+                                            placeholder={t('auth:email')}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
@@ -194,14 +200,14 @@ export default function SignUp()
                                 </FormItem>
                             )}
                         />
-                        <div className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
+                        <div dir='ltr' className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
                             <FormField
                                 control={form.control}
                                 name="countryCode"
                                 render={({ field }) => (
                                     <FormItem className="">
                                         <FormControl>
-                                            <div className='relative'>
+                                            <div dir='ltr' className='relative'>
                                                 <select {...field} className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-2 outline-none rounded-md z-10 appearance-none'>
                                                     {countryCodes.map((countryCode, index) => (<option key={index} value={countryCode}>{countryCode}</option>))}
                                                 </select>
@@ -222,7 +228,7 @@ export default function SignUp()
                                     <FormItem className="ml-auto flex-1">
                                         <FormControl>
                                             <input 
-                                                placeholder="Phone Number" 
+                                                placeholder={t('auth:number')}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
                                                 {...field}
                                                 onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
@@ -241,14 +247,14 @@ export default function SignUp()
                                     <FormControl>
                                         <div className="relative">
                                             <input 
-                                                placeholder="Password" 
+                                                placeholder={t('auth:password')}
                                                 type={passwordVisible ? 'text' : 'password'}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                 {...field}
                                             />
                                             {passwordVisible ? (
                                                 <Eye 
-                                                    className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[10%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setPasswordVisible(prev => !prev)
@@ -256,7 +262,7 @@ export default function SignUp()
                                                 />
                                             ) : (
                                                 <EyeOff 
-                                                    className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[10%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setPasswordVisible(prev => !prev)
@@ -277,14 +283,14 @@ export default function SignUp()
                                     <FormControl>
                                         <div className="relative">
                                             <input 
-                                                placeholder="Confirm Password" 
+                                                placeholder={t('auth:confirmpassword')}
                                                 type={confirmPasswordVisible ? 'text' : 'password'}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                 {...field}
                                             />
                                             {confirmPasswordVisible ? (
                                                 <Eye 
-                                                    className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setConfirmPasswordVisible(prev => !prev)
@@ -292,7 +298,7 @@ export default function SignUp()
                                                 />
                                             ) : (
                                                 <EyeOff 
-                                                    className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setConfirmPasswordVisible(prev => !prev)
@@ -307,7 +313,7 @@ export default function SignUp()
                         />
                         <div className='w-full flex justify-between items-center gap-2'>
                             <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
-                            <p className='text-white font-poppins text-xs font-light'>or sign up using</p>
+                            <p className='text-white font-poppins text-xs font-light'>{t('auth:orsignIn')}</p>
                             <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
                         </div>
                         <div className='w-full flex justify-center items-center gap-6'>
@@ -336,9 +342,9 @@ export default function SignUp()
                                 />
                             </span>
                         </div>
-                        <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign up</button>
+                        <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:signUp')}</button>
                     </form>
-                    <p className='text-white mt-2 font-poppins text-sm mb-3'>Already have an account? <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign In</span></p>
+                    <p className='text-white mt-2 font-poppins text-sm mb-3'>{t('auth:already')} <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signIn')}</span></p>
                 </Form>
             </div>
             <Dialog open={loading}>

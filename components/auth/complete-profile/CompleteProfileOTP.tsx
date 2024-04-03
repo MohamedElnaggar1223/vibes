@@ -5,7 +5,7 @@ import { Form, FormField, FormItem, FormControl, FormMessage } from "@/component
 import { auth, db } from "@/firebase/client/config";
 import { updateDoc, doc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
     InputOTP,
@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     user: UserType;
@@ -38,6 +39,9 @@ const NUMS_ONLY = /^\d+$/
 export default function CompleteProfileOTP({ user }: Props) 
 {
     const router = useRouter()
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false)
     const [sentOtp, setSentOtp] = useState(false)
@@ -163,8 +167,8 @@ export default function CompleteProfileOTP({ user }: Props)
     }, [error])
         
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen'>
-            <p className='font-poppins font-base mb-6 text-white'>Verify You Phone Number</p>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+            <p className='font-poppins font-base mb-6 text-white'>{t('auth:verifyNumber')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
                     {
@@ -194,16 +198,16 @@ export default function CompleteProfileOTP({ user }: Props)
                                 )}
                             />
                         ) : (
-                            <p className='font-poppins text-md mb-6 text-white'>A Code Will Be Sent To {user.countryCode}{user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}</p>
+                            <p className='font-poppins text-md mb-6 text-white'>{t('auth:codeSent')} {user.countryCode}{user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}</p>
                         )
                     }
                     {sentOtp ? (
                         <>
-                            <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Verify</button>
+                            <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:verify')}</button>
                             {/* <span onClick={handleSendCode} className={('flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10')}>Resend Code ({timer})</span> */}
                         </>
                     ) : (
-                        <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Send Code</span>
+                        <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:sendCode')}</span>
                         )}
                 <div id="recaptcha-container" /> 
                 </form>

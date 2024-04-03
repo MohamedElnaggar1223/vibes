@@ -6,10 +6,13 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
+import { useTranslation } from "react-i18next";
 
 export default function SignedInHeader()
 {
     const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [open, setOpen] = useState(false)
     const [accountMenu, setAccountMenu] = useState(false)
@@ -32,7 +35,7 @@ export default function SignedInHeader()
     return (
         <Select onOpenChange={setOpen} open={open}>
             <SelectTrigger className={cn("w-[100px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-sm lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
-                <SelectValue placeholder="Profile" />
+                <SelectValue placeholder={t('profile')} />
             </SelectTrigger>
             <SelectContent className='z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md right-[5%] lg:right-[35%] p-0'>
                 <SelectGroup className='bg-white flex flex-col items-center justify-center'>
@@ -47,7 +50,7 @@ export default function SignedInHeader()
                                             }}
                                             className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                         >
-                                            <span>Account Details</span>
+                                            <span>{t('accountDetails')}</span>
                                         </span>
                                     ) : (
                                         <Link 
@@ -58,7 +61,7 @@ export default function SignedInHeader()
                                             href='/profile' 
                                             className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                         >
-                                            <span>Account Details</span>
+                                            <span>{t('accountDetails')}</span>
                                         </Link>
                                     )
                                 }
@@ -75,7 +78,7 @@ export default function SignedInHeader()
                                     href='/profile?show=personal' 
                                     className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                 >
-                                    <span>Personal Information</span>
+                                    <span>{t('personalInformation')}</span>
                                 </Link>
                                 <Separator color="black" />
                                 <Link 
@@ -86,7 +89,7 @@ export default function SignedInHeader()
                                     href='/profile?show=change-password'
                                     className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                 >
-                                    <span>Change Password</span>
+                                    <span>{t('changePassword')}</span>
                                 </Link>
                                 <Separator color="black" />
                                 <Link 
@@ -97,7 +100,7 @@ export default function SignedInHeader()
                                     href='/profile?show=my-tickets' 
                                     className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                 >
-                                    <span>My Tickets</span>
+                                    <span>{t('myTickets')}</span>
                                 </Link>
                             </>
                         )

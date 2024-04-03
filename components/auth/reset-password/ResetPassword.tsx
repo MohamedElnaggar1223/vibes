@@ -8,9 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { confirmPasswordReset } from "firebase/auth";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 type Props = {
@@ -20,6 +22,9 @@ type Props = {
 export default function ResetPassword({ oobCode }: Props)
 {
     const router = useRouter()
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
@@ -73,12 +78,12 @@ export default function ResetPassword({ oobCode }: Props)
             />
             {success !== '' ? (
                 <>
-                    <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Password reset successful!</p>
-                    <button onClick={() => router.push('/sign-in')} className='cursor-pointer rounded-md font-light py-5 px-10 w-screen max-w-[412px] max-sm:max-w-[340px] text-white font-poppins bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]'>Log In</button>
+                    <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>{t('auth:resetSuccess')}</p>
+                    <button onClick={() => router.push('/sign-in')} className='cursor-pointer rounded-md font-light py-5 px-10 w-screen max-w-[412px] max-sm:max-w-[340px] text-white font-poppins bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]'>{t('auth:logIn')}</button>
                 </>
             ) : (
                 <>
-                    <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>Reset Your Password</p>
+                    <p className='font-poppins text-center w-full text-white font-medium text-base mb-2'>{t('auth:reset')}</p>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-7 flex flex-col justify-center items-center">
                             <FormField
@@ -89,14 +94,14 @@ export default function ResetPassword({ oobCode }: Props)
                                         <FormControl>
                                             <div className="relative">
                                                 <input 
-                                                    placeholder="Password" 
+                                                    placeholder={t('auth:password')} 
                                                     type={passwordVisible ? 'text' : 'password'}
                                                     className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                     {...field}
                                                 />
                                                 {passwordVisible ? (
                                                     <Eye 
-                                                        className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPasswordVisible(prev => !prev)
@@ -104,7 +109,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                     />
                                                 ) : (
                                                     <EyeOff 
-                                                        className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPasswordVisible(prev => !prev)
@@ -125,14 +130,14 @@ export default function ResetPassword({ oobCode }: Props)
                                         <FormControl>
                                             <div className="relative">
                                                 <input 
-                                                    placeholder="Confirm Password" 
+                                                    placeholder={t('auth:confirmPassword')} 
                                                     type={confirmPasswordVisible ? 'text' : 'password'}
                                                     className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                                     {...field}
                                                 />
                                                 {confirmPasswordVisible ? (
                                                     <Eye 
-                                                        className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setConfirmPasswordVisible(prev => !prev)
@@ -140,7 +145,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                     />
                                                 ) : (
                                                     <EyeOff 
-                                                        className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setConfirmPasswordVisible(prev => !prev)
@@ -153,7 +158,7 @@ export default function ResetPassword({ oobCode }: Props)
                                     </FormItem>
                                 )}
                             />
-                            <button disabled={form.getValues().newPassword.length === 0 || form.getValues().confirmNewPassword.length === 0} type="submit" className={cn('cursor-pointer rounded-md font-light py-5 px-10 w-full text-white font-poppins', form.getValues().newPassword.length === 0 || form.getValues().confirmNewPassword.length === 0 ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>Confirm Changes</button>
+                            <button disabled={form.getValues().newPassword.length === 0 || form.getValues().confirmNewPassword.length === 0} type="submit" className={cn('cursor-pointer rounded-md font-light py-5 px-10 w-full text-white font-poppins', form.getValues().newPassword.length === 0 || form.getValues().confirmNewPassword.length === 0 ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>{t('auth:confirmChanges')}</button>
                         </form>
                     </Form>
                 </>

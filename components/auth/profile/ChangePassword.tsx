@@ -16,7 +16,7 @@ import { auth } from "@/firebase/client/config"
 import { User, updatePassword } from "firebase/auth"
 import { authErrors } from "@/constants"
 import { cn } from "@/lib/utils"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
 type Props = {
@@ -29,6 +29,8 @@ type Props = {
 export default function ChangePassword({ user, setError, setLoading, setSuccess }: Props) 
 {
     const router = useRouter()
+
+    const pathname = usePathname()
 
     const [oldPasswordVisible, setOldPasswordVisible] = useState(false)
     const [newPasswordVisible, setNewPasswordVisible] = useState(false)
@@ -86,7 +88,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         />
                                         {oldPasswordVisible ? (
                                             <Eye 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setOldPasswordVisible(prev => !prev)
@@ -94,7 +96,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setOldPasswordVisible(prev => !prev)
@@ -122,7 +124,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         />
                                         {newPasswordVisible ? (
                                             <Eye 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setNewPasswordVisible(prev => !prev)
@@ -130,7 +132,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setNewPasswordVisible(prev => !prev)
@@ -158,7 +160,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                         />
                                         {confirmPasswordVisible ? (
                                             <Eye 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setConfirmPasswordVisible(prev => !prev)
@@ -166,7 +168,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setConfirmPasswordVisible(prev => !prev)

@@ -3,19 +3,24 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form"
 import { countryCodes } from "@/constants"
 import { auth } from "@/firebase/client/config";
+import { cn } from "@/lib/utils";
 import { UserForgotPasswordSchema } from "@/lib/validations/user"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { sendPasswordResetEmail } from "firebase/auth";
 import { Loader2 } from "lucide-react"
 import Image from "next/image";
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next";
 import { z } from "zod"
 
 export default function ForgotPassword()
 {
     const router = useRouter()
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
@@ -50,7 +55,7 @@ export default function ForgotPassword()
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen'>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>Reset Password</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -61,7 +66,7 @@ export default function ForgotPassword()
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="Email" 
+                                        placeholder={t('auth:email')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />

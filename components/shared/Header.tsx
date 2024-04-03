@@ -18,7 +18,7 @@ export default async function Header({ params }: Props)
     const session = await getServerSession()
 
     return (
-        <header className='py-2 lg:px-20 min-w-full flex justify-between items-center sticky top-0 z-[99999999999] bg-black'>
+        <header dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='py-2 lg:px-20 min-w-full flex justify-between items-center sticky top-0 z-[99999999999] bg-black'>
             <Link href='/'>
                 <Image
                     src="/assets/logo.png"

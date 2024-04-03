@@ -16,14 +16,19 @@ import { auth } from "@/firebase/client/config"
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 import { authErrors } from "@/constants"
 import { Eye, EyeOff } from 'lucide-react';
+import { cn } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 export default function SignIn()
 {
     const router = useRouter()
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -147,8 +152,8 @@ export default function SignIn()
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 max-lg:max-w-[100vw] max-lg:w-screen'>
-            <p className='font-poppins font-base mb-6 text-white'>Sign in</p>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+            <p className='font-poppins font-base mb-6 text-white'>{t('auth:signIn')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                     <FormField
@@ -158,7 +163,7 @@ export default function SignIn()
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="Email" 
+                                        placeholder={t('auth:email')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
@@ -175,14 +180,14 @@ export default function SignIn()
                                 <FormControl>
                                     <div className="relative">
                                         <input 
-                                            placeholder="Password" 
+                                            placeholder={t('auth:password')}
                                             type={passwordVisible ? 'text' : 'password'}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                         {passwordVisible ? (
                                             <Eye 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setPasswordVisible(prev => !prev)
@@ -190,7 +195,7 @@ export default function SignIn()
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className='absolute left-[90%] top-[32%] z-50 cursor-pointer' 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setPasswordVisible(prev => !prev)
@@ -200,13 +205,13 @@ export default function SignIn()
                                     </div>
                                 </FormControl>
                                 <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
-                                <p onClick={() => router.push('/forgot-password')} className='text-white font-poppins text-sm font-light w-full flex justify-end cursor-pointer forgotpass'>Forgot Password?</p>
+                                <p onClick={() => router.push('/forgot-password')} className='text-white font-poppins text-sm font-light w-full flex justify-end cursor-pointer forgotpass'>{t('auth:forgot')}</p>
                             </FormItem>
                         )}
                     />
                     <div className='w-full flex justify-between items-center gap-2'>
                         <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
-                        <p className='text-white font-poppins text-xs font-light'>or sign in using</p>
+                        <p className='text-white font-poppins text-xs font-light'>{t('auth:orsignUp')}</p>
                         <span className='h-[1px] bg-[rgba(255,255,255,0.5)] flex-1'></span>
                     </div>
                     <div className='w-full flex justify-center items-center gap-6'>
@@ -235,9 +240,9 @@ export default function SignIn()
                             />
                         </span>
                     </div>
-                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Sign in</button>
+                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:signIn')}</button>
                 </form>
-                <p className='text-white mt-2 font-poppins text-sm text-center text-nowrap'>Don't have an account yet? <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>Sign Up</span></p>
+                <p className='text-white mt-2 font-poppins text-sm text-center text-nowrap'>{t('auth:noaccount')} <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signUp')}</span></p>
             </Form>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>

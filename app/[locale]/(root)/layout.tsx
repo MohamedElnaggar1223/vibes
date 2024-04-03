@@ -58,7 +58,7 @@ export default async function RootLayout({
   const user = await getUser()
   if(user && !user.verified) return redirect('/complete-profile')
 
-  const { resources } = await initTranslations(params.locale ?? 'en', ['homepage', 'common'])
+  const { resources } = await initTranslations(params.locale ?? 'en', ['homepage', 'common', 'auth'])
 
   return (
     <html lang={params.locale}>
@@ -71,14 +71,14 @@ export default async function RootLayout({
           className='bg-image'
           priority
         />
-        <TranslationsProvider locale={params.locale!} resources={resources} namespaces={['homepage', 'common']}>
+        <TranslationsProvider locale={params.locale!} resources={resources} namespaces={['homepage', 'common', 'auth']}>
           <CountryContextProvider>
             <Header params={params} />
             <main className='px-6 md:px-20 min-h-screen flex'>
               {children}
               <SpeedInsights />
             </main>
-            <Footer />
+            <Footer params={params} />
           </CountryContextProvider>
         </TranslationsProvider>
       </body>

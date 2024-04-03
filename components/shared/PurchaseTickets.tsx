@@ -21,7 +21,8 @@ import { Timestamp, addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, upd
 import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     event: EventType,
@@ -44,6 +45,10 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
     const { country } = context
 
     const router = useRouter()
+
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [dialogOpen, setDialogOpen] = useState(false)
     const [buyToolTip, setButToolTip] = useState(false)
@@ -219,7 +224,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     <div className='flex-1 max-lg:hidden' />
                     <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
                         <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
-                            Choose Your Tickets
+                            {t('common:chooseticketshead')}
                         </button>
                         {
                             availableParkingPasses?.quantity > 0 &&
@@ -230,7 +235,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
                         <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
-                            Map
+                            {t('common:map')}
                         </button>
                     </div>
                 </div>
@@ -332,7 +337,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     ) : (
                         <div ref={parentRef} className='flex-1 w-full flex items-center justify-center'>
                             <div className='py-6 px-2.5 lg:px-14 bg-[rgba(255,255,255,0.15)] text-white text-center font-poppins font-semibold text-sm rounded-lg'>
-                                {"Choose Your Tickets & They’ll Appear Here"}
+                                {t('common:chooseticketsbody')}
                             </div>
                         </div>
                     )
@@ -340,18 +345,18 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                 }
                 <div className='w-full h-[5.5rem] flex justify-between gap-4 items-center px-4 py-2 lg:px-8 bg-[#181C25] rounded-lg'>
                     <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                        <p className='font-poppins text-center text-xs lg:text-base text-white'>Number of tickets</p>
+                        <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:numberOfTickets')}</p>
                         <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
                     </div>
                     {
                         availableParkingPasses?.quantity > 0 &&
                         <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                            <p className='font-poppins text-center text-xs lg:text-base text-white'>Parking Pass</p>
+                            <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:numberOfParking')}</p>
                             <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{purchasedParkingPass}</p>
                         </div>
                     }
                     <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                        <p className='font-poppins text-center text-xs lg:text-base text-white'>Total</p>
+                        <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:total')}</p>
                         <p className='font-poppins text-base mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
                     </div>
                     <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
@@ -369,11 +374,11 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                                 disabled={(currentWidth ?? 0) > 1024} 
                                                 className=' max-lg:flex-1 font-poppins text-sm lgtext-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
-                                                {(currentWidth ?? 0) < 1024 ? 'Buy Now' : 'Buy Now'}
+                                                {t('common:buy')}
                                             </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>You must be signed in!</p>
+                                            <p>{t('common:mustSignIn')}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -382,13 +387,13 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
-                                                {(currentWidth ?? 0) < 1024 ? 'Buy Now' : 'Buy Now'}
+                                                {t('common:buy')}
                                             </motion.button>
                                         </TooltipTrigger>
                                         {
                                             !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) &&
                                             <TooltipContent>
-                                                <p>Add tickets to continue!</p>
+                                                <p>{t('common:mustAddTickets')}</p>
                                             </TooltipContent>
                                         }
                                     </Tooltip>
@@ -398,10 +403,10 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     </div>
                 </div>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                    <DialogContent className='flex flex-col w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
+                    <DialogContent dir={pathname?.includes('ar') ? 'rtl' : 'ltr'} className='flex flex-col w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
                         <div className='flex flex-col w-full max-w-[627px]'>
                             <div className='py-6 text-white font-poppins max-lg:text-base font-semibold bg-[#232834] items-center text-center rounded-t-lg'>
-                                Choose one or more type of tickets
+                                {t('common:choosetickets')}
                             </div>
                             <div className='flex flex-col w-full divide-y-[1px] border-[rgba(255,255,255,0.25)]'>
                                 {Object.keys(selectedTickets).map((ticket, index) => (
@@ -451,7 +456,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                         {
                                             availableTickets.find(ticketData => ticketData?.name === ticket)?.quantity === 0 &&
                                             <div className='flex items-center justify-center bg-transparent border-none outline-none'>
-                                                <p className='font-poppins font-normal text-white text-center max-lg:text-sm lg:text-base'>Sold out!</p>
+                                                <p className='font-poppins font-normal text-white text-center max-lg:text-sm lg:text-base'>{t('common:soldout')}</p>
                                             </div>
                                         }
                                         <p className='text-white font-poppins max-lg:text-sm lg:text-base font-light flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
@@ -465,7 +470,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                     setDialogOpen(false)
                                 }}
                             >
-                                Add Tickets
+                                {t('common:addTickets')}
                             </div>
                         </div>
                     </DialogContent>

@@ -14,7 +14,8 @@ import ClientDates from "./clientdates"
 
 type Props = {
     params: {
-        id: string
+        id: string,
+        locale?: string | undefined
     }
 }
 
@@ -65,7 +66,7 @@ export default async function EventPage({ params }: Props)
 
     return (
         <Suspense fallback={<Loading />}>
-            <section className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-16'>
+            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-16'>
                 <div className='flex flex-col w-full max-w-[390px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1 h-full'>
                     <ImageMotion 
                         selectedEvent={selectedEvent}

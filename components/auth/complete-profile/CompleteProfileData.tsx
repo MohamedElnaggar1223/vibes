@@ -5,13 +5,15 @@ import { Form, FormField, FormItem, FormControl, FormMessage } from "@/component
 import { countryCodes } from "@/constants";
 import { db } from "@/firebase/client/config";
 import { UserType } from "@/lib/types/userTypes";
+import { cn } from "@/lib/utils";
 import { UserCompleteProfileSchema } from "@/lib/validations/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoc, doc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 type Props = {
@@ -21,6 +23,9 @@ type Props = {
 export default function CompleteProfileData({ user }: Props) 
 {
     const router = useRouter()
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false)
 
@@ -62,8 +67,8 @@ export default function CompleteProfileData({ user }: Props)
     }
 
     return (
-        <section className='h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen'>
-            <p className='font-poppins font-base mb-6 text-white'>Complete Your Profile</p>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+            <p className='font-poppins font-base mb-6 text-white'>{t('auth:completeProfile')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
                     <FormField
@@ -73,7 +78,7 @@ export default function CompleteProfileData({ user }: Props)
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="First Name" 
+                                        placeholder={t('auth:firstname')} 
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
@@ -89,7 +94,7 @@ export default function CompleteProfileData({ user }: Props)
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="Last Name" 
+                                        placeholder={t('auth:lastname')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                         {...field}
                                     />
@@ -131,7 +136,7 @@ export default function CompleteProfileData({ user }: Props)
                                     <FormItem className="ml-auto flex-1">
                                         <FormControl>
                                             <input 
-                                                placeholder="Phone Number" 
+                                                placeholder={t('auth:number')} 
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
                                                 {...field}
                                                 onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
