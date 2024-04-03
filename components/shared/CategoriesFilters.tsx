@@ -16,6 +16,7 @@ type Props = {
 export default function CategoriesFilters({ locale }: Props)
 {
     const searchParams = useSearchParams()
+    
     const router = useRouter()
 
     const { t } = useTranslation()
