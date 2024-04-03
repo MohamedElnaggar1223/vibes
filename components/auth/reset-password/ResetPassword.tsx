@@ -101,7 +101,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                 />
                                                 {passwordVisible ? (
                                                     <Eye 
-                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPasswordVisible(prev => !prev)
@@ -109,7 +109,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                     />
                                                 ) : (
                                                     <EyeOff 
-                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setPasswordVisible(prev => !prev)
@@ -137,7 +137,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                 />
                                                 {confirmPasswordVisible ? (
                                                     <Eye 
-                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setConfirmPasswordVisible(prev => !prev)
@@ -145,7 +145,7 @@ export default function ResetPassword({ oobCode }: Props)
                                                     />
                                                 ) : (
                                                     <EyeOff 
-                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                        className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setConfirmPasswordVisible(prev => !prev)

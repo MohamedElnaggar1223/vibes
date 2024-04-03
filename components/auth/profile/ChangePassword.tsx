@@ -18,6 +18,7 @@ import { authErrors } from "@/constants"
 import { cn } from "@/lib/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     user: UserType,
@@ -31,6 +32,8 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
     const router = useRouter()
 
     const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const [oldPasswordVisible, setOldPasswordVisible] = useState(false)
     const [newPasswordVisible, setNewPasswordVisible] = useState(false)
@@ -70,7 +73,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
     
     return (
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
-            <p className='mb-4 font-poppins text-white font-medium'>Change Password</p>
+            <p className='mb-4 font-poppins text-white font-medium'>{t('auth:changePassword')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col justify-center items-center">
                     <FormField
@@ -81,14 +84,14 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                 <FormControl>
                                     <div className="relative">
                                         <input 
-                                            placeholder="Old Password" 
+                                            placeholder={t("auth:oldPassword")} 
                                             type={oldPasswordVisible ? 'text' : 'password'}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                         {oldPasswordVisible ? (
                                             <Eye 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setOldPasswordVisible(prev => !prev)
@@ -96,7 +99,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setOldPasswordVisible(prev => !prev)
@@ -117,14 +120,14 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                 <FormControl>
                                     <div className="relative">
                                         <input 
-                                            placeholder="New Password" 
+                                            placeholder={t("auth:newPassword")} 
                                             type={newPasswordVisible ? 'text' : 'password'}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                         {newPasswordVisible ? (
                                             <Eye 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setNewPasswordVisible(prev => !prev)
@@ -132,7 +135,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setNewPasswordVisible(prev => !prev)
@@ -153,14 +156,14 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                 <FormControl>
                                     <div className="relative">
                                         <input 
-                                            placeholder="New Password" 
+                                            placeholder={t("auth:confirmNewPassword")}
                                             type={confirmPasswordVisible ? 'text' : 'password'}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
                                             {...field}
                                         />
                                         {confirmPasswordVisible ? (
                                             <Eye 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setConfirmPasswordVisible(prev => !prev)
@@ -168,7 +171,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setConfirmPasswordVisible(prev => !prev)

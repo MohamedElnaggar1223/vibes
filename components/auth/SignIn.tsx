@@ -152,7 +152,7 @@ export default function SignIn()
     }
 
     return (
-        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>{t('auth:signIn')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
@@ -161,7 +161,7 @@ export default function SignIn()
                         name="email"
                         render={({ field }) => (
                             <FormItem className="">
-                                <FormControl>
+                                <FormControl dir='ltr'>
                                     <input 
                                         placeholder={t('auth:email')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
@@ -187,7 +187,7 @@ export default function SignIn()
                                         />
                                         {passwordVisible ? (
                                             <Eye 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setPasswordVisible(prev => !prev)
@@ -195,7 +195,7 @@ export default function SignIn()
                                             />
                                         ) : (
                                             <EyeOff 
-                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('ar') ? 'left-[5%]' : 'left-[90%]')} 
+                                                className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setPasswordVisible(prev => !prev)

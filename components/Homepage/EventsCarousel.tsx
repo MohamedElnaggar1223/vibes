@@ -111,7 +111,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                 <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl'>
                     {(currentWidth ?? 0) > 1024 ? (
                         <>
-                            <div dir={pathname?.includes('ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
+                            <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
                                 <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? t('eventTitle', {eventTitle: events[0].name}) :  t('eventTitle', {eventTitle: events[selectedIndex + 1].name})}</p>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end max-lg:w-full'>
                                     <p className='font-poppins text-base font-extralight'>{t('startingFrom')} {selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</p>
@@ -120,7 +120,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                                     </button>
                                 </div>
                             </div>
-                            <div dir={pathname?.includes('ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row lg:gap-6 items-center justify-center flex-1 w-full'>
+                            <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row lg:gap-6 items-center justify-center flex-1 w-full'>
                                 <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36 max-lg:w-full'>
                                     <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
                                     <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>

@@ -67,7 +67,7 @@ export default function CompleteProfileData({ user }: Props)
     }
 
     return (
-        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>{t('auth:completeProfile')}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -103,7 +103,7 @@ export default function CompleteProfileData({ user }: Props)
                             </FormItem>
                         )}
                     />
-                    <div className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
+                    <div dir='ltr' className='w-screen max-w-[412px] max-sm:max-w-[340px] flex gap-4'>
                         {
                             !user.countryCode &&
                             <FormField

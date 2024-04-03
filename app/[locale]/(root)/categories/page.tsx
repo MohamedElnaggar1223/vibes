@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import CategoriesFilters from "@/components/shared/CategoriesFilters";
 import Categorie from "@/components/shared/Category";
-import { getCategories, getEvents } from "@/lib/utils";
+import { getCategories, getEvents, initTranslations } from "@/lib/utils";
 import { Suspense } from "react";
 import Loading from "./loading";
 import EventsLoading from "./eventsLoading";
@@ -26,6 +26,8 @@ const countries = {
 
 export default async function CategoriesPage({ searchParams, params }: Props) 
 {
+    const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
+
     const categories = await getCategories()
     const events = await getEvents()
 
@@ -35,7 +37,7 @@ export default async function CategoriesPage({ searchParams, params }: Props)
     return (
         <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex max-lg:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16' key={Math.random()}>
             <div className='flex lg:flex-col mt-2 lg:mt-16 gap-2 w-full lg:w-48'>
-                <p className='font-poppins text-white font-light max-lg:hidden'>Filters</p>
+                <p className='font-poppins text-white font-light max-lg:hidden'>{t('filters')}</p>
                 <CategoriesFilters locale={params.locale} />
             </div>
             {
@@ -43,7 +45,7 @@ export default async function CategoriesPage({ searchParams, params }: Props)
                 .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
                 .filter(event => country ? (event.country === countries[country]) : true)
                 .length === 0 ? (
-                    <p className='flex items-center justify-center text-white text-lg text-center font-poppins font-semibold h-52 flex-1'>No Events Found!</p>
+                    <p className='flex items-center justify-center text-white text-lg text-center font-poppins font-semibold h-52 flex-1'>{t('noEvents')}</p>
                 ) : (
                     <Suspense fallback={<EventsLoading />}>
                         <div className='flex flex-col flex-1 gap-8'>

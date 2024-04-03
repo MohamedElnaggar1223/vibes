@@ -91,7 +91,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="First Name" 
+                                        placeholder={t("auth:firstname")} 
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                         {...field}
                                     />
@@ -107,7 +107,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             <FormItem className="">
                                 <FormControl>
                                     <input 
-                                        placeholder="Last Name" 
+                                        placeholder={t("auth:lastname")} 
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                         {...field}
                                     />
@@ -123,9 +123,9 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             name="email"
                             render={({ field }) => (
                                 <FormItem className="">
-                                    <FormControl>
+                                    <FormControl dir='ltr'>
                                         <input 
-                                            placeholder="Email" 
+                                            placeholder={t("auth:email")}  
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                             {...field}
                                         />
@@ -144,7 +144,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                 <FormItem className="">
                                     <FormControl>
                                         <input 
-                                            placeholder="Password" 
+                                            placeholder={t("auth:password")} 
                                             type='password'
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
                                             {...field}
@@ -183,7 +183,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                                 <FormItem className="ml-auto flex-1">
                                     <FormControl>
                                         <input 
-                                            placeholder="Phone Number" 
+                                            placeholder={t("auth:number")} 
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
                                             {...field}
                                             onChange={(e) => handlePhoneNumberChage(e, field.onChange)}

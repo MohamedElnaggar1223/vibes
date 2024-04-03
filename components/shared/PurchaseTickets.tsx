@@ -403,7 +403,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                     </div>
                 </div>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                    <DialogContent dir={pathname?.includes('ar') ? 'rtl' : 'ltr'} className='flex flex-col w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
+                    <DialogContent dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
                         <div className='flex flex-col w-full max-w-[627px]'>
                             <div className='py-6 text-white font-poppins max-lg:text-base font-semibold bg-[#232834] items-center text-center rounded-t-lg'>
                                 {t('common:choosetickets')}

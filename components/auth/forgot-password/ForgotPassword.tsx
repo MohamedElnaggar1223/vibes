@@ -55,7 +55,7 @@ export default function ForgotPassword()
     }
 
     return (
-        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('ar') ? 'mr-auto' : 'ml-auto')}>
+        <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>Reset Password</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
@@ -64,7 +64,7 @@ export default function ForgotPassword()
                         name="email"
                         render={({ field }) => (
                             <FormItem className="">
-                                <FormControl>
+                                <FormControl dir='ltr'>
                                     <input 
                                         placeholder={t('auth:email')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'

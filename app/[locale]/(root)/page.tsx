@@ -39,7 +39,7 @@ export default async function Home({ searchParams, params }: Props)
 			{
 				(search || date || country || category) ? (
 					<Suspense fallback={<SearchLoading />}>
-						<Search search={search} date={date} category={category} country={country} categories={categories} />
+						<Search locale={params.locale} search={search} date={date} category={category} country={country} categories={categories} />
 					</Suspense>
 				) : (
 					<>
