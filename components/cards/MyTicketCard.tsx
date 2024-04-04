@@ -7,8 +7,9 @@ import { getDaySuffix, formatTime, cn } from "@/lib/utils"
 import QRCode from "react-qr-code"
 import Image from "next/image"
 import { Separator } from "../ui/separator"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
+import { LucideChevronDown } from 'lucide-react'
 
 type Props = {
     ticket: TicketType,
@@ -22,6 +23,35 @@ export default function MyTicketCard({ ticket, event, first }: Props)
     const [isAnimating, setIsAnimating] = useState(false)
     const [clicked, setClicked] = useState(false)
     const [currentWidth, setCurrentWidth] = useState<number>()
+    const [scrolled, setScrolled] = useState(false)
+
+    const infoRef = useRef<HTMLDivElement>(null)
+    const infoRefScrollable = useMemo(() => {
+        if(infoRef.current) return infoRef.current.scrollHeight > infoRef.current.clientHeight
+        return false
+    }, [infoRef])
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const element = infoRef.current
+            if (element) {
+                setScrolled(
+                    element.scrollHeight - element.scrollTop === element.clientHeight
+                )
+            }
+        }
+
+        const element = infoRef.current
+        if (element) {
+            element.addEventListener('scroll', handleScroll)
+        }
+
+        return () => {
+            if (element) {
+                element.removeEventListener('scroll', handleScroll)
+            }
+        }
+    }, [])
 
     useEffect(() => {
         if(window) setCurrentWidth(window?.innerWidth!)
@@ -31,7 +61,7 @@ export default function MyTicketCard({ ticket, event, first }: Props)
 
     const handleFlip = () => {
         setClicked(true)
-        if(!isAnimating && (currentWidth ?? 0) < 1536)
+        if(!isAnimating && (currentWidth ?? 0) < 1280)
         {
             setIsFlipped(prev => !prev)
             setIsAnimating(true)
@@ -46,52 +76,69 @@ export default function MyTicketCard({ ticket, event, first }: Props)
 
     return (
         <AnimatePresence>
-            <div onClick={handleFlip} className='absolute rounded-lg flex w-full max-2xl:min-h-64 h-auto max-2xl:max-h-64 2xl:min-h-44 2xl:max-h-44 p-0 2xl:overflow-hidden gap-8 flipCardInner'>
+            <div onClick={handleFlip} className='absolute rounded-lg flex w-full max-xl:min-h-64 h-auto max-xl:max-h-64 xl:min-h-44 xl:max-h-44 p-0 xl:overflow-hidden gap-8 flipCardInner'>
                 <motion.div 
                     initial={false}
                     animate={{ rotateY: isFlipped ? 180 : 360 }}
                     transition={{ duration: 0.6 }}
                     onAnimationComplete={() => setIsAnimating(false)}
                     ref={mainRef}
-                    className={cn('flex max-2xl:flex-col max-2xl:min-h-64 gap-2 2xl:gap-8 items-center justify-between w-full h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && (currentWidth ?? 0) < 1536 && 'animate-semiFlip')}
+                    className={cn('flex max-xl:flex-col max-xl:min-h-64 gap-2 xl:gap-8 items-center justify-between w-full h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && (currentWidth ?? 0) < 1536 && 'animate-semiFlip')}
                 >
-                    <div className='2xl:flex-1 flex items-start max-2xl:w-full 2xl:items-center justify-start gap-2 2xl:gap-8'>
+                    <div className='xl:flex-1 flex items-start max-xl:w-full xl:items-center justify-start gap-2 xl:gap-8'>
                         <Image
                             src={event.displayPageImage}
                             height={176}
                             width={176}
                             alt={event.name}
-                            className='max-2xl:max-w-28 2xl:min-w-44 2xl:min-h-44 2xl:h-full object-fill rounded-lg'
+                            className='max-xl:max-w-28 xl:min-w-44 xl:min-h-44 xl:h-full object-fill rounded-lg'
                         />
-                        <div className='flex flex-col gap-3 py-2 max-2xl:flex-1'>
-                            <p className='font-poppins font-bold text-base 2xl:text-2xl text-white'>{event.name}</p>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] 2xl:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
-                            <div className='w-full flex 2xl:justify-between items-center gap-0.5 2xl:gap-6 max-2xl:flex-wrap'>
-                                <p className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-extralight text-white'>{event?.venue} <span className='2xl:hidden font-poppins text-[0.6rem] leading-[1rem] 2xl:text-base font-extralight text-white'>|</span></p>
-                                <p className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-extralight text-white max-2xl:hidden'>|</p>
-                                <p className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
+                        <div ref={infoRef} className='info relative flex flex-col gap-3 py-2 max-xl:flex-1 xl:max-h-44 overflow-auto'>
+                            <p className='font-poppins font-bold text-base xl:text-2xl text-white'>{event.name}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
+                            <div className='w-full flex xl:justify-between items-center gap-0.5 xl:gap-6 max-xl:flex-wrap'>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white'>{event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white'>|</span></p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white max-xl:hidden'>|</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
                             </div>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] 2xl:text-base font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
+                            {
+                                infoRefScrollable && !scrolled &&
+                                <div 
+                                    onClick={() => {
+                                        const element = infoRef.current;
+                                        if (element) {
+                                            element.scrollTo({
+                                                top: element.scrollHeight,
+                                                behavior: 'smooth' // Enable smooth scrolling behavior
+                                            });
+                                        }
+                                    }} 
+                                    className='cursor-pointer fixed flex items-center justify-center p-[0.1rem] rounded-full border-[2px] min-w-5 min-h-5 max-w-5 max-h-5' style={{ top: `${(infoRef.current?.clientHeight ?? 10) - 30}px`, right: `${(infoRef.current?.clientWidth ?? 100) + 75}px` }}
+                                >
+                                    <LucideChevronDown className='text-white w-5 min-h-5' />
+                                </div>
+                            }
                         </div>
                     </div>
-                    <Separator className='w-[90%] 2xl:hidden h-[1px]' />
-                    <div className='flex gap-4 items-center justify-between max-2xl:px-12 max-2xl:mt-4 max-2xl:mb-auto max-2xl:w-full 2xl:max-h-full'>
-                        <div className='flex 2xl:w-24 flex-col mr-auto text-left gap-0.5 2xl:gap-3 2xl:pb-4 2xl:pt-10 h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-2xl:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
-                            {ticket.parkingPass > 0 && <p className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-normal text-white'>Parking Pass <span className='font-extralight ml-2 max-2xl:hidden'>x{ticket.parkingPass}</span></p>}
+                    <Separator className='w-[90%] xl:hidden h-[1px]' />
+                    <div className='flex gap-4 items-center justify-between max-xl:px-12 max-xl:mt-4 max-xl:mb-auto max-xl:w-full xl:max-h-full'>
+                        <div className='flex xl:w-24 flex-col mr-auto text-left gap-0.5 xl:gap-3 xl:pb-4 xl:pt-10 h-full w-fit text-nowrap'>
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {ticket.parkingPass > 0 && <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>Parking Pass <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.parkingPass}</span></p>}
                         </div>
-                        <div className='flex h-full items-center justify-center qrcodeHeight max-2xl:hidden'>
+                        <div className='flex h-full items-center justify-center qrcodeHeight max-xl:hidden'>
                             {/* <QrCode values="sadawddwadaw" /> */}
                             <QRCode value={ticket.id} height='90%' />
                         </div>
-                        <div className='2xl:hidden flex text-right flex-col h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
-                            {ticket.parkingPass > 0 && <span className='font-extralight ml-2 font-poppins text-[0.6rem] max-2xl:leading-[1rem] 2xl:text-base text-white'>x{ticket.parkingPass}</span>}
+                        <div className='xl:hidden flex text-right flex-col h-full w-fit text-nowrap'>
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
+                            {ticket.parkingPass > 0 && <span className='font-extralight ml-2 font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base text-white'>x{ticket.parkingPass}</span>}
                         </div>
                     </div>
                     {
                         (currentWidth ?? 0) < 1536 && (
-                            <motion.div style={{ minHeight: `${mainRef.current?.offsetHeight}px` }} className='absolute flipCard flipCardBack flex max-2xl:flex-col gap-2 2xl:gap-8 items-center justify-center w-full min-h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg'>
+                            <motion.div style={{ minHeight: `${mainRef.current?.offsetHeight}px` }} className='absolute flipCard flipCardBack flex max-xl:flex-col gap-2 xl:gap-8 items-center justify-center w-full min-h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg'>
                                 <div className='flex items-center justify-center qrcodeHeight w-full'>
                                     {/* <QrCode values="sadawddwadaw" /> */}
                                     <QRCode value={ticket.id} height='90%' />
