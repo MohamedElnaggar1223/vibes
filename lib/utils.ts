@@ -75,6 +75,13 @@ export const getEvents = cache(async () => {
     return events
 })
 
+export const getCategory = cache(async (id: string) => {
+    const admin = await initAdmin()
+    const category = (await admin.firestore().collection('categories').doc(id).get()).data() as Category
+
+    return category
+})
+
 export async function initTranslations(
   locale: string,
   namespaces: string[],
@@ -207,4 +214,19 @@ export const toArabicTime = (time: string) => {
   }
   //@ts-expect-error num
   return time.split('').map((char) => englishToArabicMap[char]).join('')
+}
+
+export const convertArgbToHex = (argbValue: number) => {
+  if (typeof argbValue !== 'number' || argbValue < 0 || argbValue > 4294967295) {
+    return null; // Handle invalid input
+  }
+
+  const alpha = (argbValue >> 24) & 0xff;
+  const red = (argbValue >> 16) & 0xff;
+  const green = (argbValue >> 8) & 0xff;
+  const blue = argbValue & 0xff;
+
+  const hexColor = `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
+
+  return alpha !== 0xff ? `rgba(${red}, ${green}, ${blue}, ${alpha / 255})` : hexColor;
 }

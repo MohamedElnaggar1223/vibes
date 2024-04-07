@@ -1,28 +1,30 @@
 'use client'
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "../ui/carousel";
 import { memo, useEffect, useMemo, useState } from "react";
-import { cn, getDaySuffix, toArabicDate } from "@/lib/utils";
+import { cn, convertArgbToHex, getDaySuffix, toArabicDate } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
 import Autoplay from 'embla-carousel-autoplay'
-import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
+import { Category, EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { months } from "@/constants";
 import FormattedPrice from "../shared/FormattedPrice";
 import { useTranslation } from "react-i18next";
+import useSWR from "swr";
 
 type Props = {
     events: EventType[],
     exchangeRate: ExchangeRate
     locale: string | undefined
+    categories: Category[]
 }
 
-function EventsCarousel({ events, exchangeRate, locale }: Props) 
+function EventsCarousel({ events, exchangeRate, locale, categories }: Props) 
 {
     const { t } = useTranslation()
 
     const pathname = usePathname()
-
+    
     const [api, setApi] = useState<CarouselApi>()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [currentWidth, setCurrentWidth] = useState<number>()
@@ -127,7 +129,7 @@ function EventsCarousel({ events, exchangeRate, locale }: Props)
                                     <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? toArabicDate(`${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}`) : `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : locale === 'ar' ? toArabicDate(`${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`) : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
                                     <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? t(`${events[0].country.replaceAll(" ", '')}`) : t(`${events[selectedIndex + 1].country.replaceAll(" ", '')}`)},{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].cityArabic : events[0].city : locale === 'ar' ? events[selectedIndex + 1].cityArabic : events[selectedIndex + 1].city}</p>
                                 </div>
-                                <div className='w-4 rotate-0 lg:rotate-180 max-lg:h-[10px] max-lg:my-4 max-lg:w-[90%] h-[172px] bg-[#7D40FF]' />
+                                <div className='w-4 rotate-0 lg:rotate-180 max-lg:h-[10px] max-lg:my-4 max-lg:w-[90%] h-[172px]' style={{ background: selectedIndex === events.length - 1 ? convertArgbToHex(categories.find(cat => cat.id === events[0].categoryID)?.color!)! : convertArgbToHex(categories.find(cat => cat.id === events[selectedIndex + 1].categoryID)?.color!)! }} />
                                 <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description}</p>
                             </div>
                         </>
@@ -136,7 +138,7 @@ function EventsCarousel({ events, exchangeRate, locale }: Props)
                             <p className='font-poppins font-medium text-lg lg:text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].nameArabic : events[0].name : locale === 'ar' ? events[selectedIndex + 1].nameArabic : events[selectedIndex + 1].name}</p>
                             <div className='flex gap-4 items-center justify-between flex-1 w-full my-6'>
                                 <div className='flex gap-2 flex-1'>
-                                    <div className='min-w-2.5 rotate-180 min-h-full bg-[#7D40FF]' />
+                                    <div className='min-w-2.5 rotate-180 min-h-full' style={{ background: selectedIndex === events.length - 1 ? convertArgbToHex(categories.find(cat => cat.id === events[0].categoryID)?.color!)! : convertArgbToHex(categories.find(cat => cat.id === events[selectedIndex + 1].categoryID)?.color!)! }} />
                                     <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-24 flex-1'>
                                         <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].venueArabic : events[0].venue : locale === 'ar' ? events[selectedIndex + 1].venueArabic : events[selectedIndex + 1].venue}</p>
                                         <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? toArabicDate(`${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}`) : `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : locale === 'ar' ? toArabicDate(`${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`) : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
@@ -146,7 +148,7 @@ function EventsCarousel({ events, exchangeRate, locale }: Props)
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end justify-end h-full'>
                                     <p className='font-poppins text-sm lg:text-base font-extralight flex flex-col'><span>starting from</span> <span className='font-medium text-right'>{selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</span></p>
                                     <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-sm lg:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
-                                        Book Now
+                                        {t('common:book')}
                                     </button>
                                 </div>
                             </div>

@@ -1,15 +1,16 @@
 import { Suspense } from "react";
 import EventsCarousel from "./EventsCarousel";
-import { EventType, ExchangeRate } from "@/lib/types/eventTypes";
+import { Category, EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { initAdmin } from "@/firebase/server/config";
 import { getExchangeRate } from "@/lib/utils";
 
 type Props = {
     events: string[] | undefined
     locale: string | undefined
+    categories: Category[]
 }
 
-export default async function EventsCarouselContainer({ events, locale }: Props) 
+export default async function EventsCarouselContainer({ events, locale, categories }: Props) 
 {
     if(!events) return <></>
 
@@ -31,7 +32,7 @@ export default async function EventsCarouselContainer({ events, locale }: Props)
     
     return (
         <Suspense>
-            <EventsCarousel locale={locale} events={eventData} exchangeRate={exchangeRate} />
+            <EventsCarousel categories={categories} locale={locale} events={eventData} exchangeRate={exchangeRate} />
         </Suspense>
     )
 }

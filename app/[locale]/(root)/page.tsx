@@ -5,7 +5,7 @@ import CarouselCategory from "@/components/shared/CarouselCategory";
 import SearchBar from "@/components/shared/SearchBar";
 import { initAdmin } from "@/firebase/server/config";
 import { Category, Display } from "@/lib/types/eventTypes";
-import { getCategories } from "@/lib/utils";
+import { convertArgbToHex, getCategories } from "@/lib/utils";
 import { Suspense } from "react";
 
 type Props = {
@@ -43,7 +43,7 @@ export default async function Home({ searchParams, params }: Props)
 					</Suspense>
 				) : (
 					<>
-						<EventsCarouselContainer locale={params.locale} events={displays.find(display => display.display === 'Top Events')?.events} />
+						<EventsCarouselContainer categories={categories} locale={params.locale} events={displays.find(display => display.display === 'Top Events')?.events} />
 						<section className='flex flex-col max-lg:gap-24 gap-4 my-8 lg:my-36 w-full'>
 							{displays.slice().filter(display => display.events.length > 0 && display.display !== 'Top Events').map(display => (
 								<CarouselCategory locale={params.locale} key={display.id} title={params.locale === 'ar' ? display.displayArabic : display.display} subTitle={params.locale === 'ar' ? display.descriptionArabic : display.description} events={display.events} />
