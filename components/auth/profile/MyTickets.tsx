@@ -92,7 +92,7 @@ export default function ViewMyTickets({ user }: Props)
                     {t('auth:pastTickets')}
                 </button>
             </div>
-            <div className='flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12 lg:gap-12'>
+            <div className='info flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12 lg:gap-12'>
                 {
                     optimisticSelectedTab === 'current' ? (
                         isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.currentTickets!} events={data?.events!} />

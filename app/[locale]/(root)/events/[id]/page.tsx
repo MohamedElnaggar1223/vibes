@@ -90,7 +90,7 @@ export default async function EventPage({ params }: Props)
                         <ClientDates selectedEvent={selectedEvent} className='font-poppins text-xs lg:text-md font-extralight text-white' />
                         <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesOpen)) : formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesClose)) : formatTime(selectedEvent.gatesClose)}`}</p>
                         <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
-                            <p className='font-poppins text-xs font-extralight text-white'>{params.locale === 'ar' ? selectedEvent.descriptionArabic : selectedEvent.description}</p>
+                            <p className='font-poppins text-xs font-extralight text-white max-h-[250px] overflow-auto'>{params.locale === 'ar' ? selectedEvent.descriptionArabic : selectedEvent.description}</p>
                         </div>
                         <div className='flex flex-col items-start justify-end w-full gap-6 mb-4 mt-auto flex-1'>
                             {selectedEvent.eventDisclaimers.map((disclaimer, index) => {

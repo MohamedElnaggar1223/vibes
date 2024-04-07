@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogContent,
   } from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
+import { cn, toArabicNums } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import FormattedPrice from "./FormattedPrice"
@@ -262,7 +262,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                             -
                                                         </button>
                                                     }
-                                                    <p className='text-black font-poppins text-sm font-semibold'>{purchasedTickets[ticket]}</p>
+                                                    <p className='text-black font-poppins text-sm font-semibold'>{locale === 'ar' ? toArabicNums(purchasedTickets[ticket].toString()) : purchasedTickets[ticket]}</p>
                                                     <button
                                                         className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
@@ -307,7 +307,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                             -
                                                         </button>
                                                     }
-                                                    <p className='text-black font-poppins text-sm font-semibold'>{purchasedParkingPass}</p>
+                                                    <p className='text-black font-poppins text-sm font-semibold'>{locale === 'ar' ? toArabicNums(purchasedParkingPass.toString()) : purchasedParkingPass}</p>
                                                     <button
                                                         className='bg-black text-white text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
@@ -441,7 +441,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                     >
                                                         -
                                                     </button>
-                                                    <p className='text-white font-poppins text-xs lg:text-sm font-semibold'>{selectedTickets[ticket]}</p>
+                                                    <p className='text-white font-poppins text-xs lg:text-sm font-semibold'>{locale === 'ar' ? toArabicNums(selectedTickets[ticket].toString()) : selectedTickets[ticket]}</p>
                                                     <button 
                                                         className='bg-white max-lg:text-sm lg:text-base font-poppins font-medium h-5 w-5 rounded-full text-center flex items-center justify-center' 
                                                         onClick={(e) => {
