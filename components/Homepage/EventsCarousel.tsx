@@ -1,7 +1,7 @@
 'use client'
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "../ui/carousel";
 import { memo, useEffect, useMemo, useState } from "react";
-import { cn, getDaySuffix } from "@/lib/utils";
+import { cn, getDaySuffix, toArabicDate } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import ImageMotion from "../shared/ImageMotion";
 import { AnimatePresence } from "framer-motion";
@@ -14,9 +14,10 @@ import { useTranslation } from "react-i18next";
 type Props = {
     events: EventType[],
     exchangeRate: ExchangeRate
+    locale: string | undefined
 }
 
-function EventsCarousel({ events, exchangeRate }: Props) 
+function EventsCarousel({ events, exchangeRate, locale }: Props) 
 {
     const { t } = useTranslation()
 
@@ -84,7 +85,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                             // >
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] max-w-[728px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
+                                className={cn('max-h-[448px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
@@ -112,7 +113,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                     {(currentWidth ?? 0) > 1024 ? (
                         <>
                             <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
-                                <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? t('eventTitle', {eventTitle: events[0].name}) :  t('eventTitle', {eventTitle: events[selectedIndex + 1].name})}</p>
+                                <p className='font-poppins font-medium text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].nameArabic : events[0].name : locale === 'ar' ? events[selectedIndex + 1].nameArabic : events[selectedIndex + 1].name }</p>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end max-lg:w-full'>
                                     <p className='font-poppins text-base font-extralight'>{t('startingFrom')} {selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</p>
                                     <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
@@ -122,24 +123,24 @@ function EventsCarousel({ events, exchangeRate }: Props)
                             </div>
                             <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row lg:gap-6 items-center justify-center flex-1 w-full'>
                                 <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-36 max-lg:w-full'>
-                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
-                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
-                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
+                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].venueArabic : events[0].venue : locale === 'ar' ? events[selectedIndex + 1].venueArabic : events[selectedIndex + 1].venue}</p>
+                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? toArabicDate(`${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}`) : `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : locale === 'ar' ? toArabicDate(`${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`) : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                                    <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? t(`${events[0].country.replaceAll(" ", '')}`) : t(`${events[selectedIndex + 1].country.replaceAll(" ", '')}`)},{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].cityArabic : events[0].city : locale === 'ar' ? events[selectedIndex + 1].cityArabic : events[selectedIndex + 1].city}</p>
                                 </div>
                                 <div className='w-4 rotate-0 lg:rotate-180 max-lg:h-[10px] max-lg:my-4 max-lg:w-[90%] h-[172px] bg-[#7D40FF]' />
-                                <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
+                                <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description}</p>
                             </div>
                         </>
                     ) : (
                         <>
-                            <p className='font-poppins font-medium text-lg lg:text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? events[0].name : events[selectedIndex + 1].name}</p>
+                            <p className='font-poppins font-medium text-lg lg:text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].nameArabic : events[0].name : locale === 'ar' ? events[selectedIndex + 1].nameArabic : events[selectedIndex + 1].name}</p>
                             <div className='flex gap-4 items-center justify-between flex-1 w-full my-6'>
                                 <div className='flex gap-2 flex-1'>
                                     <div className='min-w-2.5 rotate-180 min-h-full bg-[#7D40FF]' />
                                     <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-24 flex-1'>
-                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].venue : events[selectedIndex + 1].venue}</p>
-                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
-                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? events[0].country : events[selectedIndex + 1].country},{selectedIndex === events.length - 1 ? events[0].city : events[selectedIndex + 1].city}</p>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].venueArabic : events[0].venue : locale === 'ar' ? events[selectedIndex + 1].venueArabic : events[selectedIndex + 1].venue}</p>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? locale === 'ar' ? toArabicDate(`${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}`) : `${months[events[0].eventDate?.getMonth()]}, ${getDaySuffix(events[0].eventDate.getDate())}, ${events[0].eventDate.getFullYear()}` : locale === 'ar' ? toArabicDate(`${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`) : `${months[events[selectedIndex + 1].eventDate?.getMonth()]}, ${getDaySuffix(events[selectedIndex + 1].eventDate.getDate())}, ${events[selectedIndex + 1].eventDate.getFullYear()}`}</p>
+                                        <p className='font-poppins font-extralight text-sm text-left w-full text-nowrap'>{selectedIndex === events.length - 1 ? t(`${events[0].country.replaceAll(" ", '')}`) : t(`${events[selectedIndex + 1].country.replaceAll(" ", '')}`)},{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].cityArabic : events[0].city : locale === 'ar' ? events[selectedIndex + 1].cityArabic : events[selectedIndex + 1].city}</p>
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end justify-end h-full'>
@@ -149,7 +150,7 @@ function EventsCarousel({ events, exchangeRate }: Props)
                                     </button>
                                 </div>
                             </div>
-                            <p className='font-poppins font-extralight text-sm lg:text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? events[0].description : events[selectedIndex + 1].description}</p>
+                            <p className='font-poppins font-extralight text-sm lg:text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description}</p>
                         </>
                     )
                     }

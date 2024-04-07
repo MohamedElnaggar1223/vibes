@@ -6,9 +6,10 @@ import { getExchangeRate } from "@/lib/utils";
 
 type Props = {
     events: string[] | undefined
+    locale: string | undefined
 }
 
-export default async function EventsCarouselContainer({ events }: Props) 
+export default async function EventsCarouselContainer({ events, locale }: Props) 
 {
     if(!events) return <></>
 
@@ -30,7 +31,7 @@ export default async function EventsCarouselContainer({ events }: Props)
     
     return (
         <Suspense>
-            <EventsCarousel events={eventData} exchangeRate={exchangeRate} />
+            <EventsCarousel locale={locale} events={eventData} exchangeRate={exchangeRate} />
         </Suspense>
     )
 }

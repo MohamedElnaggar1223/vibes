@@ -28,6 +28,7 @@ type Props = {
     event: EventType,
     exchangeRate: ExchangeRate,
     user: UserType | null
+    locale: string | undefined
 }
 
 function addValues(obj1: any, obj2: any) {
@@ -38,7 +39,7 @@ function addValues(obj1: any, obj2: any) {
     return tempObj
 }
 
-export default function PurchaseTickets({ event, exchangeRate, user }: Props) 
+export default function PurchaseTickets({ event, exchangeRate, user, locale }: Props) 
 {
     const context = useContext(CountryContext)
     if(!context) return <Loader2 className='animate-spin' />
@@ -229,7 +230,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                         {
                             availableParkingPasses?.quantity > 0 &&
                             <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
-                                Add Parking Pass
+                                {t('addParking')}
                             </button>
                         }
                     </div>
@@ -245,7 +246,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                             <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
                                 {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
                                     <motion.div layoutId={ticket} className='relative z-10 px-4 lg:px-36 flex justify-between max-lg:my-8 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
-                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{ticket}</p>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{locale === 'ar' ? event.tickets.find(t => t.name === ticket)?.nameArabic : ticket}</p>
                                         {
                                             purchasedTickets[ticket] > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
@@ -290,7 +291,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                 {
                                     purchasedParkingPass > 0 &&
                                     <motion.div layoutId={'parkinPass'} className='relative px-4 lg:px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
-                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>Parking pass</p>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{t('parkingPass')}</p>
                                         {
                                             purchasedParkingPass > 0 && (
                                                 <div className='flex justify-center items-center flex-1 gap-2'>
@@ -420,7 +421,7 @@ export default function PurchaseTickets({ event, exchangeRate, user }: Props)
                                         }}
                                     >
                                         <p className='text-white font-poppins max-lg:text-sm lg:text-base font-normal flex-1'>
-                                            {ticket}
+                                            {locale === 'ar' ? event.tickets.find(t => t.name === ticket)?.nameArabic : ticket}
                                             {
                                                 availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass === 'Included' &&
                                                 <span className='mt-auto text-end text-xs text-gray-400'>

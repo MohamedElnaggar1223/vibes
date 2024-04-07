@@ -50,7 +50,7 @@ export default async function CategoriesPage({ searchParams, params }: Props)
                     <Suspense fallback={<EventsLoading />}>
                         <div className='flex flex-col flex-1 gap-8'>
                             {categories.map(category => (
-                                <Categorie key={category.id} category={category} events={events} country={country} date={date} /> 
+                                <Categorie locale={params.locale} key={category.id} category={category} events={events} country={country} date={date} /> 
                             ))}
                         </div>
                     </Suspense>

@@ -2,7 +2,9 @@ export type Display = {
     id: string,
     createdAt: Date,
     description: string,
+    descriptionArabic: string,
     display: string,
+    displayArabic: string,
     events: string[]
 }
 
@@ -10,14 +12,17 @@ export type EventType = {
     id: string,
     categoryID: string,
     city: string,
+    cityArabic: string,
     country: string,
     createdAt: Date,
     description: string,
+    descriptionArabic: string,
     displayID: string,
     displayPageImage: string,
     eventDate: Date,
     eventDisclaimers: {
         disclaimer: string,
+        disclaimerArabic: string,
         icon: string
     }[],
     eventPageImage: string,
@@ -26,15 +31,18 @@ export type EventType = {
     gatesOpen: Date | null,
     mapImage: string,
     name: string,
+    nameArabic: string,
     seated: boolean,
     tickets: {
         name: string,
+        nameArabic: string,
         parkingPass: string,
         price: number,
         quantity: number
     }[],
     timeZone: string,
     venue: string,
+    venueArabic: string,
     parkingPass: {
         price: number,
         quantity: number
@@ -59,6 +67,7 @@ export type Category = {
     id: string,
     createdAt: Date,
     category: string,
+    categoryArabic: string,
     color: number,
     events: string[],
 }

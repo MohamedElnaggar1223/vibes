@@ -130,3 +130,81 @@ export const toArabicNums = (price: string) => {
   //@ts-expect-error num
   return price.replace(/[0-9]/g, num => englishToArabicMap[num])
 }
+
+export const toArabicDate = (date: string) => {
+  console.log(date)
+  const englishToArabicMap = {
+    '0': '٠',
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩',
+    '.': '.', // Decimal point remains the same
+    January: 'يناير',
+    February: 'فبراير',
+    March: 'مارس',
+    April: 'أبريل',
+    May: 'مايو',
+    June: 'يونيو',
+    July: 'يوليو',
+    August: 'أغسطس',
+    September: 'سبتمبر',
+    October: 'أكتوبر',
+    November: 'نوفمبر',
+    December: 'ديسمبر',
+    th: 'هـ',
+    st: 'الأول',
+    nd: 'الثاني',
+    rd: 'الثالث'
+  };
+
+  // Split the text based on commas (assuming price format or date separators)
+  const parts = date.split(',');
+
+  // Handle potential errors (e.g., non-numeric characters, invalid date format)
+  // Convert based on the number of parts
+  let convertedText = '';
+  if (parts.length === 1) {
+    // Price format: convert digits
+    //@ts-expect-error dates
+    convertedText = parts[0].split('').map((char) => englishToArabicMap[char]).join('');
+  } else if (parts.length === 3) {
+    // Date format: convert month, day, and year
+    //@ts-expect-error dates
+    const month = englishToArabicMap[parts[0].trim()];
+    //@ts-expect-error dates
+    const day = parts[1].trim().replace(/(th|st|nd|rd)$/, '').split('').map((char) => englishToArabicMap[char]).join('');
+    //@ts-expect-error dates
+    const year = parts[2].split('').map((char) => englishToArabicMap[char]).join('')
+    convertedText = `${month} ${day}, ${year}`;
+  } else {
+    throw new Error('Invalid text format.');
+  }
+
+  return convertedText;
+}
+
+export const toArabicTime = (time: string) => {
+  const englishToArabicMap = {
+    '0': '٠',
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩',
+    ':': ':',
+    'PM': 'م',
+    'AM': 'ص'
+  }
+  //@ts-expect-error num
+  return time.split('').map((char) => englishToArabicMap[char]).join('')
+}

@@ -4,7 +4,7 @@ import { months } from "@/constants"
 import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
 import { UserType } from "@/lib/types/userTypes"
-import { formatTime, getDaySuffix, getExchangeRate } from "@/lib/utils"
+import { formatTime, getDaySuffix, getExchangeRate, initTranslations, toArabicTime } from "@/lib/utils"
 import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 import Image from "next/image"
@@ -58,6 +58,8 @@ const getUser = cache(async () => {
 
 export default async function EventPage({ params }: Props) 
 {
+    const { t } = await initTranslations(params.locale!, ['homepage', 'common'])
+
     const selectedEvent = await getEvent(params.id)
 
     const exchangeRate = await getExchangeRate()
@@ -80,15 +82,15 @@ export default async function EventPage({ params }: Props)
                         eventPage={true}
                     />
                     <div className='flex flex-col p-3 gap-4 flex-1'>
-                        <p className='font-poppins text-lg lg:text-2xl font-bold text-white'>{selectedEvent?.name}</p>
+                        <p className='font-poppins text-lg lg:text-2xl font-bold text-white'>{params.locale === 'ar' ? selectedEvent?.nameArabic : selectedEvent?.name}</p>
                         <div className='w-full flex justify-between items-center'>
-                            <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent?.venue}</p>
-                            <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{selectedEvent?.city}, {selectedEvent?.country}</p>
+                            <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{params.locale === 'ar' ? selectedEvent?.venueArabic : selectedEvent?.venue}</p>
+                            <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{params.locale === 'ar' ? selectedEvent?.cityArabic : selectedEvent?.city}, {t(`${selectedEvent?.country}`)}</p>
                         </div>
                         <ClientDates selectedEvent={selectedEvent} className='font-poppins text-xs lg:text-md font-extralight text-white' />
-                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${formatTime(selectedEvent.gatesClose)}`}</p>
+                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesOpen)) : formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesClose)) : formatTime(selectedEvent.gatesClose)}`}</p>
                         <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
-                            <p className='font-poppins text-xs font-extralight text-white'>{selectedEvent.description}</p>
+                            <p className='font-poppins text-xs font-extralight text-white'>{params.locale === 'ar' ? selectedEvent.descriptionArabic : selectedEvent.description}</p>
                         </div>
                         <div className='flex flex-col items-start justify-end w-full gap-6 mb-4 mt-auto flex-1'>
                             {selectedEvent.eventDisclaimers.map((disclaimer, index) => {
@@ -106,14 +108,14 @@ export default async function EventPage({ params }: Props)
                                                 alt={disclaimerText}
                                             />
                                         </div>
-                                        <p className='font-poppins leading-4 text-[0.65rem] lg:text-xs font-extralight text-white w-full'>{disclaimer.disclaimer}</p>
+                                        <p className='font-poppins leading-4 text-[0.65rem] lg:text-xs font-extralight text-white w-full'>{params.locale === 'ar' ? disclaimer.disclaimerArabic : disclaimer.disclaimer}</p>
                                     </div>
                                 )
                             })}
                         </div>
                     </div>
                 </div>
-                <PurchaseTickets exchangeRate={exchangeRate} event={selectedEvent} user={user} />
+                <PurchaseTickets locale={params.locale} exchangeRate={exchangeRate} event={selectedEvent} user={user} />
             </section>
         </Suspense>
     )

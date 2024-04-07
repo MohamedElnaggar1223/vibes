@@ -89,7 +89,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                         name="firstname"
                         render={({ field }) => (
                             <FormItem className="">
-                                <FormControl>
+                                <FormControl dir='ltr'>
                                     <input 
                                         placeholder={t("auth:firstname")} 
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
@@ -105,7 +105,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                         name="lastname"
                         render={({ field }) => (
                             <FormItem className="">
-                                <FormControl>
+                                <FormControl dir='ltr'>
                                     <input 
                                         placeholder={t("auth:lastname")} 
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] outline-none rounded-md max-sm:max-w-[340px]'
@@ -155,7 +155,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
                             )}
                         />
                     }
-                    <div className='w-screen max-w-[412px] flex gap-4 max-sm:max-w-[340px]'>
+                    <div dir='ltr' className='w-screen max-w-[412px] flex gap-4 max-sm:max-w-[340px]'>
                         <FormField
                             control={form.control}
                             name="countryCode"

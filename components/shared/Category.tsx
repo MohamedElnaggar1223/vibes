@@ -1,11 +1,12 @@
 import { Category, EventType } from "@/lib/types/eventTypes"
-import { getEvents } from "@/lib/utils"
+import { getEvents, toArabicNums } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 
 type Props = {
     category: Category
     events: EventType[]
+    locale: string | undefined
     date: string | undefined
     country: 
         'KSA' |
@@ -20,7 +21,7 @@ const countries = {
     'Egypt': 'Egypt'
 }
 
-export default async function Categorie({ category, events, country, date }: Props) 
+export default async function Categorie({ category, events, country, date, locale }: Props) 
 {
     const catEvents = events
                         .filter(event => event.categoryID === category.id)
@@ -32,7 +33,7 @@ export default async function Categorie({ category, events, country, date }: Pro
     else return (
         <div className='flex flex-1 flex-col gap-4 mt-6'>
             <div className='flex flex-col gap-0.5'>
-                <p className='font-poppins text-white text-md lg:text-base font-semibold'>{category.category} <span className='font-extralight text-sm'>({catEvents.length})</span></p>
+                <p className='font-poppins text-white text-md lg:text-base font-semibold'>{locale === 'ar' ? category.categoryArabic : category.category} <span className='font-extralight text-sm'>({locale === 'ar' ? toArabicNums(`${catEvents.length}`) : catEvents.length})</span></p>
                 <div className='w-10 h-px bg-white' />
             </div>
             <div className='w-full flex justify-start lg:items-center gap-6 lg:gap-8 flex-wrap max-md:justify-start'>

@@ -54,7 +54,7 @@ export default async function CarouselCategory({ locale, title, subTitle, events
                         </div>
                     </CarouselItem>
                     {eventsData.map((event) => (
-                        <EventCard key={event.id} event={event} exchangeRate={exchangeRate} />
+                        <EventCard key={event.id} locale={locale} event={event} exchangeRate={exchangeRate} />
                     ))}
                 </CarouselContent>
             </Carousel>
