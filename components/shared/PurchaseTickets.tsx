@@ -224,18 +224,18 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 <div className='w-full flex justify-between items-center gap-1.5 lg:gap-4'>
                     <div className='flex-1 max-lg:hidden' />
                     <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
-                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             {t('common:chooseticketshead')}
                         </button>
                         {
                             availableParkingPasses?.quantity > 0 &&
-                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                                 {t('addParking')}
                             </button>
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-2 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white w-fit font-poppins text-center font-semibold text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             {t('common:map')}
                         </button>
                     </div>
@@ -347,18 +347,18 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 <div className='w-full h-[5.5rem] flex justify-between gap-4 items-center px-4 py-2 lg:px-8 bg-[#181C25] rounded-lg'>
                     <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
                         <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:numberOfTickets')}</p>
-                        <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
+                        <p className='font-poppins text-sm lg:text-lg text-white font-semibold'>{Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)}</p>
                     </div>
                     {
                         availableParkingPasses?.quantity > 0 &&
                         <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
                             <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:numberOfParking')}</p>
-                            <p className='font-poppins text-base lg:text-lg text-white font-semibold'>{purchasedParkingPass}</p>
+                            <p className='font-poppins text-sm lg:text-lg text-white font-semibold'>{purchasedParkingPass}</p>
                         </div>
                     }
                     <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
                         <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:total')}</p>
-                        <p className='font-poppins text-base mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
+                        <p className='font-poppins text-sm mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
                     </div>
                     <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
                         {
@@ -373,7 +373,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                 }}  
                                                 layout={true} 
                                                 disabled={(currentWidth ?? 0) > 1024} 
-                                                className=' max-lg:flex-1 font-poppins text-sm lgtext-base lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
+                                                className='max-lg:flex-1 font-poppins text-xs lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
                                                 {t('common:buy')}
                                             </motion.button>
@@ -387,7 +387,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
-                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-base lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
+                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-xs lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                                                 {t('common:buy')}
                                             </motion.button>
                                         </TooltipTrigger>
