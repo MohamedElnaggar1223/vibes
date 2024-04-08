@@ -61,7 +61,7 @@ export default function MyTicketCard({ ticket, event, first }: Props)
 
     const handleFlip = () => {
         setClicked(true)
-        if(!isAnimating && (currentWidth ?? 0) < 1280)
+        if(!isAnimating && (currentWidth ?? 0) < 1024)
         {
             setIsFlipped(prev => !prev)
             setIsAnimating(true)
@@ -76,14 +76,14 @@ export default function MyTicketCard({ ticket, event, first }: Props)
 
     return (
         <AnimatePresence>
-            <div onClick={handleFlip} className='absolute rounded-lg flex w-full max-xl:min-h-64 h-auto max-xl:max-h-64 xl:min-h-44 xl:max-h-44 p-0 xl:overflow-hidden gap-8 flipCardInner'>
+            <div onClick={handleFlip} className='absolute rounded-lg flex w-full max-xl:min-h-64 h-auto max-xl:max-h-64 xl:min-h-48 xl:max-h-48 p-0 xl:overflow-hidden gap-8 flipCardInner'>
                 <motion.div 
                     initial={false}
                     animate={{ rotateY: isFlipped ? 180 : 360 }}
                     transition={{ duration: 0.6 }}
                     onAnimationComplete={() => setIsAnimating(false)}
                     ref={mainRef}
-                    className={cn('flex max-xl:flex-col max-xl:min-h-64 gap-2 xl:gap-8 items-center justify-between w-full h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && (currentWidth ?? 0) < 1536 && 'animate-semiFlip')}
+                    className={cn('flex max-xl:flex-col max-xl:min-h-64 gap-2 xl:gap-8 items-center justify-between w-full h-full flipCard bg-[rgba(217,217,217,0.2)] rounded-lg flipCardInner', !clicked && first && (currentWidth ?? 0) < 1024 && 'animate-semiFlip')}
                 >
                     <div className='xl:flex-1 flex items-start max-xl:w-full xl:items-center justify-start gap-2 xl:gap-8'>
                         <Image
@@ -91,17 +91,17 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                             height={176}
                             width={176}
                             alt={event.name}
-                            className='max-xl:max-w-28 xl:min-w-44 xl:min-h-44 xl:h-full object-fill rounded-lg'
+                            className='max-xl:max-w-28 xl:min-w-48 xl:min-h-48 xl:h-full object-fill rounded-lg'
                         />
-                        <div ref={infoRef} className='info relative flex flex-col gap-3 py-2 max-xl:flex-1 xl:max-h-44 overflow-auto'>
-                            <p className='font-poppins font-bold text-base xl:text-2xl text-white'>{event.name}</p>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
+                        <div ref={infoRef} className='info relative flex flex-col gap-3 py-2 max-xl:flex-1 xl:max-h-48 overflow-auto'>
+                            <p className='font-poppins font-bold text-base xl:text-xl text-white'>{event.name}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
                             <div className='w-full flex xl:justify-between items-center gap-0.5 xl:gap-6 max-xl:flex-wrap'>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white'>{event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white'>|</span></p>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white max-xl:hidden'>|</p>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-extralight text-white'>{event?.city}, {event?.country}</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>|</span></p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white max-xl:hidden'>|</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{event?.city}, {event?.country}</p>
                             </div>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-base font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
                             {
                                 infoRefScrollable && !scrolled &&
                                 <div 

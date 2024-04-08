@@ -17,11 +17,11 @@ export default function PastTickets({ tickets, events }: Props)
             {   
                 tickets.length ?
                 tickets.map((ticket, index) => (
-                    <div key={ticket.id} className='info relative rounded-lg flex w-full max-lg:min-h-64 lg:min-h-44 lg:max-h-44 p-0 lg:overflow-hidden gap-8'>
+                    <div key={ticket.id} className='info relative rounded-lg flex w-full max-lg:min-h-64 lg:min-h-48 lg:max-h-48 p-0 lg:overflow-hidden gap-8'>
                         <MyTicketCard ticket={ticket} event={events.find(event => event.id === ticket.eventId)!} first={index === 0}  />
                     </div>
                 )) :
-                <p className='h-44 w-full font-poppins text-white font-medium text-center flex items-center justify-center'>No tickets available!</p>
+                <p className='h-48 w-full font-poppins text-white font-medium text-center flex items-center justify-center'>No tickets available!</p>
             }
         </Suspense>
     )

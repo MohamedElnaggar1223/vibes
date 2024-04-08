@@ -139,7 +139,6 @@ export const toArabicNums = (price: string) => {
 }
 
 export const toArabicDate = (date: string) => {
-  console.log(date)
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',

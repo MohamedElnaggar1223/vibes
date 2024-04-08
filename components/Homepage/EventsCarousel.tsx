@@ -111,7 +111,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                         ))}
                     </CarouselContent>
                 </Carousel>
-                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl'>
+                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl max-lg:h-[34rem] lg:h-80'>
                     {(currentWidth ?? 0) > 1024 ? (
                         <>
                             <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
@@ -130,13 +130,13 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                     <p className='font-poppins font-extralight text-lg max-lg:text-left max-lg:w-full text-nowrap'>{selectedIndex === events.length - 1 ? t(`${events[0].country.replaceAll(" ", '')}`) : t(`${events[selectedIndex + 1].country.replaceAll(" ", '')}`)},{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].cityArabic : events[0].city : locale === 'ar' ? events[selectedIndex + 1].cityArabic : events[selectedIndex + 1].city}</p>
                                 </div>
                                 <div className='w-4 rotate-0 lg:rotate-180 max-lg:h-[10px] max-lg:my-4 max-lg:w-[90%] h-[172px]' style={{ background: selectedIndex === events.length - 1 ? convertArgbToHex(categories.find(cat => cat.id === events[0].categoryID)?.color!)! : convertArgbToHex(categories.find(cat => cat.id === events[selectedIndex + 1].categoryID)?.color!)! }} />
-                                <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description}</p>
+                                <p className='font-poppins font-extralight text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic.length > 780 ? `${events[0].descriptionArabic.slice(0, 780)}...` : events[0].descriptionArabic : events[0].description.length > 780 ? `${events[0].description.slice(0,780)}...` : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic.length > 780 ? `${events[selectedIndex + 1].descriptionArabic.slice(0, 780)}...` : events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description.length > 780 ? `${events[selectedIndex + 1].description.slice(0, 780)}...` : events[selectedIndex + 1].description}</p>
                             </div>
                         </>
                     ) : (
                         <>
                             <p className='font-poppins font-medium text-lg lg:text-2xl text-center max-lg:w-full'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].nameArabic : events[0].name : locale === 'ar' ? events[selectedIndex + 1].nameArabic : events[selectedIndex + 1].name}</p>
-                            <div className='flex gap-4 items-center justify-between flex-1 w-full my-6'>
+                            <div className='flex gap-4 items-center justify-between flex-1 w-full my-6 mb-auto max-h-32 '>
                                 <div className='flex gap-2 flex-1'>
                                     <div className='min-w-2.5 rotate-180 min-h-full' style={{ background: selectedIndex === events.length - 1 ? convertArgbToHex(categories.find(cat => cat.id === events[0].categoryID)?.color!)! : convertArgbToHex(categories.find(cat => cat.id === events[selectedIndex + 1].categoryID)?.color!)! }} />
                                     <div className='flex flex-col gap-2 justify-between items-end text-nowrap h-24 flex-1'>
@@ -152,7 +152,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                     </button>
                                 </div>
                             </div>
-                            <p className='font-poppins font-extralight text-sm lg:text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description}</p>
+                            <p className='font-poppins font-extralight text-sm lg:text-base w-fit flex-1'>{selectedIndex === events.length - 1 ? locale === 'ar' ? events[0].descriptionArabic.length > 780 ? `${events[0].descriptionArabic.slice(0, 780)}...` : events[0].descriptionArabic : events[0].description.length > 780 ? `${events[0].description.slice(0,780)}...` : events[0].description : locale === 'ar' ? events[selectedIndex + 1].descriptionArabic.length > 780 ? `${events[selectedIndex + 1].descriptionArabic.slice(0, 780)}...` : events[selectedIndex + 1].descriptionArabic : events[selectedIndex + 1].description.length > 780 ? `${events[selectedIndex + 1].description.slice(0, 780)}...` : events[selectedIndex + 1].description}</p>
                         </>
                     )
                     }
