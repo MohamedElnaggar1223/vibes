@@ -425,7 +425,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                             {
                                                 availableTickets.find(ticketData => ticketData?.name === ticket)?.parkingPass === 'Included' &&
                                                 <span className='mt-auto text-end text-xs text-gray-400'>
-                                                    {" "}(Including Parking Pass)
+                                                    {" "}({t('includingParking')})
                                                 </span>
                                             }
                                         </p>
