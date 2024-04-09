@@ -118,7 +118,7 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e: any)
         {
-            setError(e.message)
+            setError(e)
         }
     }
     
@@ -138,7 +138,7 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e: any)
         {
-            setError(e.message)
+            setError(e)
         }
     }
     
