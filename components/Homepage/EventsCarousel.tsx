@@ -146,7 +146,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-2 lg:gap-6 items-end justify-end h-full'>
-                                    <p className='font-poppins text-sm lg:text-base font-extralight flex flex-col'><span>starting from</span> <span className='font-medium text-right'>{selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</span></p>
+                                    <p className='font-poppins text-sm lg:text-base font-extralight flex flex-col'><span>{t('startingFrom')}</span> <span className='font-medium text-right'>{selectedIndex === events.length - 1 ? <FormattedPrice price={events[0].tickets[0].price} exchangeRate={exchangeRate} /> : <FormattedPrice price={events[selectedIndex + 1].tickets[0].price} exchangeRate={exchangeRate} />}</span></p>
                                     <button onClick={() => router.push(`/events/${selectedIndex === events.length - 1 ? events[0].id : events[selectedIndex + 1].id}`)} className='font-poppins text-sm lg:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-fit px-3 py-2 text-white'>
                                         {t('common:book')}
                                     </button>
