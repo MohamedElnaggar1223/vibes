@@ -38,7 +38,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 
 	return (
 		<section className='w-screen h-screen flex items-center justify-center rotate-90'>
-			<div className={`relative flex items-center justify-center w-[931px] h-[384px] overflow-hidden`}>
+			<div className={`relative flex items-center justify-center w-[931px] h-[450px] overflow-hidden`}>
 				<Image
 					src={event?.displayPageImage}
 					width={931}
@@ -47,7 +47,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 					className='bg-image blur-md'
 					priority
 				/>
-				<div className='h-[281px] w-[685px] flex rounded-2xl bg-gradient-to-b from-[#00030D] from-[-5.87%] to-[#15081F] to-[101.65%] overflow-hidden'>
+				<div className='h-[320px] w-[685px] flex rounded-2xl bg-gradient-to-b from-[#00030D] from-[-5.87%] to-[#15081F] to-[101.65%] overflow-hidden'>
 					<div className='flex flex-col h-full justify-between w-[423px]'>
 						<div className='relative flex w-[423px] h-[162px]'>
 							<Image
@@ -81,7 +81,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 				<div className='flex items-center justify-center h-[255px] min-w-[30px] max-w-[30px] rounded-[2px] bg-gradient-to-b from-[#00030D] from-[-5.87%] to-[#15081F] to-[101.65%]'>
 					<div className='h-[1px] min-w-[255px] rotate-90' style={{ background: 'repeating-linear-gradient(90deg,var(--ds-gray-600),var(--ds-gray-600) 4px,transparent 4px,transparent 10px)' }} />
 				</div>
-				<div className='flex-col justify-between py-6 h-[281px] w-[170px] flex rounded-2xl bg-gradient-to-b from-[#00030D] from-[-5.87%] to-[#15081F] to-[101.65%]'>
+				<div className='flex-col justify-between py-6 h-[320px] w-[170px] flex rounded-2xl bg-gradient-to-b from-[#00030D] from-[-5.87%] to-[#15081F] to-[101.65%]'>
 					<Image
 						src="/assets/logo.png"
 						width={195}
