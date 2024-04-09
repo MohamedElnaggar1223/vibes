@@ -32,6 +32,9 @@ export function generateStaticParams() {
 export const metadata: Metadata = {
   title: "Vibes",
   description: "Buy and sell your tickets online",
+  openGraph: {
+    images: 'https://firebasestorage.googleapis.com/v0/b/test-2cf5b.appspot.com/o/play_store_512.png?alt=media&token=a5f145ce-53c4-48af-a75e-26f81067cd87'
+  }
 };
 
 const getUser = cache(async () => {
@@ -63,6 +66,7 @@ export default async function RootLayout({
   return (
     <html lang={params.locale}>
       <meta name="google-site-verification" content="irnPUXjZLm_rx9_Xs0zW_MaO1dC4yFnVfVSGBb0wjZw" />
+      <meta property='og:image' content='https://firebasestorage.googleapis.com/v0/b/test-2cf5b.appspot.com/o/play_store_512.png?alt=media&token=a5f145ce-53c4-48af-a75e-26f81067cd87' />
       <body className={cn('max-w-[100vw] overflow-x-hidden', poppins.variable)}>
         <Image
           src="/assets/background.svg"
