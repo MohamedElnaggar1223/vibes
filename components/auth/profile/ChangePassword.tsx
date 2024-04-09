@@ -184,7 +184,7 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
                             </FormItem>
                         )}
                     />
-                    <button type="submit" className={cn('cursor-pointer bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>Confirm Changes</button>
+                    <button type="submit" className={cn('cursor-pointer bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>{t('auth:confirmChanges')}</button>
                 </form>
             </Form>
         </div>
