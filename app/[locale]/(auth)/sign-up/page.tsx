@@ -7,7 +7,13 @@ import { redirect } from "next/navigation"
 import { Suspense } from "react"
 import Loading from "./loading"
 
-export default async function SignUpPage()
+type Props = {
+    params: {
+        locale?: string
+    }
+}
+
+export default async function SignUpPage({ params }: Props)
 {
     const admin = await initAdmin()
     const cookiesData = cookies()
@@ -21,7 +27,7 @@ export default async function SignUpPage()
 
     return (
         <Suspense fallback={<Loading />}>
-            <SignUp />
+            <SignUp locale={params.locale} />
         </Suspense>
     )
 }

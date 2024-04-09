@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { useTranslation } from "react-i18next"
 
-export default function SignUp()
+export default function SignUp({ locale }: { locale: string | undefined })
 {
     const router = useRouter()
     const pathname = usePathname()
@@ -226,7 +226,7 @@ export default function SignUp()
                                 name="phoneNumber"
                                 render={({ field }) => (
                                     <FormItem className="ml-auto flex-1">
-                                        <FormControl dir='rtl'>
+                                        <FormControl dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                                             <input 
                                                 placeholder={t('auth:number')}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
