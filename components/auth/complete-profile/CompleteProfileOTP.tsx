@@ -134,7 +134,7 @@ console.error(e)
             })
             .catch((error) => {
                 console.error(error)
-                setError('Something went wrongfireauth')
+                setError(error)
             })
         }
         catch(e: any)
