@@ -148,7 +148,7 @@ export default function CompleteProfileData({ user }: Props)
                             />
                         }
                     </div>
-                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>Finish</button>
+                    <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('finish')}</button>
                 </form>
             </Form>
             <Dialog open={loading}>
