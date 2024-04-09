@@ -118,7 +118,7 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e: any)
         {
-            setError('Something went wrong')
+            setError('Something went wrong22')
 console.error(e)
         }
     }
@@ -134,13 +134,13 @@ console.error(e)
             })
             .catch((error) => {
                 console.error(error)
-                setError('Something went wrong')
+                setError('Something went wrongfireauth')
             })
         }
         catch(e: any)
         {
 console.error(e)
-            setError('Something went wrong')
+            setError('Something went wrong33')
         }
     }
     
