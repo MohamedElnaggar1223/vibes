@@ -134,7 +134,7 @@ console.error(e)
             })
             .catch((error) => {
                 console.error(error)
-                setError(error)
+                setError(error.message)
             })
         }
         catch(e: any)
