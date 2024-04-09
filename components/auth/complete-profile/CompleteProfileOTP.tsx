@@ -170,7 +170,7 @@ export default function CompleteProfileOTP({ user }: Props)
         <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit ml-auto z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>{t('auth:verifyNumber')}</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
+                <form dir='ltr' onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
                     {
                         sentOtp ? (
                             <FormField
