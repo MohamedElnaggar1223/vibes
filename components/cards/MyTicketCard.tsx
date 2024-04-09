@@ -2,7 +2,7 @@
 import { months } from "@/constants"
 import { EventType } from "@/lib/types/eventTypes"
 import { TicketType } from "@/lib/types/ticketTypes"
-import { getDaySuffix, formatTime, cn } from "@/lib/utils"
+import { getDaySuffix, formatTime, cn, toArabicDate, toArabicTime, toArabicNums } from "@/lib/utils"
 // import { QrCode } from "lucide-react"
 import QRCode from "react-qr-code"
 import Image from "next/image"
@@ -10,6 +10,8 @@ import { Separator } from "../ui/separator"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { LucideChevronDown } from 'lucide-react'
+import { usePathname } from "next/navigation"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     ticket: TicketType,
@@ -24,6 +26,10 @@ export default function MyTicketCard({ ticket, event, first }: Props)
     const [clicked, setClicked] = useState(false)
     const [currentWidth, setCurrentWidth] = useState<number>()
     const [scrolled, setScrolled] = useState(false)
+
+    const pathname = usePathname()
+
+    const { t } = useTranslation()
 
     const infoRef = useRef<HTMLDivElement>(null)
     const infoRefScrollable = useMemo(() => {
@@ -94,14 +100,14 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                             className='max-xl:max-w-28 xl:min-w-48 xl:min-h-48 xl:h-full object-fill rounded-lg'
                         />
                         <div ref={infoRef} className='info relative flex flex-col gap-3 py-2 max-xl:flex-1 xl:max-h-48 overflow-auto'>
-                            <p className='font-poppins font-bold text-base xl:text-xl text-white'>{event.name}</p>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>{`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {formatTime(event.eventTime)} {event.timeZone}</p>
+                            <p className='font-poppins font-bold text-base xl:text-xl text-white'>{pathname?.startsWith('/ar') ? event.nameArabic : event.name}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>{pathname?.startsWith('/ar') ? toArabicDate(`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`) : `${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {pathname?.startsWith('/ar') ? toArabicTime(formatTime(event.eventTime)) : formatTime(event.eventTime)} {event.timeZone}</p>
                             <div className='w-full flex xl:justify-between items-center gap-0.5 xl:gap-6 max-xl:flex-wrap'>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>|</span></p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{pathname?.startsWith('/ar') ? event.venueArabic : event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white'>|</span></p>
                                 <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white max-xl:hidden'>|</p>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{event?.city}, {event?.country}</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-sm font-extralight text-white'>{pathname?.startsWith('/ar') ? event.cityArabic : event?.city}, {t(`${event?.country.replaceAll(" ", "")}`)}</p>
                             </div>
-                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `Gates open ${formatTime(event.gatesOpen)}`} {event.gatesClose && `| Gates close ${formatTime(event.gatesClose)}`}</p>
+                            <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-sm font-extralight text-white whitespace-break-spaces'>{event.gatesOpen && `${t('gatesOpen')} ${pathname?.startsWith('/ar') ? toArabicTime(formatTime(event.gatesOpen)) : formatTime(event.gatesOpen)}`} {event.gatesClose && `| ${t('gatesClose')} ${pathname?.startsWith('/ar') ? toArabicTime(formatTime(event.gatesClose)) : formatTime(event.gatesClose)}`}</p>
                             {
                                 infoRefScrollable && !scrolled &&
                                 <div 
@@ -124,16 +130,16 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                     <Separator className='w-[90%] xl:hidden h-[1px]' />
                     <div className='flex gap-4 items-center justify-between max-xl:px-12 max-xl:mt-4 max-xl:mb-auto max-xl:w-full xl:max-h-full'>
                         <div className='flex xl:w-24 flex-col mr-auto text-left gap-0.5 xl:gap-3 xl:pb-4 xl:pt-10 h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{ticketKey} <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.tickets[ticketKey]}</span></p>)}
-                            {ticket.parkingPass > 0 && <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>Parking Pass <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.parkingPass}</span></p>}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{pathname?.startsWith('/ar') ? event.tickets.find(t => t.name.toLowerCase() === ticketKey.toLowerCase())?.nameArabic : ticketKey} <span className='font-extralight ml-2 max-xl:hidden'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[ticketKey]}`) : ticket.tickets[ticketKey]}</span></p>)}
+                            {ticket.parkingPass > 0 && <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{t('parkingPass')} <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.parkingPass}</span></p>}
                         </div>
                         <div className='flex h-full items-center justify-center qrcodeHeight max-xl:hidden'>
                             {/* <QrCode values="sadawddwadaw" /> */}
                             <QRCode value={ticket.id} height='90%' />
                         </div>
                         <div className='xl:hidden flex text-right flex-col h-full w-fit text-nowrap'>
-                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'><span className='font-extralight ml-2'>x{ticket.tickets[ticketKey]}</span></p>)}
-                            {ticket.parkingPass > 0 && <span className='font-extralight ml-2 font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base text-white'>x{ticket.parkingPass}</span>}
+                            {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'><span className='font-extralight ml-2'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[ticketKey]}`) : ticket.tickets[ticketKey]}</span></p>)}
+                            {ticket.parkingPass > 0 && <span className='font-extralight ml-2 font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base text-white'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.parkingPass}`) : ticket.parkingPass}</span>}
                         </div>
                     </div>
                     {

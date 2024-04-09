@@ -78,8 +78,8 @@ export default async function Footer({ params }: Props)
             <div className='flex flex-col gap-2.5 mr-6 ml-6 sm:ml-14 sm:mr-14'>
                 <p className='font-poppins text-xs sm:text-sm bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text mb-0.5'>{t('touch')}</p>
                 <p className='font-poppins text-white text-xs sm:text-sm'>Vibes@gmail.com</p>
-                <p className='font-poppins text-white text-xs sm:text-sm'>+20 12092283</p>
-                <p className='font-poppins text-white text-xs sm:text-sm'>+966 012092283</p>
+                <p dir='ltr' className='font-poppins text-white text-xs sm:text-sm'>+20 12092283</p>
+                <p dir='ltr' className='font-poppins text-white text-xs sm:text-sm'>+966 012092283</p>
             </div>
         </footer>
     )

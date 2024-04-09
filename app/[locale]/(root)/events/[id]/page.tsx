@@ -85,10 +85,10 @@ export default async function EventPage({ params }: Props)
                         <p className='font-poppins text-lg lg:text-2xl font-bold text-white'>{params.locale === 'ar' ? selectedEvent?.nameArabic : selectedEvent?.name}</p>
                         <div className='w-full flex justify-between items-center'>
                             <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{params.locale === 'ar' ? selectedEvent?.venueArabic : selectedEvent?.venue}</p>
-                            <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{params.locale === 'ar' ? selectedEvent?.cityArabic : selectedEvent?.city}, {t(`${selectedEvent?.country}`)}</p>
+                            <p className='font-poppins text-xs lg:text-md font-extralight text-white mr-4'>{params.locale === 'ar' ? selectedEvent?.cityArabic : selectedEvent?.city}, {t(`${selectedEvent?.country.replaceAll(" ", "")}`)}</p>
                         </div>
-                        <ClientDates selectedEvent={selectedEvent} className='font-poppins text-xs lg:text-md font-extralight text-white' />
-                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `Gates open ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesOpen)) : formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| Gates close ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesClose)) : formatTime(selectedEvent.gatesClose)}`}</p>
+                        <ClientDates locale={params.locale} selectedEvent={selectedEvent} className='font-poppins text-xs lg:text-md font-extralight text-white' />
+                        <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{selectedEvent.gatesOpen && `${t('gatesOpen')} ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesOpen)) : formatTime(selectedEvent.gatesOpen)}`} {selectedEvent.gatesClose && `| ${t('gatesClose')} ${params.locale === 'ar' ? toArabicTime(formatTime(selectedEvent.gatesClose)) : formatTime(selectedEvent.gatesClose)}`}</p>
                         <div className='flex text-center w-full border-y-[1px] border-[#fff] py-4'>
                             <p className='font-poppins text-xs font-extralight text-white max-h-[180px] overflow-auto'>{params.locale === 'ar' ? selectedEvent.descriptionArabic : selectedEvent.description}</p>
                         </div>

@@ -224,18 +224,18 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 <div className='w-full flex justify-between items-center gap-1.5 lg:gap-4'>
                     <div className='flex-1 max-lg:hidden' />
                     <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
-                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             {t('common:chooseticketshead')}
                         </button>
                         {
                             availableParkingPasses?.quantity > 0 &&
-                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                            <button onClick={() => setPurchasedParkingPass(prev => availableParkingPasses.quantity >= prev + 1 ? prev + 1 : prev)} className='text-white font-poppins font-semibold text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                                 {t('addParking')}
                             </button>
                         }
                     </div>
                     <div className='flex-1 flex items-center justify-end'>
-                        <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white w-fit font-poppins text-center font-semibold text-xs lg:text-sm px-1.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        <button disabled={!eventData.mapImage} onClick={() => setShowMap(true)} className='text-white w-fit font-poppins text-center font-semibold text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             {t('common:map')}
                         </button>
                     </div>
@@ -290,7 +290,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 ))}
                                 {
                                     purchasedParkingPass > 0 &&
-                                    <motion.div layoutId={'parkinPass'} className='relative px-4 lg:px-36 flex justify-between mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
+                                    <motion.div layoutId={'parkinPass'} className='relative z-10 px-4 lg:px-36 flex justify-between max-lg:my-8 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible'>
                                         <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{t('parkingPass')}</p>
                                         {
                                             purchasedParkingPass > 0 && (

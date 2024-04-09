@@ -147,7 +147,7 @@ export default function SignUp()
     }
 
     return (
-        <section className={cn('min-h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 overflow-auto max-lg:w-screen max-lg:max-w-[100vw]', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
+        <section className={cn('min-h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 overflow-auto max-lg:w-screen max-lg:max-w-[100vw] max-lg:pb-4', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <div className='flex flex-col justify-center items-center mt-3'>
                 <p className='font-poppins font-base mb-6 text-white'>{t('auth:signUp')}</p>
                 <Form {...form}>
@@ -189,7 +189,7 @@ export default function SignUp()
                             name="email"
                             render={({ field }) => (
                                 <FormItem className="">
-                                    <FormControl dir='ltr'>
+                                    <FormControl>
                                         <input 
                                             placeholder={t('auth:email')}
                                             className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
@@ -226,7 +226,7 @@ export default function SignUp()
                                 name="phoneNumber"
                                 render={({ field }) => (
                                     <FormItem className="ml-auto flex-1">
-                                        <FormControl>
+                                        <FormControl dir='rtl'>
                                             <input 
                                                 placeholder={t('auth:number')}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
@@ -254,7 +254,7 @@ export default function SignUp()
                                             />
                                             {passwordVisible ? (
                                                 <Eye 
-                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[10%]' : 'left-[90%]')} 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setPasswordVisible(prev => !prev)
@@ -262,7 +262,7 @@ export default function SignUp()
                                                 />
                                             ) : (
                                                 <EyeOff 
-                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[10%]' : 'left-[90%]')} 
+                                                    className={cn('absolute top-[32%] z-50 cursor-pointer', pathname?.includes('/ar') ? 'left-[5%]' : 'left-[90%]')} 
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         setPasswordVisible(prev => !prev)

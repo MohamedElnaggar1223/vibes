@@ -33,7 +33,7 @@ export default function AuthHeader()
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">
                 <Link href='/' className='text-white font-poppins text-base font-semibold z-[9999]'>
-                    AR
+                    
                 </Link>
                 {pathname === '/complete-profile' && (
                     <button onClick={handleLogOut} className='font-poppins text-sm md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white'>

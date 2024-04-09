@@ -161,7 +161,7 @@ export default function SignIn()
                         name="email"
                         render={({ field }) => (
                             <FormItem className="">
-                                <FormControl dir='ltr'>
+                                <FormControl>
                                     <input 
                                         placeholder={t('auth:email')}
                                         className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-screen max-w-[412px] max-sm:max-w-[340px] outline-none rounded-md'
