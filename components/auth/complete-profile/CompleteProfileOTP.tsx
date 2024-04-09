@@ -116,9 +116,9 @@ export default function CompleteProfileOTP({ user }: Props)
             })
             window.recaptchaVerifier.render()
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong! Please try again.')
+            setError(e.message)
         }
     }
     
@@ -133,12 +133,12 @@ export default function CompleteProfileOTP({ user }: Props)
             })
             .catch((error) => {
                 console.log(error)
-                setError('Something went wrong! Please try again.')
+                setError(error)
             })
         }
-        catch(e)
+        catch(e: any)
         {
-            setError('Something went wrong! Please try again.')
+            setError(e.message)
         }
     }
     
