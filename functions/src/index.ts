@@ -92,7 +92,42 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                     await browser.close()
                 }
             })
-            
+
+            const parkingPassPdf = [...Array(ticket.parkingPass)].map(async (_, i) => {
+                const browser = await puppeteer.launch({
+                    args: [...chrome.args, '--disable-features=site-per-process'],
+                    defaultViewport: chrome.defaultViewport,
+                    executablePath: await chrome.executablePath(),
+                    headless: false,
+                })
+    
+                const page = await browser.newPage()
+    
+    
+                await page.goto(`https://vibes-woad.vercel.app/ticket/${ticket?.id}?type=ParkingPass`, {
+                    waitUntil: 'networkidle2'
+                })
+    
+                const pdfBuffer = await page.pdf({
+                    format: 'A4',
+                    printBackground: true,
+                    margin: {
+                        top: '2cm',
+                        right: '2cm',
+                        bottom: '2cm',
+                        left: '2cm',
+                    },
+                })
+
+                attachments.push({
+                    filename: `${eventData?.name}-ParkingPass.pdf`,
+                    content: pdfBuffer
+                })
+
+                await browser.close()
+            })
+
+            await Promise.all(parkingPassPdf!)            
             await Promise.all(ticketsPdfs! ?? [])
         
         
