@@ -118,7 +118,8 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e: any)
         {
-            setError(e.message)
+            setError('Something went wrong22')
+console.error(e)
         }
     }
     
@@ -132,13 +133,14 @@ export default function CompleteProfileOTP({ user }: Props)
                 window.confirmationResult = confirmationResult
             })
             .catch((error) => {
-                console.log(error)
-                setError(error)
+                console.error(error)
+                setError(error.message)
             })
         }
         catch(e: any)
         {
-            setError(e.message)
+console.error(e)
+            setError('Something went wrong33')
         }
     }
     
