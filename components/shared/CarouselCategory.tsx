@@ -43,7 +43,7 @@ export default async function CarouselCategory({ locale, title, subTitle, events
                 opts={{
                     align: "start",
                     dragFree: true,
-                    direction: 'rtl'
+                    direction: locale === 'ar' ? 'rtl' : 'ltr'
                 }}
                 className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
             >
