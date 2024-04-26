@@ -8,12 +8,14 @@ import { Calendar } from "../ui/calendar";
 import { CalendarIcon, FilterX } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { Category } from "@/lib/types/eventTypes";
 
 type Props = {
     locale?: string | undefined
+    categories: Category[]
 }
 
-export default function CategoriesFilters({ locale }: Props)
+export default function CategoriesFilters({ locale, categories }: Props)
 {
     const searchParams = useSearchParams()
     
@@ -23,6 +25,7 @@ export default function CategoriesFilters({ locale }: Props)
 
     const [country, setCountry] = useState(searchParams?.get('country') || '')
     const [date, setDate] = useState<Date | undefined>(!!searchParams?.get('date') ? parseISO(searchParams?.get('date')!) : undefined)
+    const [category, setCategory] = useState(searchParams?.get('category') === 'Theatre ' ? 'Theatre & comedy' : searchParams?.get('category')  || '')
     const todaysDate = new Date()
     const tomorrow = new Date(todaysDate)
     tomorrow.setDate(todaysDate.getDate() + 1)
@@ -30,9 +33,10 @@ export default function CategoriesFilters({ locale }: Props)
     useEffect(() => {
         let query = ''
         if(date) query += `date=${date.toISOString()}&`
-        if(country) query += `country=${country}`
+        if(country) query += `country=${country}&`
+        if(category) query += `category=${category}`
         if(query) router.push(`/categories/?${query}`)
-    }, [date, country])
+    }, [date, country, category])
 
     return (
         <>
@@ -81,9 +85,20 @@ export default function CategoriesFilters({ locale }: Props)
                     </Popover>
                 </PopoverContent>
             </Popover>
-            {[country, date].some(element => !!element) && (
+            <Select dir={locale === 'ar' ? 'rtl' : 'ltr'} value={category} onValueChange={setCategory}>
+                <SelectTrigger>
+                    <SelectValue placeholder={t("categories")} />
+                </SelectTrigger>
+                <SelectContent className='p-0'>
+                    {categories.map(cat => (
+                        <SelectItem key={cat.id} value={cat.category}>{locale === 'ar' ? cat.categoryArabic : cat.category}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            {[country, date, category].some(element => !!element) && (
                 <button onClick={() => {
                     setCountry('')
+                    setCategory('')
                     setDate(undefined)
                     router.push('/categories')
                 }} className='rounded-md self-center px-1 lg:px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] lg:ml-4 cursor-pointer text-xs w-16 lg:w-24'>

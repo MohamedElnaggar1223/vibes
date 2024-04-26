@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import { useTranslation } from "react-i18next";
+import CartHeaderLink from "./CartHeaderLink";
 
 export default function SignedInHeader()
 {
@@ -33,80 +34,83 @@ export default function SignedInHeader()
     }, [])
 
     return (
-        <Select onOpenChange={setOpen} open={open}>
-            <SelectTrigger className={cn("w-[100px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-sm lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
-                <SelectValue placeholder={t('profile')} />
-            </SelectTrigger>
-            <SelectContent className={cn('z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>
-                <SelectGroup className='bg-white flex flex-col items-center justify-center'>
-                    {
-                        !accountMenu ? (
-                            <>
-                                {
-                                    (currentWidth ?? 0) < 1024 ? (
-                                        <span 
-                                            onClick={() => {
-                                                setAccountMenu(true)   
-                                            }}
-                                            className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
-                                        >
-                                            <span>{t('accountDetails')}</span>
-                                        </span>
-                                    ) : (
-                                        <Link 
-                                            onClick={() => {
-                                                setOpen(false)
-                                            }} 
-                                            prefetch={true} 
-                                            href='/profile' 
-                                            className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
-                                        >
-                                            <span>{t('accountDetails')}</span>
-                                        </Link>
-                                    )
-                                }
-                                <Separator color="black" />
-                                <HeaderLinks setOpen={setOpen} />
-                            </>
-                        ) : (
-                            <>
-                                <Link 
-                                    onClick={() => {
-                                        setOpen(false)
-                                    }}
-                                    prefetch={true} 
-                                    href='/profile?show=personal' 
-                                    className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
-                                >
-                                    <span>{t('personalInformation')}</span>
-                                </Link>
-                                <Separator color="black" />
-                                <Link 
-                                    onClick={() => {
-                                        setOpen(false)
-                                    }}
-                                    prefetch={true} 
-                                    href='/profile?show=change-password'
-                                    className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
-                                >
-                                    <span>{t('changePassword')}</span>
-                                </Link>
-                                <Separator color="black" />
-                                <Link 
-                                    onClick={() => {
-                                        setOpen(false)
-                                    }} 
-                                    prefetch={true} 
-                                    href='/profile?show=my-tickets' 
-                                    className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
-                                >
-                                    <span>{t('myTickets')}</span>
-                                </Link>
-                            </>
-                        )
-                    }
-                </SelectGroup>
-            </SelectContent>
-        </Select>
+        <>
+            <CartHeaderLink />
+            <Select onOpenChange={setOpen} open={open}>
+                <SelectTrigger className={cn("w-[90px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-sm lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
+                    <SelectValue placeholder={t('profile')} />
+                </SelectTrigger>
+                <SelectContent className={cn('z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>
+                    <SelectGroup className='bg-white flex flex-col items-center justify-center'>
+                        {
+                            !accountMenu ? (
+                                <>
+                                    {
+                                        (currentWidth ?? 0) < 1024 ? (
+                                            <span 
+                                                onClick={() => {
+                                                    setAccountMenu(true)   
+                                                }}
+                                                className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
+                                            >
+                                                <span>{t('accountDetails')}</span>
+                                            </span>
+                                        ) : (
+                                            <Link 
+                                                onClick={() => {
+                                                    setOpen(false)
+                                                }} 
+                                                prefetch={true} 
+                                                href='/profile' 
+                                                className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
+                                            >
+                                                <span>{t('accountDetails')}</span>
+                                            </Link>
+                                        )
+                                    }
+                                    <Separator color="black" />
+                                    <HeaderLinks setOpen={setOpen} />
+                                </>
+                            ) : (
+                                <>
+                                    <Link 
+                                        onClick={() => {
+                                            setOpen(false)
+                                        }}
+                                        prefetch={true} 
+                                        href='/profile?show=personal' 
+                                        className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
+                                    >
+                                        <span>{t('personalInformation')}</span>
+                                    </Link>
+                                    <Separator color="black" />
+                                    <Link 
+                                        onClick={() => {
+                                            setOpen(false)
+                                        }}
+                                        prefetch={true} 
+                                        href='/profile?show=change-password'
+                                        className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
+                                    >
+                                        <span>{t('changePassword')}</span>
+                                    </Link>
+                                    <Separator color="black" />
+                                    <Link 
+                                        onClick={() => {
+                                            setOpen(false)
+                                        }} 
+                                        prefetch={true} 
+                                        href='/profile?show=my-tickets' 
+                                        className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
+                                    >
+                                        <span>{t('myTickets')}</span>
+                                    </Link>
+                                </>
+                            )
+                        }
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+        </>
     )
 }

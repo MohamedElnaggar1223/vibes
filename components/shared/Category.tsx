@@ -5,8 +5,10 @@ import Link from "next/link"
 
 type Props = {
     category: Category
+    categories: Category[]
     events: EventType[]
     locale: string | undefined
+    categorySearchParam: string | undefined
     date: string | undefined
     country: 
         'KSA' |
@@ -21,13 +23,13 @@ const countries = {
     'Egypt': 'Egypt'
 }
 
-export default async function Categorie({ category, events, country, date, locale }: Props) 
+export default async function Categorie({ category, events, country, date, locale, categories, categorySearchParam }: Props) 
 {
     const catEvents = events
                         .filter(event => event.categoryID === category.id)
                         .filter(event => date ? event.eventDate.toISOString().includes(date) : true)
                         .filter(event => country ? (event.country === countries[country]) : true)
-
+                        .filter(event => categorySearchParam ? categories.find(cat => cat.id === event.categoryID)?.category === categorySearchParam : true)
 
     if(catEvents.length === 0) return null
     else return (
