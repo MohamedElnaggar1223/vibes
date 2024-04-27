@@ -16,6 +16,7 @@ export default function CategoriesHeaderLink({ categories }: Props)
     const pathname = usePathname()
     const { t } = useTranslation()
     
+    
     return (
         <Popover>
             <PopoverTrigger>
