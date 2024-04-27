@@ -53,5 +53,5 @@ export default async function Home({ searchParams, params }: Props)
 				)
 			}
 		</section>
-	);
+	)
 }
