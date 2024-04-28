@@ -41,13 +41,13 @@ export default function CategoriesFilters({ locale, categories }: Props)
     return (
         <>
             <Select dir={locale === 'ar' ? 'rtl' : 'ltr'} value={country} onValueChange={setCountry}>
-                <SelectTrigger>
+                <SelectTrigger className='text-xs-important font-normal font-poppins'>
                     <SelectValue placeholder={t("selectCountry")} />
                 </SelectTrigger>
-                <SelectContent className='p-0'>
-                    <SelectItem value='KSA'>{t('KSA')}</SelectItem>
-                    <SelectItem value='UAE'>{t('UAE')}</SelectItem>
-                    <SelectItem value='Egypt'>{t('Egypt')}</SelectItem>
+                <SelectContent className='p-0 text-xs-important'>
+                    <SelectItem className='text-xs' value='KSA'>{t('KSA')}</SelectItem>
+                    <SelectItem className='text-xs' value='UAE'>{t('UAE')}</SelectItem>
+                    <SelectItem className='text-xs' value='Egypt'>{t('Egypt')}</SelectItem>
                 </SelectContent>
             </Select>
             <Popover>
@@ -86,22 +86,25 @@ export default function CategoriesFilters({ locale, categories }: Props)
                 </PopoverContent>
             </Popover>
             <Select dir={locale === 'ar' ? 'rtl' : 'ltr'} value={category} onValueChange={setCategory}>
-                <SelectTrigger>
-                    <SelectValue placeholder={t("categories")} />
+                <SelectTrigger className='text-xs-important font-normal font-poppins'>
+                    <SelectValue className='text-xs-important' placeholder={t("categories")} />
                 </SelectTrigger>
                 <SelectContent className='p-0'>
                     {categories.map(cat => (
-                        <SelectItem key={cat.id} value={cat.category}>{locale === 'ar' ? cat.categoryArabic : cat.category}</SelectItem>
+                        <SelectItem className='text-xs text-xs-important' key={cat.id} value={cat.category}>{locale === 'ar' ? cat.categoryArabic : cat.category}</SelectItem>
                     ))}
                 </SelectContent>
             </Select>
             {[country, date, category].some(element => !!element) && (
-                <button onClick={() => {
-                    setCountry('')
-                    setCategory('')
-                    setDate(undefined)
-                    router.push('/categories')
-                }} className='rounded-md self-center px-1 lg:px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] lg:ml-4 cursor-pointer text-xs w-16 lg:w-24'>
+                <button 
+                    onClick={() => {
+                        setCountry('')
+                        setCategory('')
+                        setDate(undefined)
+                        router.push('/categories')
+                    }} 
+                    className='rounded-md self-center px-1 lg:px-1.5 py-1 outline-none font-poppins font-light text-white bg-[#D9D9D9] lg:ml-4 cursor-pointer text-xs w-24 lg:w-24'
+                >
                     <span className='max-lg:hidden'>{t('clearFilters')}</span>
                     <FilterX className='lg:hidden w-5 h-5' />
                 </button>

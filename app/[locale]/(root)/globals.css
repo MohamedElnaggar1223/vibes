@@ -96,6 +96,10 @@ body{
   text-decoration-color: linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%) !important;
 }
 
+.text-xs-important * {
+  @apply text-xs !important;
+}
+
 .info::-webkit-scrollbar {
   display: none !important;
 }
