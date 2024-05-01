@@ -17,7 +17,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-import { Timestamp, addDoc, arrayUnion, collection, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore"
+import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
@@ -162,22 +162,24 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 parkingPass: purchasedParkingPass,
                 country: country,
                 totalPaid: total * selectedExchangeRate,
-                createdAt: Timestamp.now()
+                createdAt: Timestamp.now(),
             }
             const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
             fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${addedTicket.id}` : `http://localhost:3000/api/sendMail?ticketId=${addedTicket.id}`, {
                 method: 'GET',
             })
             await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
-            await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(addedTicket.id) })
+            await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [addedTicket.id] : [...(user?.cart?.tickets ?? []), addedTicket.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
-            const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
-            await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
+            // const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
+            // await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
             setLoading(false)
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
-            router.push(`/success/${addedTicket.id}`)
+            await fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/refreshCart` : `http://localhost:3000/api/refreshCart`, {  method: 'GET' })
+            router.push('/cart')
+            // router.push(`/success/${addedTicket.id}`)
 
             if(!event.uploadedTickets)
             {
@@ -375,7 +377,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                 disabled={(currentWidth ?? 0) > 1024} 
                                                 className='max-lg:flex-1 font-poppins text-xs lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
-                                                {t('common:buy')}
+                                                {t('common:addCart')}
                                             </motion.button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -388,7 +390,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
                                             <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-xs lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
-                                                {t('common:buy')}
+                                                {t('common:addCart')}
                                             </motion.button>
                                         </TooltipTrigger>
                                         {

@@ -51,9 +51,11 @@ const getUser = cache(async () => {
     const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
 
 
-    const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
+    const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() : null
 
-    return user
+    const userClient = {...user, cart: user?.cart && user?.cart.tickets.length ? {...user.cart, createdAt: user.cart?.createdAt?.toDate()} : undefined} as UserType
+
+    return userClient
 })
 
 export default async function EventPage({ params }: Props) 

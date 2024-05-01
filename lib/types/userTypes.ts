@@ -8,4 +8,9 @@ export type UserType = {
     verified: boolean,
     provider: string,
     tickets: string[] | undefined
+    cart?: {
+        tickets: string[],
+        createdAt: Date,
+        status: 'pending' | 'paid' | 'inprogress'
+    }
 }

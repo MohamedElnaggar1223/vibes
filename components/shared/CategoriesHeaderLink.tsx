@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import useSWR from "swr";
 import { Category } from "@/lib/types/eventTypes";
 import { useState } from "react";
 
