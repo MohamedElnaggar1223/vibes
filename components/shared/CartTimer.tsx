@@ -9,7 +9,7 @@ type Props = {
 export default function CartTimer({ createdAt }: Props) 
 {
     const calculateTimeLeft = () => {
-        const TEN_MINUTES_IN_MS = 10 * 60 * 1000
+        const TEN_MINUTES_IN_MS = 2 * 60 * 1000
         const currentTime = new Date().getTime()
         const createdAtTime = new Date(createdAt).getTime() + TEN_MINUTES_IN_MS
         const difference = createdAtTime - currentTime

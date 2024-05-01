@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
     const admin = await initAdmin()
-    const tenMinutesAgo = Timestamp.now().toMillis() - (10 * 60 * 1000)
+    const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
     const usersRef = admin.firestore().collection('users')
     const snapshot = await usersRef
       .where('cart.createdAt', '<=', tenMinutesAgo)
