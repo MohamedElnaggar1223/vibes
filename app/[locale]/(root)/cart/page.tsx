@@ -11,9 +11,10 @@ export default async function Cart()
 {
     revalidatePath('/cart')
     const user = await getUser()
+    if(!user) return redirect('/')
+    
     const cart = await getCart(user?.id!)
 
-    if(!user) return redirect('/')
 
     if(cart.tickets.length === 0)
     {
