@@ -9,7 +9,6 @@ import { revalidatePath } from "next/cache";
 export default async function Cart()
 {
     revalidatePath('/cart')
-
     const user = await getUser()
     const cart = await getCart(user?.id!)
 
