@@ -5,12 +5,15 @@ import { cn, getCart, getEvent, getExchangeRate } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export default async function Cart()
 {
     revalidatePath('/cart')
     const user = await getUser()
     const cart = await getCart(user?.id!)
+
+    if(!user) return redirect('/')
 
     if(cart.tickets.length === 0)
     {
