@@ -7,6 +7,8 @@ import { Resource, createInstance, i18n } from 'i18next';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { i18nConfig } from '@/i18nConfig';
+import { TicketType } from "./types/ticketTypes";
+import { UserType } from "./types/userTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -75,12 +77,50 @@ export const getEvents = cache(async () => {
     return events
 })
 
+export const getEvent = cache(async (id: string) => {
+    const admin = await initAdmin()
+    const event = (await admin.firestore().collection('events').doc(id).get())
+
+    if(event === undefined) return null
+    return {
+        ...event.data(),
+        createdAt: event.data()?.createdAt.toDate(),
+        eventTime: event.data()?.eventTime.toDate(),
+        eventDate: event.data()?.eventDate.toDate(),
+        updatedAt: event.data()?.updatedAt?.toDate(),
+        gatesClose: event.data()?.gatesClose?.toDate(),
+        gatesOpen: event.data()?.gatesOpen?.toDate(),
+    } as EventType
+
+})
+
 export const getCategory = cache(async (id: string) => {
     const admin = await initAdmin()
     const category = (await admin.firestore().collection('categories').doc(id).get()).data() as Category
 
     return category
 })
+
+export const getCart = async (id: string) => {
+    const admin = await initAdmin()
+    const user = (await admin.firestore().collection('users').doc(id).get()).data()
+    const userClient = {...user, cart: user?.cart && user?.cart.tickets.length ? {...user.cart, createdAt: user.cart?.createdAt?.toDate()} : undefined}
+
+    const userCart = (userClient as UserType)?.cart
+
+    const cart = userCart?.tickets?.map(async (ticketId: string) => {
+        const ticket = (await admin.firestore().collection('tickets').doc(ticketId).get()).data()
+        return {...ticket, createdAt: ticket?.createdAt.toDate()}
+    })
+
+    const cartTickets = (await Promise.all(cart || [])) as TicketType[]
+
+    const cartTicketsSorted = cartTickets.sort((a, b) => {
+        return a.createdAt.getTime() - b.createdAt.getTime()
+    })
+
+    return {...userCart, tickets: cartTicketsSorted}
+}
 
 export async function initTranslations(
   locale: string,

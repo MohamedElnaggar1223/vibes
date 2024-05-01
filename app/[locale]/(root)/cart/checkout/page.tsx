@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getUser } from "../layout";
-import { cn, getCart, getEvent, getExchangeRate } from "@/lib/utils";
+import { getUser } from "../../layout";
+import { getCart, getEvent, getExchangeRate } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
+import ProceedToPayment from "@/components/shared/ProceedToPayment";
 
 export default async function Cart()
 {
@@ -47,8 +48,40 @@ export default async function Cart()
 
     const exchangeRate = await getExchangeRate()
 
+    const total = cart.tickets.reduce((total, ticket) => {
+        const event = events.find(event => event?.id === ticket.eventId)!
+        const ticketTotal = Object.keys(ticket.tickets).reduce((ticketTotal, key) => {
+            ticketTotal += event.tickets.find(eventTicket => eventTicket.name === key)?.price! * ticket.tickets[key]
+            return ticketTotal
+        }, 0)
+        return total + ticketTotal + ((ticket.parkingPass ?? 0) * (event.parkingPass.price ?? 0))
+    }, 0)
+
+    const ticketsTotal = cart.tickets.reduce((total, ticket) => {
+        const event = events.find(event => event?.id === ticket.eventId)!
+        const ticketTotal = Object.keys(ticket.tickets).reduce((ticketTotal, key) => {
+            ticketTotal += event.tickets.find(eventTicket => eventTicket.name === key)?.price! * ticket.tickets[key]
+            return ticketTotal
+        }, 0)
+        return total + ticketTotal
+    }, 0)
+
+    const parkingTotal = cart.tickets.reduce((total, ticket) => {
+        const event = events.find(event => event?.id === ticket.eventId)!
+        console.log(event.parkingPass.price)
+        return total + (ticket.parkingPass * (event.parkingPass.price ?? 0))
+    }, 0)
+
+    const totalNumberTickets = cart.tickets.reduce((total, ticket) => {
+        return total + (Object.values(ticket.tickets) as number[]).reduce((acc, ticket) => acc + ticket ,0)
+    }, 0)
+
+    const totalNumberParkingPasses = cart.tickets.reduce((total, ticket) => {
+        return total + ticket.parkingPass
+    }, 0)
+
     return (
-        <section className='h-[90vh] w-full flex flex-col gap-2 items-center justify-center'>
+        <section className='h-[90vh] w-full flex gap-6 items-center justify-center'>
             <div className='w-screen max-w-[734px] flex flex-col'>
                 <div className='flex items-center justify-between gap-2'>
                     <p className='font-poppins text-white font-medium text-lg'>Reserved Tickets</p>
@@ -63,9 +96,7 @@ export default async function Cart()
                     ))}
                 </div>
             </div>
-            <Link href='/cart/checkout' className='w-full max-w-[412px]'>
-                <button className={cn('cursor-pointer max-w-[412px] mt-4 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>Checkout</button>
-            </Link>
+            <ProceedToPayment total={total} user={user!} totalNumberTickets={totalNumberTickets} totalNumberParkingPasses={totalNumberParkingPasses} tickets={cart.tickets} ticketsTotal={ticketsTotal} parkingTotal={parkingTotal} exchangeRate={exchangeRate} />
         </section>
     )
 }

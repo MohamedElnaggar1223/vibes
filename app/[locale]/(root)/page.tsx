@@ -4,8 +4,8 @@ import SearchLoading from "@/components/Homepage/Search/SearchLoading";
 import CarouselCategory from "@/components/shared/CarouselCategory";
 import SearchBar from "@/components/shared/SearchBar";
 import { initAdmin } from "@/firebase/server/config";
-import { Category, Display } from "@/lib/types/eventTypes";
-import { convertArgbToHex, getCategories } from "@/lib/utils";
+import { Display } from "@/lib/types/eventTypes";
+import { getCategories } from "@/lib/utils";
 import { Suspense } from "react";
 
 type Props = {

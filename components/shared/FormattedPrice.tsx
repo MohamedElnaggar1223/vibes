@@ -11,9 +11,10 @@ import { useTranslation } from "react-i18next"
 type Props = {
     price: number,
     exchangeRate: ExchangeRate
+    currency?: string
 }
 
-export default function FormattedPrice({ price, exchangeRate }: Props) {
+export default function FormattedPrice({ price, exchangeRate, currency }: Props) {
     const context = useContext(CountryContext)
     if(!context) return <Loader2 className='animate-spin' />
     const { country } = context
@@ -22,6 +23,12 @@ export default function FormattedPrice({ price, exchangeRate }: Props) {
     const pathname = usePathname()
 
     const selectedExchangeRate = useMemo(() => {
+        if(currency)
+        {
+            if(currency === 'EGP') return exchangeRate.USDToEGP
+            else if(currency === 'SAR') return exchangeRate.USDToSAR
+            else return exchangeRate.USDToAED
+        }
         if(country === 'EGP') return exchangeRate.USDToEGP
         else if(country === 'SAR') return exchangeRate.USDToSAR
         else return exchangeRate.USDToAED
@@ -32,7 +39,7 @@ export default function FormattedPrice({ price, exchangeRate }: Props) {
         
          {
             country ?
-            `${pathname?.includes("ar") ? toArabicNums(((price ?? 0) * selectedExchangeRate).toLocaleString()) : ((price ?? 0) * selectedExchangeRate).toLocaleString()} ${t(`common:${country}`) ?? t(`common:AED`)}` :
+            `${pathname?.includes("/ar") ? toArabicNums(((price ?? 0) * selectedExchangeRate).toLocaleString()) : ((price ?? 0) * selectedExchangeRate).toLocaleString()} ${t(`common:${country}`) ?? t(`common:AED`)}` :
             <Loader2 className='animate-spin' />
         }
         </>

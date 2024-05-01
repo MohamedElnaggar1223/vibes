@@ -8,4 +8,5 @@ export type TicketType = {
     tickets: any,
     totalPaid: number,
     userId: string,
+    status: 'pending' | 'paid'
 }
