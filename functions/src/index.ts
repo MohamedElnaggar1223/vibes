@@ -11,6 +11,8 @@ import { EventType } from './../../lib/types/eventTypes';
 
 import { TicketType } from './../../lib/types/ticketTypes';
 import * as functions from 'firebase-functions'
+import { onSchedule } from 'firebase-functions/v2/scheduler'
+import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 // import * as admin from 'firebase-admin'
 const admin = require('firebase-admin')
 const nodemailer = require('nodemailer')
@@ -38,8 +40,47 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }).firestore.document('tickets/{documentId}').onCreate(async (snap, context) => {
-    const ticket = {...snap.data(), id: snap.id} as TicketType
+export const clearCarts = onSchedule("* * * * *", async () => {
+    const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
+    const usersRef = db.collection('users')
+    const snapshot = await usersRef
+      .where('cart.createdAt', '<=', tenMinutesAgo)
+      .where('cart.status', '==', 'pending')
+      .get()
+
+    const ticketsIds = snapshot.docs.map((doc: any) => doc.data().cart.tickets).flat()
+
+    const ticketsRef = admin.firestore().collection('tickets')
+    const eventsRef = admin.firestore().collection('events')
+
+    const ticketsUpdate = ticketsIds.map(async (ticketId: string) => {
+        const ticket = (await ticketsRef.doc(ticketId).get()).data() as TicketType
+        const event = (await eventsRef.doc(ticket?.eventId).get()).data() as EventType
+
+        const newEventTickets = event?.tickets.map(eventTicket => {
+            const foundTicket = Object.keys(ticket.tickets).find(key => key === eventTicket.name)
+            if (foundTicket) {
+                eventTicket.quantity = eventTicket.quantity + ticket.tickets[foundTicket]
+            }
+        })
+
+        await eventsRef.doc(event.id).update({ tickets: newEventTickets })
+        await ticketsRef.doc(ticketId).delete()
+    })
+
+    await Promise.all(ticketsUpdate)
+
+    snapshot.forEach((doc: any) => {
+        const userRef = usersRef.doc(doc.id)
+        admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': FieldValue.delete()})
+    })
+
+})
+
+export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }).firestore.document('tickets/{documentId}').onUpdate(async (snap, context) => {
+    const ticket = {...snap.after.data(), id: snap.after.id} as TicketType
+
+    if(ticket.status !== 'paid') return
 
     const event = await db.collection('events').doc(ticket.eventId).get()
 

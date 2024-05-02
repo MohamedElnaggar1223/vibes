@@ -10,11 +10,13 @@ export async function GET() {
     const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
     const usersRef = admin.firestore().collection('users')
     const snapshot = await usersRef
-      .where('cart.createdAt', '<=', tenMinutesAgo)
-      .where('cart.status', '==', 'pending')
+    //   .where('cart.createdAt', '<=', tenMinutesAgo)
+    //   .where('cart.status', '==', 'pending')
       .get()
 
-    const ticketsIds = snapshot.docs.map(doc => doc.data().cart.tickets).flat()
+    const filteredUsers = snapshot.docs.filter(doc => doc.data().cart && doc.data().cart.tickets && doc.data().cart.createdAt <= tenMinutesAgo && doc.data().cart.status === 'pending')
+
+    const ticketsIds = filteredUsers.map(doc => doc.data().cart.tickets).flat()
 
     const ticketsRef = admin.firestore().collection('tickets')
     const eventsRef = admin.firestore().collection('events')
