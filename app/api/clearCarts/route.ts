@@ -24,7 +24,10 @@ export async function GET() {
     const eventsRef = admin.firestore().collection('events')
 
     const ticketsUpdate = ticketsIds.map(async (ticketId: string) => {
+        if(!ticketId) return console.error('No ticket id found')
         const ticket = (await ticketsRef.doc(ticketId).get()).data() as TicketType
+        if(!ticket) return console.error('No ticket found')
+        if(!ticket.eventId) return console.error('No event id found')
         const event = (await eventsRef.doc(ticket?.eventId).get()).data() as EventType
 
         const newEventTickets = event?.tickets.map(eventTicket => {
@@ -35,6 +38,7 @@ export async function GET() {
         })
 
         // await eventsRef.doc(event.id).update({ tickets: newEventTickets! })
+        if(!ticketId) return console.error('No event found')
         await ticketsRef.doc(ticketId).delete()
     })
 
