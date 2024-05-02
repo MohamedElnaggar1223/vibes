@@ -1,9 +1,10 @@
 import { initAdmin } from '@/firebase/server/config'
 import { EventType } from '@/lib/types/eventTypes'
 import { TicketType } from '@/lib/types/ticketTypes'
-import { deleteField, Timestamp } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
+import { FieldValue } from 'firebase-admin/firestore';
 
 export async function GET() {
     const admin = await initAdmin()
@@ -41,7 +42,7 @@ export async function GET() {
 
     snapshot.forEach(doc => {
         const userRef = usersRef.doc(doc.id)
-        admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': deleteField()})
+        admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': FieldValue.delete()})
     })
 
     revalidatePath('/cart')
