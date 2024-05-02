@@ -23,7 +23,7 @@ export async function GET() {
     const ticketsRef = admin.firestore().collection('tickets')
     const eventsRef = admin.firestore().collection('events')
 
-    const ticketsUpdate = ticketsIds.map(async ticketId => {
+    const ticketsUpdate = ticketsIds.map(async (ticketId: string) => {
         const ticket = (await ticketsRef.doc(ticketId).get()).data() as TicketType
         const event = (await eventsRef.doc(ticket?.eventId).get()).data() as EventType
 
@@ -40,7 +40,7 @@ export async function GET() {
 
     await Promise.all(ticketsUpdate)
 
-    snapshot.forEach(doc => {
+    filteredUsers.forEach(doc => {
         const userRef = usersRef.doc(doc.id)
         admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': FieldValue.delete()})
     })
