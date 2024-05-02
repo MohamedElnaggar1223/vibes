@@ -41,39 +41,59 @@ const transporter = nodemailer.createTransport({
 })
 
 export const clearCarts = onSchedule("* * * * *", async () => {
+    // admin.firestore().settings({ ignoreUndefinedProperties: true })
     const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
     const usersRef = db.collection('users')
     const snapshot = await usersRef
-      .where('cart.createdAt', '<=', tenMinutesAgo)
-      .where('cart.status', '==', 'pending')
+    //   .where('cart.createdAt', '<=', tenMinutesAgo)
+    //   .where('cart.status', '==', 'pending')
       .get()
 
-    const ticketsIds = snapshot.docs.map((doc: any) => doc.data().cart.tickets).flat()
+    
 
-    const ticketsRef = admin.firestore().collection('tickets')
-    const eventsRef = admin.firestore().collection('events')
+    const filteredUsers = snapshot.docs.filter((doc: any) => doc.data().cart && doc.data().cart.tickets && doc.data().cart.createdAt && doc.data().cart.createdAt.toMillis() <= tenMinutesAgo && doc.data().cart.status === 'pending')
+    
+    const ticketsIds = filteredUsers.map((doc: any) => doc.data().cart.tickets).flat()
+
+    const ticketsRef = db.collection('tickets')
+    const eventsRef = db.collection('events')
 
     const ticketsUpdate = ticketsIds.map(async (ticketId: string) => {
+        if(!ticketId) return console.error('No ticket id found')
+        console.log(ticketId)
         const ticket = (await ticketsRef.doc(ticketId).get()).data() as TicketType
+        if(!ticket) return console.error('No ticket found')
+        if(!ticket.eventId) return console.error('No event id found')
         const event = (await eventsRef.doc(ticket?.eventId).get()).data() as EventType
 
         const newEventTickets = event?.tickets.map(eventTicket => {
+            console.log(eventTicket)
+            console.log(ticket.tickets)
             const foundTicket = Object.keys(ticket.tickets).find(key => key === eventTicket.name)
             if (foundTicket) {
-                eventTicket.quantity = eventTicket.quantity + ticket.tickets[foundTicket]
+                console.log(foundTicket)
+                return {...eventTicket, quantity: eventTicket.quantity + ticket.tickets[foundTicket]}
             }
+            return eventTicket
         })
 
-        await eventsRef.doc(event.id).update({ tickets: newEventTickets })
-        await ticketsRef.doc(ticketId).delete()
+        console.log(newEventTickets)
+
+        await eventsRef.doc(event.id).update({ tickets: newEventTickets! })
+        if(!ticketId) return console.error('No event found')
+        // await ticketsRef.doc(ticketId).delete()
     })
 
     await Promise.all(ticketsUpdate)
 
-    snapshot.forEach((doc: any) => {
-        const userRef = usersRef.doc(doc.id)
-        admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': FieldValue.delete()})
+    const usersUpdate = filteredUsers.map(async (doc: any) => {
+        if(!doc.id) return console.error('No user id found')
+        await usersRef.doc(doc.id).update({ cart: { tickets: [], createdAt: null }})
     })
+
+    await Promise.all(usersUpdate)
+
+    fetch('https://www.vibes-events.com/api/refreshCart')
 
 })
 
