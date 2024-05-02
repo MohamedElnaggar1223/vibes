@@ -47,7 +47,7 @@ export async function GET() {
     filteredUsers.forEach(doc => {
         if(!doc.id) return console.error('No user id found')
         const userRef = usersRef.doc(doc.id!)
-        admin.firestore().batch().update(userRef!, { cart: { tickets: [], createdAt: FieldValue.delete() }})
+        admin.firestore().batch().update(userRef!, { cart: { tickets: [], createdAt: null }})
     })
 
     revalidatePath('/cart')
