@@ -42,7 +42,7 @@ export async function GET() {
 
     filteredUsers.forEach(doc => {
         const userRef = usersRef.doc(doc.id)
-        admin.firestore().batch().update(userRef, {'cart.tickets': [], 'cart.createdAt': FieldValue.delete()})
+        admin.firestore().batch().update(userRef, { cart: { tickets: [], createdAt: FieldValue.delete() }})
     })
 
     revalidatePath('/cart')
