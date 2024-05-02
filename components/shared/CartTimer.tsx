@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 
 type Props = {
@@ -8,6 +9,8 @@ type Props = {
 
 export default function CartTimer({ createdAt }: Props) 
 {
+    const router = useRouter()
+
     const calculateTimeLeft = () => {
         const TEN_MINUTES_IN_MS = 2 * 60 * 1000
         const currentTime = new Date().getTime()
@@ -28,6 +31,7 @@ export default function CartTimer({ createdAt }: Props)
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft())
+            if(calculateTimeLeft().expired) router.refresh()
         }, 1000)
 
         return () => clearTimeout(timer)
