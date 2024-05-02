@@ -9,6 +9,8 @@ import { db } from "@/firebase/client/config"
 import { useRouter } from "next/navigation"
 import { TicketType } from "@/lib/types/ticketTypes"
 import { UserType } from "@/lib/types/userTypes"
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
 
 type Props = {
     total: number
@@ -78,6 +80,11 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
                 </div>
             </div>
             <button onClick={handleBuy} className={cn('cursor-pointer max-w-[412px] mt-4 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>Proceed to Payment</button>
+            <Dialog open={loading}>
+                <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                    <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

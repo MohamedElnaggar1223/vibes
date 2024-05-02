@@ -16,7 +16,7 @@ export default async function Cart()
     
     const cart = await getCart(user?.id!)
 
-    if(cart.tickets.length === 0 || (cart.createdAt?.getMilliseconds() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
+    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
     {
         return (
             <section className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>
