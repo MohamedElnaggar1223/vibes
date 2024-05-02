@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
     const admin = await initAdmin()
+    admin.firestore().settings({ ignoreUndefinedProperties: true })
     const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
     const usersRef = admin.firestore().collection('users')
     const snapshot = await usersRef
