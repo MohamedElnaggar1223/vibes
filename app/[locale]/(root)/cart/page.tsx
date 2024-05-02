@@ -6,6 +6,7 @@ import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Timestamp } from "firebase/firestore";
 
 export default async function Cart()
 {
@@ -15,8 +16,7 @@ export default async function Cart()
     
     const cart = await getCart(user?.id!)
 
-
-    if(cart.tickets.length === 0)
+    if(cart.tickets.length === 0 || (cart.createdAt?.getMilliseconds() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
     {
         return (
             <section className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>

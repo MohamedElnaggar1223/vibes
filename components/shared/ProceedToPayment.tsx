@@ -31,7 +31,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
     const handleBuy = async () => {
         setLoading(true)
         const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
-        await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: [], createdAt: deleteField(), status: 'pending' } })
+        await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: [], createdAt: null, status: 'pending' } })
         await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + totalNumberTickets + totalNumberParkingPasses, updatedAt: Timestamp.now() })
 
         const ticketsUpdate = tickets.map(async ticket => await updateDoc(doc(db, 'tickets', ticket.id), { status: 'paid' }))
