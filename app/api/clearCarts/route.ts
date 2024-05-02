@@ -32,7 +32,7 @@ export async function GET() {
             }
         })
 
-        await eventsRef.doc(event.id).update({ tickets: newEventTickets })
+        await eventsRef.doc(event.id).update({ tickets: newEventTickets! })
         await ticketsRef.doc(ticketId).delete()
     })
 
