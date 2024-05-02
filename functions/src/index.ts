@@ -12,7 +12,7 @@ import { EventType } from './../../lib/types/eventTypes';
 import { TicketType } from './../../lib/types/ticketTypes';
 import * as functions from 'firebase-functions'
 import { onSchedule } from 'firebase-functions/v2/scheduler'
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 // import * as admin from 'firebase-admin'
 const admin = require('firebase-admin')
 const nodemailer = require('nodemailer')
@@ -81,7 +81,7 @@ export const clearCarts = onSchedule("* * * * *", async () => {
 
         await eventsRef.doc(event.id).update({ tickets: newEventTickets! })
         if(!ticketId) return console.error('No event found')
-        // await ticketsRef.doc(ticketId).delete()
+        await ticketsRef.doc(ticketId).delete()
     })
 
     await Promise.all(ticketsUpdate)
