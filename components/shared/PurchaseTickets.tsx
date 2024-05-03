@@ -49,6 +49,8 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
 
     const pathname = usePathname()
 
+    console.log(user)
+
     const { t } = useTranslation()
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -220,6 +222,8 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
         }
     }
 
+    console.log(user?.id)
+
     return (
         <AnimatePresence>
             <div className='relative flex-1 flex flex-col py-2 px-2 gap-6 max-lg:w-full max-lg:min-h-[80vh] max-lg:mb-4'>
@@ -364,7 +368,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                     </div>
                     <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
                         {
-                            user === null ? (
+                            !user?.id ? (
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip open={buyToolTip} onOpenChange={setButToolTip}>
                                         <TooltipTrigger asChild className="max-lg:flex-1">

@@ -12,7 +12,7 @@ export default async function Cart()
 {
     revalidatePath('/cart')
     const user = await getUser()
-    if(!user) return redirect('/')
+    if(!user || !user?.id) return redirect('/')
     
     const cart = await getCart(user?.id!)
 

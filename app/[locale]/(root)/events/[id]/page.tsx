@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props)
     }
 }
 
-const getUser = cache(async () => {
+const getUser = async () => {
     const admin = await initAdmin()
     const cookiesData = cookies()
     const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
@@ -56,7 +56,7 @@ const getUser = cache(async () => {
     const userClient = {...user, cart: user?.cart && user?.cart.tickets.length ? {...user.cart, createdAt: user.cart?.createdAt?.toDate()} : undefined} as UserType
 
     return userClient
-})
+}
 
 export default async function EventPage({ params }: Props) 
 {

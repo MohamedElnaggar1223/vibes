@@ -7,12 +7,15 @@ import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
 import ProceedToPayment from "@/components/shared/ProceedToPayment";
 import { Timestamp } from "firebase/firestore";
+import { redirect } from "next/navigation";
 
 export default async function Cart()
 {
     revalidatePath('/cart')
 
     const user = await getUser()
+    if(!user || !user?.id) return redirect('/')
+    
     const cart = await getCart(user?.id!)
 
     if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
