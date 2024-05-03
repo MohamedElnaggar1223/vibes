@@ -18,6 +18,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-email/components": "^0.0.17",
     "@react-pdf/renderer": "^3.3.8",
     "@sparticuz/chromium": "^122.0.0",
     "@vercel/speed-insights": "^1.0.10",

@@ -34,7 +34,7 @@ export default function Loading()
                 </div>
             </div>
             <div className='flex-1'>
-                Hello
+                
             </div>
         </section>
     )
