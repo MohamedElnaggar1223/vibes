@@ -8,8 +8,13 @@ import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import { useTranslation } from "react-i18next";
 import CartHeaderLink from "./CartHeaderLink";
+import { UserType } from "@/lib/types/userTypes";
 
-export default function SignedInHeader()
+type Props = {
+    user: UserType
+}
+
+export default function SignedInHeader({ user }: Props)
 {
     const pathname = usePathname()
 
@@ -35,7 +40,7 @@ export default function SignedInHeader()
 
     return (
         <>
-            <CartHeaderLink />
+            <CartHeaderLink user={user} />
             <Select onOpenChange={setOpen} open={open}>
                 <SelectTrigger className={cn("w-[90px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-sm lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
                     <SelectValue placeholder={t('profile')} />

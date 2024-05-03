@@ -1,14 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getUser } from "../layout";
-import { cn, getCart, getEvent, getExchangeRate } from "@/lib/utils";
+import { cn, getCart, getEvent, getExchangeRate, initTranslations } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 
-export default async function Cart()
+type Props = {
+    params: {
+		locale?: string
+	}
+}
+
+export default async function Cart({ params }: Props)
 {
     revalidatePath('/cart')
     const user = await getUser()
@@ -16,10 +22,10 @@ export default async function Cart()
     
     const cart = await getCart(user?.id!)
 
-    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
+    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (10 * 60 * 1000)))
     {
         return (
-            <section className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>
+            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>
                 <div className='relative flex'>
                     <Image
                         src='/assets/ghost.svg'
@@ -46,17 +52,19 @@ export default async function Cart()
         return event
     })
 
+    const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
+
     const events = await Promise.all(eventsData)
 
     const exchangeRate = await getExchangeRate()
 
     return (
-        <section className='h-[90vh] w-full flex flex-col gap-2 items-center justify-center'>
-            <div className='w-screen max-w-[734px] flex flex-col'>
+        <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='h-[90vh] w-[95%] max-lg:mx-auto lg:w-full flex flex-col gap-2 items-center justify-center'>
+            <div className='w-full lg:w-screen lg:max-w-[734px] flex flex-col'>
                 <div className='flex items-center justify-between gap-2'>
-                    <p className='font-poppins text-white font-medium text-lg'>Reserved Tickets</p>
+                    <p className='font-poppins text-white font-medium text-base lg:text-lg'>{t("reserved")}</p>
                     <div className='flex gap-1.5 items-center'>
-                        <p className='font-poppins text-white font-thin text-base'>Tickets Reserved for</p>
+                        <p className='font-poppins text-white font-thin text-sm lg:text-base'>{t("ticketsReserved")}</p>
                         <CartTimer createdAt={cart?.createdAt!} />
                     </div>
                 </div>
@@ -67,7 +75,7 @@ export default async function Cart()
                 </div>
             </div>
             <Link href='/cart/checkout' className='w-full max-w-[412px]'>
-                <button className={cn('cursor-pointer max-w-[412px] mt-4 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>Checkout</button>
+                <button className={cn('cursor-pointer max-w-[412px] mt-4 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-md font-light py-5 px-10 w-full text-white font-poppins')}>{t('checkout')}</button>
             </Link>
         </section>
     )

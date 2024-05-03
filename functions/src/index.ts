@@ -42,7 +42,7 @@ const transporter = nodemailer.createTransport({
 
 export const clearCarts = onSchedule("* * * * *", async () => {
     // admin.firestore().settings({ ignoreUndefinedProperties: true })
-    const tenMinutesAgo = Timestamp.now().toMillis() - (2 * 60 * 1000)
+    const tenMinutesAgo = Timestamp.now().toMillis() - (10 * 60 * 1000)
     const usersRef = db.collection('users')
     const snapshot = await usersRef
     //   .where('cart.createdAt', '<=', tenMinutesAgo)

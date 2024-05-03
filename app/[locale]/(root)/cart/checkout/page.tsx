@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getUser } from "../../layout";
-import { getCart, getEvent, getExchangeRate } from "@/lib/utils";
+import { getCart, getEvent, getExchangeRate, initTranslations } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
@@ -9,7 +9,13 @@ import ProceedToPayment from "@/components/shared/ProceedToPayment";
 import { Timestamp } from "firebase/firestore";
 import { redirect } from "next/navigation";
 
-export default async function Cart()
+type Props = {
+    params: {
+        locale?: string
+    }
+}
+
+export default async function Cart({ params }: Props)
 {
     revalidatePath('/cart')
 
@@ -18,7 +24,7 @@ export default async function Cart()
     
     const cart = await getCart(user?.id!)
 
-    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (2 * 60 * 1000)))
+    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (10 * 60 * 1000)))
     {
         return (
             <section className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>
@@ -84,13 +90,15 @@ export default async function Cart()
         return total + ticket.parkingPass
     }, 0)
 
+    const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
+
     return (
-        <section className='h-[90vh] w-full flex gap-6 items-center justify-center'>
-            <div className='w-screen max-w-[734px] flex flex-col'>
+        <section className='lg:h-[90vh] w-[95%] lg:w-full flex gap-6 items-center justify-center max-lg:py-8 max-lg:mx-auto max-lg:flex-col-reverse'>
+            <div className='w-full lg:w-screen lg:max-w-[734px] flex flex-col'>
                 <div className='flex items-center justify-between gap-2'>
-                    <p className='font-poppins text-white font-medium text-lg'>Reserved Tickets</p>
+                    <p className='font-poppins text-white font-medium text-base lg:text-lg'>{t("reserved")}</p>
                     <div className='flex gap-1.5 items-center'>
-                        <p className='font-poppins text-white font-thin text-base'>Tickets Reserved for</p>
+                        <p className='font-poppins text-white font-thin text-sm lg:text-base'>{t("ticketsReserved")}</p>
                         <CartTimer createdAt={cart?.createdAt!} />
                     </div>
                 </div>
