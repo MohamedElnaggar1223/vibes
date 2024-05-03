@@ -24,6 +24,8 @@ export default async function Cart({ params }: Props)
     
     const cart = await getCart(user?.id!)
 
+    const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
+
     if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (10 * 60 * 1000)))
     {
         return (
@@ -38,8 +40,8 @@ export default async function Cart({ params }: Props)
                     />
                     <div className='absolute z-10 rounded-full w-32 h-32 bg-white opacity-20 top-6 right-10' />
                 </div>
-                <p className='text-white font-poppins text-xl font-light -mt-6'>No Items in Bag...</p>
-                <p className='text-white font-poppins text-xl font-light mt-3 profile-span'>Browse <Link href='/'><span className='underline decoration-[rgba(231,35,119,1)] underline-offset-4'>Events & Tickets</span></Link></p>
+                <p className='text-white font-poppins text-xl font-light -mt-6'>{t('noItems')}</p>
+                <p className='text-white font-poppins text-xl font-light mt-3 profile-span'>{t('browse')} <Link href='/'><span className='underline decoration-[rgba(231,35,119,1)] underline-offset-4'>{t('eventsTickets')}</span></Link></p>
             </section>
         )
     }
@@ -89,8 +91,6 @@ export default async function Cart({ params }: Props)
     const totalNumberParkingPasses = cart.tickets.reduce((total, ticket) => {
         return total + ticket.parkingPass
     }, 0)
-
-    const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
 
     return (
         <section className='lg:h-[90vh] w-[95%] lg:w-full flex gap-6 items-center justify-center max-lg:py-8 max-lg:mx-auto max-lg:flex-col-reverse'>
