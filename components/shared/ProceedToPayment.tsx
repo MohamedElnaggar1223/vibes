@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import FormattedPrice from "./FormattedPrice"
 import { ExchangeRate } from "@/lib/types/eventTypes"
-import { Timestamp, deleteField, doc, getDoc, updateDoc } from "firebase/firestore"
+import { Timestamp, arrayUnion, deleteField, doc, getDoc, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import { usePathname, useRouter } from "next/navigation"
 import { TicketType } from "@/lib/types/ticketTypes"
@@ -38,7 +38,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
     const handleBuy = async () => {
         setLoading(true)
         const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
-        await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: [], createdAt: null, status: 'pending' } })
+        await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
         await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + totalNumberTickets + totalNumberParkingPasses, updatedAt: Timestamp.now() })
 
         const ticketsUpdate = tickets.map(async ticket => await updateDoc(doc(db, 'tickets', ticket.id), { status: 'paid' }))

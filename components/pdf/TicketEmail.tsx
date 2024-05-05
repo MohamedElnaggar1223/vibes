@@ -41,11 +41,11 @@ export default function TicketEmail({ event, ticket }: Props)
             </Head>
             <Preview>{''}</Preview>
             <Tailwind>
-                <Body className='min-w-[1260px] flex items-center justify-center flex-col'>
-                    <Section width={1260} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className='min-w-[1260px] border border-solid border-[#eaeaea] flex flex-col items-center justify-center px-4 py-4'>
-                        <Section width={1260} className='w-full max-w-[1260px] flex flex-col'>
-                            <Row width={1260} className='w-[1260px] mx-auto flex justify-between'>
-                                <Column width={614} align="left" className='h-[50px] overflow-hidden '>
+                <Body className='min-w-[960px] flex items-center justify-center flex-col'>
+                    <Section width={960} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className='min-w-[960px] border border-solid border-[#eaeaea] flex flex-col items-center justify-center px-4 py-4'>
+                        <Section width={960} className='w-full max-w-[960px] flex flex-col'>
+                            <Row width={960} className='w-[960px] mx-auto flex justify-between'>
+                                <Column width={466} align="left" className='h-[50px] overflow-hidden '>
                                     <Img
                                         src='https://firebasestorage.googleapis.com/v0/b/test-2cf5b.appspot.com/o/play_store_512.png?alt=media&token=a5f145ce-53c4-48af-a75e-26f81067cd87'
                                         alt='logo'
@@ -54,17 +54,17 @@ export default function TicketEmail({ event, ticket }: Props)
                                         className='object-contain'
                                     />
                                 </Column>
-                                <Column width={614} align="right" className=''>
+                                <Column width={466} align="right" className=''>
                                     <Link href="https://www.vibes-events.com/profile">My Profile</Link>
                                 </Column>
                             </Row>
                         </Section>
-                        <Section width={1260} className='my-16 w-[1260px] flex-col mx-auto flex items-center justify-center text-center'>
-                            <Text className='font-poppins w-[1260px] mx-auto text-7xl font-bold text-black text-center'>You Got the Tickets</Text>
+                        <Section width={960} className='my-16 w-[960px] flex-col mx-auto flex items-center justify-center text-center'>
+                            <Text className='font-poppins w-[960px] mx-auto text-7xl font-bold text-black text-center'>You Got the Tickets</Text>
                         </Section>
-                        <Section width={1260} className='w-[1260px] flex flex-col mx-auto'>
-                            <Row width={1260} className='w-[1260px] mx-auto flex justify-between'>
-                                <Column width={614} align="center" className='h-[360px] overflow-hidden mx-4'>
+                        <Section width={960} className='w-[960px] flex flex-col mx-auto'>
+                            <Row width={960} className='w-[960px] mx-auto flex justify-between'>
+                                <Column width={466} align="center" className='h-[360px] overflow-hidden mx-4'>
                                     <Img
                                         src={event.displayPageImage}
                                         alt='logo'
@@ -73,32 +73,32 @@ export default function TicketEmail({ event, ticket }: Props)
                                         className='object-contain'
                                     />
                                 </Column>
-                                <Column width={614} style={{ marginLeft: '80px' }} align="left" className=''>
+                                <Column width={466} style={{ marginLeft: '80px' }} align="left" className=''>
                                     <Text className='font-poppins text-3xl text-left'>{event.name}</Text>
                                     <Text className='font-poppins text-xl text-left'>{months[event.eventDate?.getMonth()]}, {getDaySuffix(event.eventDate?.getDate())}, {event.eventDate?.getFullYear()} - {formatTime(event.eventTime)}</Text>
                                     <Text className='font-poppins text-xl text-left'>{event.venue}, {event.city}, {event.country}</Text>
                                 </Column>
                             </Row>
                         </Section>
-                        <Section width={1260} className='my-16 w-[1260px] flex-col mx-auto flex items-start justify-start text-start'>
-                            <Text className='font-poppins w-[1260px] mx-auto text-3xl font-bold text-black text-left'>Important Information</Text>
+                        <Section width={960} className='my-16 w-[960px] flex-col mx-auto flex items-start justify-start text-start'>
+                            <Text className='font-poppins w-[960px] mx-auto text-3xl font-bold text-black text-left'>Important Information</Text>
                             {event.eventDisclaimers.map((disclaimer, index) => (
-                                <Text key={index} className='font-poppins w-[1260px] mx-auto text-lg text-left'>• {disclaimer.disclaimer}</Text>
+                                <Text key={index} className='font-poppins w-[960px] mx-auto text-lg text-left'>• {disclaimer.disclaimer}</Text>
                             ))}
                         </Section>
-                        <Section width={1260} className='w-full max-w-[1260px] flex flex-col'>
-                            <Row width={1260} className='w-[1260px] mx-auto flex justify-between'>
-                                <Column width={614} align="left" className='h-[50px] overflow-hidden '>
+                        <Section width={960} className='w-full max-w-[960px] flex flex-col'>
+                            <Row width={960} className='w-[960px] mx-auto flex justify-between'>
+                                <Column width={466} align="left" className='h-[50px] overflow-hidden '>
                                     <Text className='text-3xl font-bold text-black text-left font-[Ppoppins'>Payment Summary</Text>
                                 </Column>
-                                <Column width={614} align="right" className=''>
+                                <Column width={466} align="right" className=''>
                                     <Link href="https://www.vibes-events.com/profile" className='text-2xl'>View Details</Link>
                                 </Column>
                             </Row>
                         </Section>
-                        <Hr className='w-[1080px] my-4' />
-                        <Section width={1180} className='my-16 w-[1180px] flex-col mx-auto flex items-start justify-start text-start'>
-                            <Text className='font-poppins w-[1180px] mx-auto text-3xl font-bold text-black text-right'>Total: {ticket.totalPaid}{ticket.country}</Text>
+                        <Hr className='w-[720px] my-4' />
+                        <Section width={780} className='my-16 w-[780px] flex-col mx-auto flex items-start justify-start text-start'>
+                            <Text className='font-poppins w-[780px] mx-auto text-3xl font-bold text-black text-right'>Total: {ticket.totalPaid}{ticket.country}</Text>
                         </Section>
                     </Section>
                 </Body>

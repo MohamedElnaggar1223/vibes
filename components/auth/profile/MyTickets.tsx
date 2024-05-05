@@ -21,7 +21,7 @@ type Props = {
 export default function ViewMyTickets({ user }: Props)
 {
     // const [selectedTab, setSelectedTab] = useState('current')
-
+    console.log(user)
     const router = useRouter()
     const searchParams = useSearchParams()
 
