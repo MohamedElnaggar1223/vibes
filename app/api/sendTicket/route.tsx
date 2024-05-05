@@ -22,6 +22,8 @@ export async function POST(req: Request)
     const request = await req.json()
     const { mailOptions, event, ticket } = request
 
+    console.log(mailOptions, event, ticket)
+
     const eventData = {
         ...event,
         createdAt: event?.createdAt.toDate(),
