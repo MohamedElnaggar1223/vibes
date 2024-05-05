@@ -50,6 +50,7 @@ export async function POST(req: Request)
     try
     {
         await transporter.sendMail(newMailOptions)
+        return NextResponse.json({ ok: "Okay" })
     }
     catch(e)
     {
