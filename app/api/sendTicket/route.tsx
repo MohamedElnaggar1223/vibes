@@ -24,17 +24,17 @@ export async function POST(req: Request)
 
     const eventData = {
         ...event,
-        createdAt: new Date(event?.createdAt._seconds * 1000),
-        eventTime: new Date(event?.eventTime._seconds * 1000),
-        eventDate: new Date(event?.eventDate._seconds * 1000),
-        updatedAt: new Date(event?.updatedAt._seconds * 1000),
-        gatesClose: new Date(event?.gatesClose._seconds * 1000),
-        gatesOpen: new Date(event?.gatesOpen._seconds * 1000),
+        createdAt: !event.createdAt ? null : new Date(event?.createdAt._seconds * 1000),
+        eventTime: !event.eventTime ? null : new Date(event?.eventTime._seconds * 1000),
+        eventDate: !event.eventDate ? null : new Date(event?.eventDate._seconds * 1000),
+        updatedAt: !event.updatedAt ? null : new Date(event?.updatedAt._seconds * 1000),
+        gatesClose: !event.gatesClose ? null : new Date(event?.gatesClose._seconds * 1000),
+        gatesOpen: !event.gatesOpen ? null : new Date(event?.gatesOpen._seconds * 1000),
     } as EventType
 
     const ticketData = {
         ...ticket,
-        createdAt: new Date(ticket?.createdAt._seconds * 1000),
+        createdAt: !ticket.createdAt ? null : new Date(ticket?.createdAt._seconds * 1000),
     } as TicketType
 
     const emailHtml = render(<TicketEmail event={eventData} ticket={ticketData} />);

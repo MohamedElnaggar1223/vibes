@@ -206,7 +206,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
         
             try
             {
-                const { emailHtml } = await fetch('https://www.vibes-events.com/api/sendTicket', {
+                const data = await fetch('https://www.vibes-events.com/api/sendTicket', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -216,7 +216,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
 
                 const newMailOptions = {
                     ...mailOptions,
-                    html: emailHtml
+                    html: data.emailHtml
                 }
 
                 await transporter.sendMail(newMailOptions)
