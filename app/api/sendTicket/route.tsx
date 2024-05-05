@@ -22,7 +22,7 @@ export async function POST(req: Request)
     const request = await req.json()
     const { mailOptions, event, ticket } = request
 
-    console.log(mailOptions.attachments[0].content)
+    mailOptions.attachments.map((pdf: any) => ({...pdf, content: Buffer.from(pdf.content.data, 'base64')}))
 
     const eventData = {
         ...event,
