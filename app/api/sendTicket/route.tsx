@@ -22,7 +22,7 @@ export async function POST(req: Request)
     const request = await req.json()
     const { mailOptions, event, ticket } = request
 
-    console.log(ticket)
+    console.log(event)
 
     const eventData = {
         ...event,
