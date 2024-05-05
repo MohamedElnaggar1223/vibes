@@ -22,7 +22,7 @@ export async function POST(req: Request)
     const request = await req.json()
     const { mailOptions, event, ticket } = request
 
-    mailOptions.attachments.map((pdf: any) => ({...pdf, content: Buffer.from(pdf.content.data, 'base64')}))
+    const newAttachments = mailOptions.attachments.map((pdf: any) => ({...pdf, content: Buffer.from(pdf.content.data, 'base64')}))
 
     const eventData = {
         ...event,
@@ -41,9 +41,15 @@ export async function POST(req: Request)
 
     const emailHtml = render(<TicketEmail event={eventData} ticket={ticketData} />);
 
+    const newMailOptions = {
+        ...mailOptions,
+        attachments: newAttachments,
+        html: emailHtml
+    }
+
     try
     {
-        await transporter.sendMail({...mailOptions, html: emailHtml})
+        await transporter.sendMail(newMailOptions)
     }
     catch(e)
     {
