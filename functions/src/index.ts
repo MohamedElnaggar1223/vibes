@@ -202,13 +202,13 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             const postReq = {
                 mailOptions,
                 ticket,
-                event    
+                event: {...event.data(), id: event.id} 
             }
         
             try
             {
                 // await transporter.sendMail(mailOptions)
-                await fetch('https://www.vibes-events.com/api/sendTicket', {
+                fetch('https://www.vibes-events.com/api/sendTicket', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

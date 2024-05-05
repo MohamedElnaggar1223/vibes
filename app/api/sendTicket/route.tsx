@@ -22,13 +22,13 @@ export async function POST(req: Request)
     const request = await req.json()
     const { mailOptions, event, ticket } = request
 
-    console.log(mailOptions, event, ticket)
+    console.log(ticket)
 
     const eventData = {
         ...event,
-        createdAt: event?.createdAt.toDate(),
-        eventTime: event?.eventTime.toDate(),
-        eventDate: event?.eventDate.toDate(),
+        createdAt: event?.createdAt?.toDate(),
+        eventTime: event?.eventTime?.toDate(),
+        eventDate: event?.eventDate?.toDate(),
         updatedAt: event?.updatedAt?.toDate(),
         gatesClose: event?.gatesClose?.toDate(),
         gatesOpen: event?.gatesOpen?.toDate(),
@@ -36,7 +36,7 @@ export async function POST(req: Request)
 
     const ticketData = {
         ...ticket,
-        createdAt: ticket?.createdAt.toDate(),
+        createdAt: ticket?.createdAt?.toDate(),
     } as TicketType
 
     const emailHtml = render(<TicketEmail event={eventData} ticket={ticketData} />);
