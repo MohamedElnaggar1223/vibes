@@ -27,8 +27,8 @@ export default function CartHeaderLink({ user }: Props)
             {pathname?.includes('/cart') ? (
                 <Image
                     src="/assets/bag-active.svg"
-                    width={19}
-                    height={23}
+                    width={23}
+                    height={27}
                     alt="cart-active" 
                 />
             ) : hovered ? (

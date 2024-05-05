@@ -15,7 +15,7 @@ import { onSchedule } from 'firebase-functions/v2/scheduler'
 import { Timestamp } from 'firebase-admin/firestore';
 // import * as admin from 'firebase-admin'
 const admin = require('firebase-admin')
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer')
 const chrome = require('@sparticuz/chromium')
 const puppeteer = require('puppeteer-core')
 admin.initializeApp()
@@ -29,16 +29,16 @@ const db = admin.firestore()
 //   response.send("Hello from Firebase!");
 // });
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: 'maelnaggar1223@gmail.com',
-        pass: 'nwlb vxnh kxru hkga', 
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     host: 'smtp.gmail.com',
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: 'maelnaggar1223@gmail.com',
+//         pass: 'nwlb vxnh kxru hkga', 
+//     }
+// })
 
 export const clearCarts = onSchedule("* * * * *", async () => {
     // admin.firestore().settings({ ignoreUndefinedProperties: true })
@@ -198,10 +198,23 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 subject: `Vibes ${eventData?.name}`,
                 attachments: attachments
             }
+
+            const postReq = {
+                mailOptions,
+                ticket,
+                event    
+            }
         
             try
             {
-                await transporter.sendMail(mailOptions)
+                // await transporter.sendMail(mailOptions)
+                await fetch('https://www.vibes-events.com/api/sendTicket', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postReq)
+                })
             }
             catch(e: any)
             {
