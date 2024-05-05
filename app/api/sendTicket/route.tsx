@@ -20,9 +20,7 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request)
 {
     const request = await req.json()
-    const { mailOptions, event, ticket } = request
-
-    const newAttachments = mailOptions.attachments.map((pdf: any) => ({...pdf, content: Buffer.from(pdf.content.data, 'base64')}))
+    const { event, ticket } = request
 
     const eventData = {
         ...event,
@@ -41,16 +39,16 @@ export async function POST(req: Request)
 
     const emailHtml = render(<TicketEmail event={eventData} ticket={ticketData} />);
 
-    const newMailOptions = {
-        ...mailOptions,
-        attachments: newAttachments,
-        html: emailHtml
-    }
+    // const newMailOptions = {
+    //     ...mailOptions,
+    //     attachments: newAttachments,
+    //     html: emailHtml
+    // }
 
     try
     {
-        await transporter.sendMail(newMailOptions)
-        return NextResponse.json({ ok: "Okay" })
+        // await transporter.sendMail(newMailOptions)
+        return NextResponse.json({ emailHtml })
     }
     catch(e)
     {
