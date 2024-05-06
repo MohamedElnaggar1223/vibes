@@ -10,7 +10,7 @@ import { Separator } from "../ui/separator"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { LucideChevronDown } from 'lucide-react'
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { useTranslation } from "react-i18next"
 
 type Props = {
@@ -28,6 +28,9 @@ export default function MyTicketCard({ ticket, event, first }: Props)
     const [scrolled, setScrolled] = useState(false)
 
     const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const id = searchParams?.get('id')
 
     const { t } = useTranslation()
 
@@ -73,6 +76,10 @@ export default function MyTicketCard({ ticket, event, first }: Props)
             setIsAnimating(true)
         }
     }
+
+    useEffect(() => {
+        if(typeof id === 'string' && id === ticket.id) mainRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [id])
 
     useEffect(() => {
         const handleResize = () => setCurrentWidth(window.innerWidth)

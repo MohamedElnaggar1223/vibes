@@ -92,13 +92,16 @@ export default function TicketEmail({ event, ticket }: Props)
                                     <Text className='text-3xl font-bold text-black text-left font-[Ppoppins'>Payment Summary</Text>
                                 </Column>
                                 <Column width={466} align="right" className=''>
-                                    <Link href="https://www.vibes-events.com/profile" className='text-2xl'>View Details</Link>
+                                    <Link href={`https://www.vibes-events.com/profile?show=my-tickets&id=${ticket.id}`} className='text-2xl'>View Details</Link>
                                 </Column>
                             </Row>
                         </Section>
                         <Hr className='w-[720px] my-4' />
                         <Section width={780} className='my-16 w-[780px] flex-col mx-auto flex items-start justify-start text-start'>
                             <Text className='font-poppins w-[780px] mx-auto text-3xl font-bold text-black text-right'>Total: {ticket.totalPaid}{ticket.country}</Text>
+                        </Section>
+                        <Section width={960} className='my-16 w-[960px] flex-col mx-auto flex items-center justify-center text-center'>
+                            <Text className='font-poppins w-[960px] mx-auto text-2xl font-bold text-gray-500 text-center'>Tickets Are Attached as Pdfs below</Text>
                         </Section>
                     </Section>
                 </Body>
