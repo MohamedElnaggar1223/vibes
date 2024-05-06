@@ -104,7 +104,7 @@ export default async function Cart({ params }: Props)
                 </div>
                 <div className='w-full rounded-sm bg-[rgba(217,217,217,0.2)] flex flex-col gap-4 h-screen max-h-[524px] overflow-auto'>
                     {cart.tickets.map(ticket => (
-                        <CartTicket key={ticket.id} ticket={ticket} event={events.find(event => event?.id === ticket.eventId)!} exchangeRate={exchangeRate} />
+                        <CartTicket key={ticket.id} user={user!} ticket={ticket} event={events.find(event => event?.id === ticket.eventId)!} exchangeRate={exchangeRate} />
                     ))}
                 </div>
             </div>
