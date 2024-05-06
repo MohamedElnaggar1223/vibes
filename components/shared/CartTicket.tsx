@@ -11,19 +11,50 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import FormattedPrice from "./FormattedPrice"
 import { AnimatePresence, motion } from "framer-motion"
+import { Loader2, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { UserType } from "@/lib/types/userTypes"
+import { Dialog, DialogContent } from "../ui/dialog"
 
 type Props = {
     ticket: TicketType
     event: EventType
     exchangeRate: ExchangeRate
+    user: UserType
 }
 
-export default function CartTicket({ ticket, event, exchangeRate }: Props) 
+export default function CartTicket({ user, ticket, event, exchangeRate }: Props) 
 {
     const pathname = usePathname()
+    const router = useRouter()
+
     const { t } = useTranslation()
 
-    console.log()
+    const [loading, setLoading] = useState(false)
+
+    const handleDelete = async () => {
+        setLoading(true)
+
+        const newEventTickets = event?.tickets.map(eventTicket => {
+            const foundTicket = Object.keys(ticket.tickets).find(key => key === eventTicket.name)
+            if (foundTicket) {
+                return {...eventTicket, quantity: eventTicket.quantity + ticket.tickets[foundTicket]}
+            }
+            return eventTicket
+        })
+
+        const eventDoc = doc(db, 'events', event.id)
+        const ticketDoc = doc(db, 'tickets', ticket.id)
+        const userDoc = doc(db, 'users', user.id!)
+
+        await updateDoc(eventDoc, { tickets: newEventTickets! })
+        await updateDoc(userDoc, { cart: { ...user.cart, tickets: user.cart?.tickets.slice().filter(id => id !== ticket.id) } })
+        await deleteDoc(ticketDoc)
+
+        setLoading(false)
+        router.refresh()
+    }
 
     return (
         <AnimatePresence>
@@ -47,6 +78,7 @@ export default function CartTicket({ ticket, event, exchangeRate }: Props)
                             </div>
                         </div>
                     </div>
+                    <Trash2 onClick={handleDelete} className='ml-auto mr-2 cursor-pointer' stroke="#f0f0f0" size='22' />
                 </div>
                 {Object.keys(ticket.tickets).slice().filter(key => ticket.tickets[key] !== 0).map(key => (
                     <div key={key} className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
@@ -63,6 +95,11 @@ export default function CartTicket({ ticket, event, exchangeRate }: Props)
                     </div>
                 )}
             </motion.div>
+            <Dialog open={loading}>
+                <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
+                    <Loader2 className='animate-spin' size={42} color="#5E1F3C" />
+                </DialogContent>
+            </Dialog>
         </AnimatePresence>
     )
 }
