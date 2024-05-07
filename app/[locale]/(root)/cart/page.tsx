@@ -4,7 +4,7 @@ import { getUser } from "../layout";
 import { cn, getCart, getEvent, getExchangeRate, initTranslations } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
-import { revalidatePath } from "next/cache";
+import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 
@@ -16,7 +16,7 @@ type Props = {
 
 export default async function Cart({ params }: Props)
 {
-    revalidatePath('/cart')
+    noStore()
     const user = await getUser()
     if(!user || !user?.id) return redirect('/')
     

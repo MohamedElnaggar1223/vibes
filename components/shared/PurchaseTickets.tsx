@@ -179,7 +179,8 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedParkingPass(0)
-            await fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/refreshCart` : `http://localhost:3000/api/refreshCart`, {  method: 'GET' })
+            // await fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/refreshCart` : `http://localhost:3000/api/refreshCart`, {  method: 'GET' })
+            router.refresh()
             router.push('/cart')
             // router.push(`/success/${addedTicket.id}`)
 
