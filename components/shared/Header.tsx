@@ -6,6 +6,7 @@ import CategoriesHeaderLink from "./CategoriesHeaderLink";
 import { getCategories, initTranslations } from "@/lib/utils";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { getUser } from "@/app/[locale]/(root)/layout";
+import { unstable_noStore as noStore } from "next/cache";
 
 type Props = {
     params: {
@@ -15,6 +16,7 @@ type Props = {
 
 export default async function Header({ params }: Props) 
 {
+    noStore()
     const { t } = await initTranslations(params?.locale ?? 'en', ['homepage', 'common'], )
     const session = await getServerSession()
     const categories = await getCategories()
