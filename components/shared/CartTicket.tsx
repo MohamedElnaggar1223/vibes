@@ -7,15 +7,16 @@ import { TicketType } from "@/lib/types/ticketTypes"
 import { toArabicDate, getDaySuffix, toArabicTime, formatTime, toArabicNums } from "@/lib/utils"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import FormattedPrice from "./FormattedPrice"
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { UserType } from "@/lib/types/userTypes"
 import { Dialog, DialogContent } from "../ui/dialog"
+import { PromoContextType, PromoContext } from "@/providers/PromoCodeProvider"
 
 type Props = {
     ticket: TicketType
@@ -26,12 +27,17 @@ type Props = {
 
 export default function CartTicket({ user, ticket, event, exchangeRate }: Props) 
 {
+    const context = useContext<PromoContextType>(PromoContext)
+    
+    if(!context) return null
+
     const pathname = usePathname()
     const router = useRouter()
 
     const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false)
+    const [discounted, setDiscounted] = useState(false)
 
     const handleDelete = async () => {
         setLoading(true)
@@ -55,6 +61,54 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
         setLoading(false)
         router.refresh()
     }
+
+    // const ticketPrice = useMemo(() => {
+    //     if(context.promoCodeApplied) {
+    //         const promoCode = context.promoCodes?.find(promoCode => promoCode.promo === context.promoCode)
+
+    //         if(promoCode?.singleEvent && promoCode?.eventID === event.id) {
+    //             if(promoCode?.type === '$') {
+    //                 // return (ticket.totalPaid - promoCode?.discount) / Object.values(ticket.tickets as Object)?.reduce((total: any, ticket: any) => total + ticket, 0)
+    //                 const eventTicketPrice = event.tickets.find(eventTicket => eventTicket.name === key)?.price
+    //             } else {
+    //                 return (ticket.totalPaid - (ticket.totalPaid * (promoCode?.discount / 100))) / Object.values(ticket.tickets as Object)?.reduce((total: any, ticket: any) => total + ticket, 0)
+    //             }
+    //         } else if(!promoCode?.singleEvent) {
+    //             if(promoCode?.type === '$') {
+    //                 return (ticket.totalPaid - promoCode?.discount) / Object.values(ticket.tickets as Object)?.reduce((total: any, ticket: any) => total + ticket, 0)
+    //             } else {
+    //                 return (ticket.totalPaid - (ticket.totalPaid * (promoCode?.discount! / 100))) / Object.values(ticket.tickets as Object)?.reduce((total: any, ticket: any) => total + ticket, 0)
+    //             }
+    //         }
+    //     }
+    //     else return ticket.totalPaid / Object.values(ticket.tickets as Object)?.reduce((total: any, ticket: any) => total + ticket, 0)
+    // }, [context])
+
+    const findTicketPrice = useCallback((key: string) => {
+        const ticketPrice = event.tickets.find(eventTicket => eventTicket.name === key)?.price
+        if(context.promoCodeApplied) {
+            const promoCode = context.promoCodes?.find(promoCode => promoCode.promo === context.promoCode)
+            const discountPerTicket = promoCode?.discount! / ticket.tickets[key]
+
+            console.log(discountPerTicket)
+
+            if(promoCode?.singleEvent && promoCode?.eventID === event.id) {
+                if(promoCode?.type === '$') {
+                    return (ticketPrice! - discountPerTicket)
+                } else {
+                    return (ticketPrice! - (ticketPrice! * (promoCode?.discount / 100)))
+                }
+            } else if(!promoCode?.singleEvent) {
+                if(promoCode?.type === '$') {
+                    return (ticketPrice! - discountPerTicket)
+                } else {
+                    return (ticketPrice! - (ticketPrice! * (promoCode?.discount! / 100)))
+                }
+            }
+            else return ticketPrice
+        }
+        else return ticketPrice
+    }, [context])
 
     return (
         <AnimatePresence>
@@ -84,7 +138,8 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
                     <div key={key} className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
                         <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{pathname?.startsWith('/ar') ? event.tickets.find(ticket => ticket.name === key)?.nameArabic : key}</p>
                         <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[key]}`) : ticket.tickets[key]}</p>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
+                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{findTicketPrice(key) !== event.tickets.find(eventTicket => eventTicket.name === key)?.price && <span className='text-gray-600 line-through mr-4'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></span>}<FormattedPrice price={findTicketPrice(key)!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
+                        {/* <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p> */}
                     </div>
                 ))}
                 {ticket.parkingPass > 0 && (

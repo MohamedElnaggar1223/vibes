@@ -7,7 +7,7 @@ import { Resource, createInstance, i18n } from 'i18next';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { i18nConfig } from '@/i18nConfig';
-import { TicketType } from "./types/ticketTypes";
+import { PromoCode, TicketType } from "./types/ticketTypes";
 import { UserType } from "./types/userTypes";
 
 export function cn(...inputs: ClassValue[]) {
@@ -120,6 +120,13 @@ export const getCart = async (id: string) => {
     })
 
     return {...userCart, tickets: cartTicketsSorted}
+}
+
+export const getPromoCodes = async () => {
+    const admin = await initAdmin()
+    const promoCodes = (await admin.firestore().collection('promoCodes').get()).docs.map(doc => ({...doc.data(), createdAt: doc.data().createdAt.toDate()}))
+
+    return promoCodes as PromoCode[]
 }
 
 export async function initTranslations(

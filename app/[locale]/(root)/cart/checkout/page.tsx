@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getUser } from "../../layout";
-import { getCart, getEvent, getExchangeRate, initTranslations } from "@/lib/utils";
+import { getCart, getEvent, getExchangeRate, getPromoCodes, initTranslations } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
 import { revalidatePath } from "next/cache";
@@ -23,6 +23,7 @@ export default async function Cart({ params }: Props)
     if(!user || !user?.id) return redirect('/')
     
     const cart = await getCart(user?.id!)
+    const promoCodes = await getPromoCodes()
 
     const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
 
@@ -108,7 +109,7 @@ export default async function Cart({ params }: Props)
                     ))}
                 </div>
             </div>
-            <ProceedToPayment total={total} user={user!} totalNumberTickets={totalNumberTickets} totalNumberParkingPasses={totalNumberParkingPasses} tickets={cart.tickets} ticketsTotal={ticketsTotal} parkingTotal={parkingTotal} exchangeRate={exchangeRate} />
+            <ProceedToPayment total={total} user={user!} totalNumberTickets={totalNumberTickets} totalNumberParkingPasses={totalNumberParkingPasses} tickets={cart.tickets} ticketsTotal={ticketsTotal} parkingTotal={parkingTotal} exchangeRate={exchangeRate} promoCodes={promoCodes} />
         </section>
     )
 }
