@@ -12,26 +12,39 @@ export default function CountryContextProvider({ children }: { children: React.R
     const [preferedCountry, setPreferedCountry] = useState<string | null>()
 
     useEffect(() => {
-        if(localStorage.getItem('country')) setPreferedCountry(localStorage.getItem('country'))
-        else setPreferedCountry(null)
+        if(localStorage.getItem('country')) setPreferedCountry(() => localStorage.getItem('country'))
+        else setPreferedCountry(() => null)
     }, [coordinates])
 
-    useEffect(() => {
-        setTimeout(() => {
-            if(!(['EGP', 'AED', 'SAR'].includes(country ?? ''))) 
-            {
-                if(!(['EGP', 'AED', 'SAR'].includes(localStorage.getItem('country')!))) setCountry('AED')
-                else setCountry(localStorage.getItem('country')!)
-            }
-        }, 5000)
-    }, [])
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         if(!(['EGP', 'AED', 'SAR'].includes(country ?? ''))) 
+    //         {
+    //             console.log(country)
+    //             if(!(['EGP', 'AED', 'SAR'].includes(localStorage.getItem('country')!))) setCountry(() => 'AED')
+    //             else setCountry(() => localStorage.getItem('country')!)
+    //         }
+    //     }, 5000)
+    // }, [])
 
     // const currentLocation = useMemo(() => {
     //     return navigator.geolocation.getCurrentPosition((data) => setCountry(data.coords))
     // }, [])
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((data) => setCoordinates(data.coords))
+        let mounted = false
+        navigator.geolocation.getCurrentPosition((data) => {
+            mounted = true
+            setCoordinates(() => data.coords)
+        })
+        setTimeout(() => {
+            if(mounted) return
+            if(!(['EGP', 'AED', 'SAR'].includes(country ?? ''))) 
+            {
+                if(!(['EGP', 'AED', 'SAR'].includes(localStorage.getItem('country')!))) setCountry(() => 'AED')
+                else setCountry(() => localStorage.getItem('country')!)
+            }
+        }, 5000)
     }, [])
 
     useEffect(() => {
