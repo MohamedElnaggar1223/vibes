@@ -6,7 +6,7 @@ import {
     DialogContent,
   } from "@/components/ui/dialog"
 import { cn, toArabicNums } from "@/lib/utils"
-import { Loader2 } from "lucide-react"
+import { Check, Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import FormattedPrice from "./FormattedPrice"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
@@ -49,8 +49,6 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
 
     const pathname = usePathname()
 
-    console.log(user)
-
     const { t } = useTranslation()
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -62,12 +60,18 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
     const availableParkingPasses = useMemo(() => {
         return eventData.parkingPass
     }, [eventData])
+    const availableSeats = useMemo(() => {
+        return eventData.seatPattern
+    }, [eventData])
     const [selectedTickets, setSelectedTickets] = useState(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
+    const [selectedSeats, setSelectedSeats] = useState({} as { [x: string]: string })
+    const [confirmedSeats, setConfirmedSeats] = useState({} as { [x: string]: string })
     const [purchasedTickets, setPurchasedTickets] = useState({} as { [x: string]: number })
     const [purchasedParkingPass, setPurchasedParkingPass] = useState(0)
     const [loading, setLoading] = useState(false)
     const [maxHeight, setMaxHeight] = useState(0)
     const [showMap, setShowMap] = useState(false)
+    const [showSeats, setShowSeats] = useState(false)
     const [currentWidth, setCurrentWidth] = useState<number>()
 
     useEffect(() => {
@@ -150,6 +154,41 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
         else return exchangeRate.USDToAED
     }, [country])
 
+    const RemainingSeats = useMemo(() => {
+        const remainingKeys = Object.keys(availableSeats).filter(seatPattern => !Object.keys(confirmedSeats).includes(seatPattern))
+        return remainingKeys.reduce((acc, key) => {
+            acc[key] = availableSeats[key];
+            return acc;
+          }, {} as { [x: string]: string });
+    }, [confirmedSeats, availableSeats])
+
+    const handleAddSeats = (seat: {[x: string]: string}) => {
+        const seatKey = Object.keys(seat)[0]
+        const seatTicket = Object.values(seat)[0]
+
+        const seatData = seatKey.split("_")
+        const seatType = seatData[0]
+
+        console.log(purchasedTickets[seatType])
+
+        if(Object.keys(selectedSeats).find(seatSelected => Object.keys(seat)[0] === seatSelected)) {
+            setSelectedSeats(prev => {
+                const tempSeats = {...prev}
+                delete tempSeats[seatKey]
+                return tempSeats
+            })
+
+            return
+        }
+
+        console.log(purchasedTickets[seatType])
+        console.log(Object.keys(selectedSeats).filter(seatPattern => seatPattern.includes(seatType)).length)
+
+        if(purchasedTickets[seatType] > 0 && Object.keys(selectedSeats).filter(seatPattern => seatPattern.includes(seatType)).length < purchasedTickets[seatType]) {
+            setSelectedSeats(prev => (prev ? {...prev, [seatKey]: seatTicket} : {[seatKey]: seatTicket}))
+        }
+    }
+
     const handleBuyTickets = async () => {
         startTransition(() => {
             setLoading(true)
@@ -160,7 +199,8 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 userId: user?.id,
                 eventId: event.id,
                 tickets: purchasedTickets,
-                seats: {},
+                seats: confirmedSeats,
+                seated: eventData.seated,
                 parkingPass: purchasedParkingPass,
                 country: country,
                 totalPaid: total * selectedExchangeRate,
@@ -170,7 +210,12 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
             fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${addedTicket.id}` : `http://localhost:3000/api/sendMail?ticketId=${addedTicket.id}`, {
                 method: 'GET',
             })
-            await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+            if(eventData.seated) {
+                await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+            }
+            else {
+                await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+            }
             await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [addedTicket.id] : [...(user?.cart?.tickets ?? []), addedTicket.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
             await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
             // const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
@@ -205,14 +250,14 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
             }
             else
             {
-                await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendPdfs' : 'http://localhost:3000/api/sendPdfs', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "email": user?.email,
-                        "event": event,
-                        "purchasedTickets": purchasedTickets,
-                    })
-                })
+                // await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendPdfs' : 'http://localhost:3000/api/sendPdfs', {
+                //     method: 'POST',
+                //     body: JSON.stringify({
+                //         "email": user?.email,
+                //         "event": event,
+                //         "purchasedTickets": purchasedTickets,
+                //     })
+                // })
             }
         }
         catch(e: any)
@@ -222,8 +267,6 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
             setLoading(false)
         }
     }
-
-    console.log(user?.id)
 
     return (
         <AnimatePresence>
@@ -291,6 +334,11 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
 
                                             <div onClick={() => setPurchasedTickets(prev => ({...prev, [ticket]: 0 }))} className='absolute cursor-pointer w-20 h-8 bg-[rgba(222,0,0,0.5)] font-poppins rounded-lg top-[-28px] z-[5] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 Delete
+                                            </div>
+                                        )}
+                                        {eventData.seated && (
+                                            <div onClick={() => setShowSeats(true)} className='absolute cursor-pointer px-2.5 py-2.5 bg-[rgba(0,142,23,0.5)] font-poppins rounded-lg bottom-[-32px] z-[5] right-0 text-white text-center flex items-center justify-center text-sm'>
+                                                Choose Seats {purchasedTickets[ticket] >= 1 && Object.keys(confirmedSeats).filter(seatPattern => seatPattern.includes(ticket)).length < purchasedTickets[ticket] && `(${purchasedTickets[ticket] - Object.keys(confirmedSeats).filter(seatPattern => seatPattern.includes(ticket)).length} left)`}
                                             </div>
                                         )}
                                     </motion.div>
@@ -394,7 +442,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
-                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0)} className={cn('font-poppins text-xs lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
+                                            <motion.button layout={true} onClick={handleBuyTickets} disabled={!(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) || (eventData.seated && Object.keys(confirmedSeats).length < Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0))} className={cn('font-poppins text-xs lg:text-lg w-fit font-normal px-5 rounded-lg py-1.5 text-white', !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) || (eventData.seated && Object.keys(confirmedSeats).length < Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)) ? 'bg-[#D9D9D9]' : 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}>
                                                 {t('common:addCart')}
                                             </motion.button>
                                         </TooltipTrigger>
@@ -402,6 +450,12 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                             !(Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0) > 0 || purchasedParkingPass > 0) &&
                                             <TooltipContent>
                                                 <p>{t('common:mustAddTickets')}</p>
+                                            </TooltipContent>
+                                        }
+                                        {
+                                            (eventData.seated && Object.keys(confirmedSeats).length < Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)) &&
+                                            <TooltipContent>
+                                                <p>Choose Seats!</p>
                                             </TooltipContent>
                                         }
                                     </Tooltip>
@@ -479,6 +533,50 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 }}
                             >
                                 {t('common:addTickets')}
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+                <Dialog open={showSeats} onOpenChange={setShowSeats}>
+                    <DialogContent dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col outline-none w-full max-w-[350px] lg:max-w-[627px] p-0 bg-[#181C25] border-none'>
+                        <div className='flex flex-col w-full max-w-[627px]'>
+                            <div className='py-6 text-white font-poppins outline-none max-lg:text-base font-semibold bg-[#232834] items-center text-center rounded-t-lg'>
+                                {/* {t('common:choosetickets')} */}
+                                Choose Seats
+                            </div>
+                            <div className='grid grid-cols-2 gap-2 py-2 px-2 outline-none w-full font-poppins'>
+                                {Object.keys(availableSeats).map((seat, index) => {
+                                    const seatData = seat.split("_")
+                                    const seatType = seatData[0]
+                                    const seatRow = seatData[1].split("-")[1]
+                                    const seatNumber = seatData[2].split("-")[1]
+                                    
+                                    return (
+                                        <div
+                                            key={index}
+                                            onMouseDown={() => handleAddSeats({ [seat] : availableSeats[seat] })}
+                                            className='relative flex-1 py-8 flex outline-none flex-col justify-between items-center text-white cursor-pointer'
+                                        >
+                                            <p className='font-semibold text-lg'>Row: {seatRow} Seat: {seatNumber}</p>
+                                            <p className='font-medium text-sm'>({seatType})</p>
+                                            {Object.keys(selectedSeats).find(seatSelected => seat === seatSelected) && (
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25, ease: 'easeInOut' }} className='absolute top-0 rounded-md z-50 w-full h-full border-2 border-[rgba(0,142,23,0.5)] flex items-start justify-end py-1 px-1'>
+                                                    <Check className='w-6 h-6' stroke="#008E17" />
+                                                </motion.div>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <div 
+                                className={cn('py-6 text-white font-poppins font-normal bg-[#5C5C5C] items-center text-center cursor-pointer', Object.values(selectedTickets).find(ticket => ticket > 0) && 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]')}
+                                onClick={() => {
+                                    setConfirmedSeats(selectedSeats)
+                                    setShowSeats(false)
+                                }}
+                            >
+                                {/* {t('common:addTickets')} */}
+                                Select Seats
                             </div>
                         </div>
                     </DialogContent>

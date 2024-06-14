@@ -32,6 +32,7 @@ export type EventType = {
     mapImage: string,
     name: string,
     nameArabic: string,
+    seatPattern: { [key: string]: string },
     seated: boolean,
     tickets: {
         name: string,
