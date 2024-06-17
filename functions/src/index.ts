@@ -77,9 +77,11 @@ export const clearCarts = onSchedule("* * * * *", async () => {
             return eventTicket
         })
 
+        const newEventSeats = {...event?.seatPattern, ...ticket.seats}
+
         console.log(newEventTickets)
 
-        await eventsRef.doc(event.id).update({ tickets: newEventTickets! })
+        await eventsRef.doc(event.id).update({ tickets: newEventTickets!, seatPattern: newEventSeats! })
         if(!ticketId) return console.error('No event found')
         await ticketsRef.doc(ticketId).delete()
     })

@@ -163,6 +163,9 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
     }, [confirmedSeats, availableSeats])
 
     const handleAddSeats = (seat: {[x: string]: string}) => {
+
+        console.log(seat)
+
         const seatKey = Object.keys(seat)[0]
         const seatTicket = Object.values(seat)[0]
 
@@ -545,20 +548,32 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 Choose Seats
                             </div>
                             <div className='grid grid-cols-2 gap-2 py-2 px-2 outline-none w-full font-poppins'>
-                                {Object.keys(availableSeats).map((seat, index) => {
+                                {Object.keys(availableSeats).filter(seatFilter => {
+                                    const seatData = seatFilter.split("_")
+                                    const seatType = seatData[0]
+                                    return Object.keys(purchasedTickets).includes(seatType) && purchasedTickets[seatType] > 0
+                                }).map((seat, index) => {
                                     const seatData = seat.split("_")
                                     const seatType = seatData[0]
                                     const seatRow = seatData[1].split("-")[1]
                                     const seatNumber = seatData[2].split("-")[1]
+
+                                    const count = Object.keys(purchasedTickets).filter(ticket => purchasedTickets[ticket] > 0).length
+
+                                    const numOfSelectedTickets = Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)
+                                    const numOfSelectedSeats = Object.keys(selectedSeats).length
+
+                                    const disabled = numOfSelectedTickets > 1 && numOfSelectedTickets === numOfSelectedSeats
                                     
                                     return (
                                         <div
                                             key={index}
                                             onMouseDown={() => handleAddSeats({ [seat] : availableSeats[seat] })}
-                                            className='relative flex-1 py-8 flex outline-none flex-col justify-between items-center text-white cursor-pointer'
+                                            className={cn('relative flex-1 py-8 flex outline-none flex-col justify-between items-center text-white', (disabled && !Object.keys(selectedSeats).includes(seat)) ? 'cursor-default' : 'cursor-pointer')}
                                         >
+                                            {disabled && !Object.keys(selectedSeats).includes(seat) && <div className='absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-50 rounded-md' />}
                                             <p className='font-semibold text-lg'>Row: {seatRow} Seat: {seatNumber}</p>
-                                            <p className='font-medium text-sm'>({seatType})</p>
+                                            {count > 1 && <p className='font-medium text-sm'>({seatType})</p>}
                                             {Object.keys(selectedSeats).find(seatSelected => seat === seatSelected) && (
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25, ease: 'easeInOut' }} className='absolute top-0 rounded-md z-50 w-full h-full border-2 border-[rgba(0,142,23,0.5)] flex items-start justify-end py-1 px-1'>
                                                     <Check className='w-6 h-6' stroke="#008E17" />

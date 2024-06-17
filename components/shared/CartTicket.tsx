@@ -50,11 +50,13 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
             return eventTicket
         })
 
+        const newEventSeats = {...event.seatPattern, ...ticket.seats}
+
         const eventDoc = doc(db, 'events', event.id)
         const ticketDoc = doc(db, 'tickets', ticket.id)
         const userDoc = doc(db, 'users', user.id!)
 
-        await updateDoc(eventDoc, { tickets: newEventTickets! })
+        await updateDoc(eventDoc, { tickets: newEventTickets!, seatPattern: newEventSeats})
         await updateDoc(userDoc, { cart: { ...user.cart, tickets: user.cart?.tickets.slice().filter(id => id !== ticket.id) } })
         await deleteDoc(ticketDoc)
 
@@ -149,6 +151,20 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
                         <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'><FormattedPrice price={event.parkingPass.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
                     </div>
                 )}
+                {Object.keys(ticket.seats).length > 0 && Object.keys(ticket.seats).map(seat => {
+                    const seatData = seat.split("_")
+                    const seatType = seatData[0]
+                    const seatRow = seatData[1].split("-")[1]
+                    const seatNumber = seatData[2].split("-")[1]
+
+                    return (
+                        <div className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{seatType}</p>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>Row: {seatRow}</p>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>Number: {seatNumber}</p>
+                        </div>
+                    )
+                })}
             </motion.div>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>
