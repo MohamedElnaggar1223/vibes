@@ -104,7 +104,7 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                             height={176}
                             width={176}
                             alt={event.name}
-                            className='max-xl:max-w-28 xl:min-w-48 xl:min-h-48 xl:h-full object-fill rounded-lg'
+                            className='max-xl:max-w-32 xl:min-w-48 xl:min-h-48 xl:h-full max-md:min-h-32 object-fill rounded-lg'
                         />
                         <div ref={infoRef} className='info relative flex flex-col gap-3 py-2 max-xl:flex-1 xl:max-h-48 overflow-auto'>
                             <p className='font-poppins font-bold text-base xl:text-xl text-white'>{pathname?.startsWith('/ar') ? event.nameArabic : event.name}</p>
