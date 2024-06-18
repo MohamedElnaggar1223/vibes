@@ -233,11 +233,9 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
 
             const seatsPdfs = Object.values(seats).map(async (seat: string) => {
                 const [pdfDownload] = await admin.storage().bucket().file(seat).download()
-                const seatData = seat.split("_")
-                const seatType = seatData[0]
 
                 attachments.push({
-                    filename: `${eventData?.name}-${seatType}.pdf`,
+                    filename: `${eventData?.name}.pdf`,
                     content: pdfDownload
                 })
 

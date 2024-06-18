@@ -138,6 +138,26 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                     <div className='flex gap-4 items-center justify-between max-xl:px-12 max-xl:mt-4 max-xl:mb-auto max-xl:w-full xl:max-h-full'>
                         <div className='flex xl:w-24 flex-col mr-auto text-left gap-0.5 xl:gap-3 xl:pb-4 xl:pt-10 h-full w-fit text-nowrap'>
                             {Object.keys(ticket.tickets).slice().filter(ticketKey => ticket.tickets[ticketKey] > 0).map((ticketKey, index) => <p key={index} className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{pathname?.startsWith('/ar') ? event.tickets.find(t => t.name.toLowerCase() === ticketKey.toLowerCase())?.nameArabic : ticketKey} <span className='font-extralight ml-2 max-xl:hidden'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[ticketKey]}`) : ticket.tickets[ticketKey]}</span></p>)}
+                            {event.seated && Object.keys(ticket.seats).map(seat => {
+                                const seatData = seat.split("_")
+                                const seatType = seatData[0]
+                                const seatRow = seatData[1].split("-")[1]
+                                const seatNumber = seatData[2].split("-")[1]
+                                
+                                return (
+                                    <p className='font-poppins text-[0.6rem] gap-1 max-xl:leading-[1rem] xl:text-xs font-normal text-white flex xl:flex-col items-center'>
+                                        <span>
+                                            {seatType}
+                                        </span>
+                                        <span>
+                                            R: {seatRow}
+                                        </span>
+                                        <span>
+                                            N: {seatNumber}
+                                        </span>
+                                    </p>
+                                )
+                            })}
                             {ticket.parkingPass > 0 && <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-base font-normal text-white'>{t('parkingPass')} <span className='font-extralight ml-2 max-xl:hidden'>x{ticket.parkingPass}</span></p>}
                         </div>
                         <div className='flex h-full items-center justify-center qrcodeHeight max-xl:hidden'>
