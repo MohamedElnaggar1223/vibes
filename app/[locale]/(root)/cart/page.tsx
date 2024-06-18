@@ -36,12 +36,12 @@ export default async function Cart({ params }: Props)
                         width={200}
                         height={105}
                         alt='ghost' 
-                        className="z-20 max-md:max-w-[120px] max-md:max-h-[63px]"
+                        className="z-20 max-md:max-w-[150px]"
                     />
-                    <div className='absolute z-10 rounded-full w-24 h-24 md:w-32 md:h-32 bg-white opacity-20 top-6 right-10' />
+                    <div className='absolute z-10 rounded-full w-20 h-20 md:w-32 md:h-32 bg-white opacity-20 top-6 right-10' />
                 </div>
-                <p className='text-white font-poppins text-lg md:text-xl font-light -mt-6'>{t('noItems')}</p>
-                <p className='text-white font-poppins text-lg md:text-xl font-light mt-3 profile-span'>{t('browse')} <Link href='/'><span className='underline decoration-[rgba(231,35,119,1)] underline-offset-4'>{t('eventsTickets')}</span></Link></p>
+                <p className='text-white font-poppins text-base md:text-xl font-light -mt-6'>{t('noItems')}</p>
+                <p className='text-white font-poppins text-base md:text-xl font-light mt-3 profile-span'>{t('browse')} <Link href='/'><span className='underline decoration-[rgba(231,35,119,1)] underline-offset-4'>{t('eventsTickets')}</span></Link></p>
             </section>
         )
     }

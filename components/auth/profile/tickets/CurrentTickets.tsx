@@ -16,8 +16,6 @@ export default async function CurrentTickets({ tickets, events, arabic }: Props)
     const locale = arabic ? 'ar' : 'en'
     const { t } = await initTranslations(locale, ['homepage', 'common', 'auth'])
 
-    console.log(tickets)
-
     return (
         <Suspense fallback={<Loading />}>
             {   

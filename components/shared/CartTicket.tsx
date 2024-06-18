@@ -128,9 +128,9 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
                         <div className='flex gap-12'>
                             <p className='font-poppins text-[0.6rem] leading-[1rem] xl:text-xs font-thin text-white'>{pathname?.startsWith('/ar') ? toArabicDate(`${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`) : `${months[event.eventDate?.getMonth()]}, ${getDaySuffix(event.eventDate?.getDate())}, ${event.eventDate?.getFullYear()}`} | {pathname?.startsWith('/ar') ? toArabicTime(formatTime(event.eventTime)) : formatTime(event.eventTime)} {event.timeZone}</p>
                             <div className='w-full flex items-center gap-1.5 max-xl:flex-wrap'>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-xs font-thin text-white'>{pathname?.startsWith('/ar') ? event.venueArabic : event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-xs font-thin text-white'>|</span></p>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-xs font-thin text-white max-xl:hidden'>|</p>
-                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] xl:text-xs font-thin text-white'>{pathname?.startsWith('/ar') ? event.cityArabic : event?.city}, {t(`${event?.country.replaceAll(" ", "")}`)}</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] text-nowrap xl:text-xs font-thin text-white'>{pathname?.startsWith('/ar') ? event.venueArabic : event?.venue} <span className='xl:hidden font-poppins text-[0.6rem] leading-[1rem] xl:text-xs font-thin text-white'>|</span></p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] text-nowrap xl:text-xs font-thin text-white max-xl:hidden'>|</p>
+                                <p className='font-poppins text-[0.6rem] max-xl:leading-[1rem] text-nowrap xl:text-xs font-thin text-white'>{pathname?.startsWith('/ar') ? event.cityArabic : event?.city}, {t(`${event?.country.replaceAll(" ", "")}`)}</p>
                             </div>
                         </div>
                     </div>
@@ -138,17 +138,17 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
                 </div>
                 {Object.keys(ticket.tickets).slice().filter(key => ticket.tickets[key] !== 0).map(key => (
                     <div key={key} className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{pathname?.startsWith('/ar') ? event.tickets.find(ticket => ticket.name === key)?.nameArabic : key}</p>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[key]}`) : ticket.tickets[key]}</p>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{findTicketPrice(key) !== event.tickets.find(eventTicket => eventTicket.name === key)?.price && <span className='text-gray-600 line-through mr-4'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></span>}<FormattedPrice price={findTicketPrice(key)!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'>{pathname?.startsWith('/ar') ? event.tickets.find(ticket => ticket.name === key)?.nameArabic : key}</p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.tickets[key]}`) : ticket.tickets[key]}</p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'>{findTicketPrice(key) !== event.tickets.find(eventTicket => eventTicket.name === key)?.price && <span className='text-gray-600 line-through mr-4'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></span>}<FormattedPrice price={findTicketPrice(key)!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
                         {/* <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'><FormattedPrice price={event.tickets.find(eventTicket => eventTicket.name === key)?.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p> */}
                     </div>
                 ))}
                 {ticket.parkingPass > 0 && (
                     <div className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{t('parkingPass')}</p>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.parkingPass}`) : ticket.parkingPass}</p>
-                        <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'><FormattedPrice price={event.parkingPass.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'>{t('parkingPass')}</p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'>x{pathname?.startsWith('/ar') ? toArabicNums(`${ticket.parkingPass}`) : ticket.parkingPass}</p>
+                        <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'><FormattedPrice price={event.parkingPass.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
                     </div>
                 )}
                 {Object.keys(ticket.seats).length > 0 && Object.keys(ticket.seats).map(seat => {
