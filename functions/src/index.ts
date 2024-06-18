@@ -232,13 +232,13 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             const seats = ticket.seats as { [key: string]: string }
 
             const seatsPdfs = Object.values(seats).map(async (seat: string) => {
-                const pdfDownload = await admin.storage().bucket().file(seat).download()
+                const [pdfDownload] = await admin.storage().bucket().file(seat).download()
                 const seatData = seat.split("_")
                 const seatType = seatData[0]
 
                 attachments.push({
                     filename: `${eventData?.name}-${seatType}.pdf`,
-                    content: pdfDownload[0]
+                    content: pdfDownload
                 })
 
                 await admin.storage().bucket().file(seat).delete()

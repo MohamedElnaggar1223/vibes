@@ -298,7 +298,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                         <div ref={parentRef} className='flex-1'>
                             <div className='h-full overflow-auto py-2' style={{ maxHeight: `${maxHeight}px` }}>
                                 {Object.keys(purchasedTickets).slice().filter((ticket) => purchasedTickets[ticket] > 0).map((ticket) => (
-                                    <motion.div layoutId={ticket} className='relative z-10 px-4 lg:px-36 flex justify-between max-lg:my-8 lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible' key={ticket}>
+                                    <motion.div layoutId={ticket} className={cn('relative z-10 px-4 lg:px-36 flex justify-between lg:mb-12 items-center py-6 bg-white rounded-xl overflow-visible', event.seated ? 'max-lg:my-12' : 'max-lg:my-8')} key={ticket}>
                                         <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1'>{locale === 'ar' ? event.tickets.find(t => t.name === ticket)?.nameArabic : ticket}</p>
                                         {
                                             purchasedTickets[ticket] > 0 && (
@@ -563,7 +563,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                     const numOfSelectedTickets = Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0)
                                     const numOfSelectedSeats = Object.keys(selectedSeats).length
 
-                                    const disabled = numOfSelectedTickets > 1 && numOfSelectedTickets === numOfSelectedSeats
+                                    const disabled = numOfSelectedTickets >= 1 && numOfSelectedTickets === numOfSelectedSeats
                                     
                                     return (
                                         <div

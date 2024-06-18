@@ -8,7 +8,7 @@ import TicketsLoading from "./tickets/TicketsLoading";
 import useSWR from 'swr'
 import { TicketType } from "@/lib/types/ticketTypes";
 import { db } from "@/firebase/client/config";
-import { getDoc, doc, Timestamp } from "firebase/firestore";
+import { getDoc, doc, Timestamp, collection, getDocs } from "firebase/firestore";
 import { EventType } from "@/lib/types/eventTypes";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -47,21 +47,24 @@ export default function ViewMyTickets({ user }: Props)
         const ticketsEvents = [] as string[]
         ticketsData.forEach(ticket => !ticketsEvents.includes(ticket.eventId) && ticketsEvents.push(ticket.eventId))
 
-        const eventsPromise = ticketsEvents.map(async (eventId) => {
-            const eventData = await getDoc(doc(db, 'events', eventId))
-            const eventFinalData = {
-                ...eventData.data(),
-                createdAt: eventData.data()?.createdAt?.toDate(),
-                eventDate: eventData.data()?.eventDate?.toDate(),
-                eventTime: eventData.data()?.eventTime?.toDate(),
-                gatesOpen: eventData.data()?.gatesOpen?.toDate(),
-                gatesClose: eventData.data()?.gatesClose?.toDate(),
-                updatedAt: eventData.data()?.updatedAt?.toDate(),
-            } as EventType
-            return eventFinalData
-        })
+        // const eventsPromise = ticketsEvents.map(async (eventId) => {
+        //     const eventData = await getDoc(doc(db, 'events', eventId))
+        //     const eventFinalData = {
+        //         ...eventData.data(),
+        //         createdAt: eventData.data()?.createdAt?.toDate() ?? undefined,
+        //         eventDate: eventData.data()?.eventDate?.toDate() ?? undefined,
+        //         eventTime: eventData.data()?.eventTime?.toDate() ?? undefined,
+        //         gatesOpen: eventData.data()?.gatesOpen?.toDate() ?? undefined,
+        //         gatesClose: eventData.data()?.gatesClose?.toDate() ?? undefined,
+        //         updatedAt: eventData.data()?.updatedAt?.toDate() ?? undefined,
+        //     } as EventType
 
-        const eventsData = await Promise.all(eventsPromise!)
+        //     return eventFinalData
+        // })
+
+        // const eventsData = await Promise.all(eventsPromise!)
+
+        const eventsData = (await getDocs(collection(db, 'events'))).docs.map(event => ({...event.data(), id: event.id, createdAt: event.data()?.createdAt?.toDate(), eventDate: event.data()?.eventDate?.toDate(), eventTime: event.data()?.eventTime?.toDate(), gatesOpen: event.data()?.gatesOpen?.toDate(), gatesClose: event.data()?.gatesClose?.toDate(), updatedAt: event.data()?.updatedAt?.toDate()})) as EventType[]
 
         return {
             currentTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! >= Timestamp.now().toDate()),

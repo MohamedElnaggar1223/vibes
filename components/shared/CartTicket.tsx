@@ -159,9 +159,9 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
 
                     return (
                         <div className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
-                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>{seatType}</p>
-                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>Row: {seatRow}</p>
-                            <p className='font-poppins flex-1 text-center text-white font-light text-xs lg:text-base'>Number: {seatNumber}</p>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>{seatType}</p>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>Row: {seatRow}</p>
+                            <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>Number: {seatNumber}</p>
                         </div>
                     )
                 })}
