@@ -231,12 +231,16 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
         else if(eventData?.seated) {
             const seats = ticket.seats as { [key: string]: string }
 
-            const seatsPdfs = Object.values(seats).map(async (seat: string) => {
-                const [pdfDownload] = await admin.storage().bucket().file(seat).download()
+            const seatsPdfs = Object.values(seats).map(async (seat: string, index: number) => {
+                const pdfDownload = await admin.storage().bucket().file(seat).download()
+
+                console.log(`Downloaded PDF size: ${pdfDownload[0].length} bytes`);
+                console.log(`PDF snippet: ${pdfDownload[0].slice(0, 600)}`);
 
                 attachments.push({
-                    filename: `${eventData?.name}.pdf`,
-                    content: pdfDownload
+                    filename: `${eventData?.name} - ${index}.pdf`,
+                    content: pdfDownload[0],
+                    contentType: 'application/pdf'
                 })
 
                 await admin.storage().bucket().file(seat).delete()

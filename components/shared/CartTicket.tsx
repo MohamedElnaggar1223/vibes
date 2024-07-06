@@ -13,7 +13,7 @@ import FormattedPrice from "./FormattedPrice"
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { deleteDoc, doc, runTransaction, updateDoc } from "firebase/firestore"
 import { UserType } from "@/lib/types/userTypes"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { PromoContextType, PromoContext } from "@/providers/PromoCodeProvider"
@@ -56,9 +56,12 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
         const ticketDoc = doc(db, 'tickets', ticket.id)
         const userDoc = doc(db, 'users', user.id!)
 
-        await updateDoc(eventDoc, { tickets: newEventTickets!, seatPattern: newEventSeats})
-        await updateDoc(userDoc, { cart: { ...user.cart, tickets: user.cart?.tickets.slice().filter(id => id !== ticket.id) } })
-        await deleteDoc(ticketDoc)
+        await runTransaction(db, async (transaction) => {
+            await transaction.update(eventDoc, { tickets: newEventTickets!, seatPattern: newEventSeats})
+            await transaction.update(userDoc, { cart: { ...user.cart, tickets: user.cart?.tickets.slice().filter(id => id !== ticket.id) } })
+            await transaction.delete(ticketDoc)
+        })
+
 
         setLoading(false)
         router.refresh()

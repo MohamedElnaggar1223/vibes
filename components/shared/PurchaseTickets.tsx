@@ -17,7 +17,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, updateDoc } from "firebase/firestore"
+import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, runTransaction, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
 import Image from "next/image"
@@ -209,18 +209,31 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 totalPaid: total * selectedExchangeRate,
                 createdAt: Timestamp.now(),
             }
-            const addedTicket = await addDoc(collection(db, 'tickets'), addedTicketObject)
-            fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${addedTicket.id}` : `http://localhost:3000/api/sendMail?ticketId=${addedTicket.id}`, {
-                method: 'GET',
+
+            const ticketsCollection = collection(db, 'tickets')
+            const ticketDoc = doc(ticketsCollection)
+
+            const eventDoc = doc(db, 'events', event.id)
+
+            const userDoc = doc(db, 'users', user?.id ?? '')
+
+            const newTicketDoc = doc(db, 'tickets', ticketDoc.id)
+
+            await runTransaction(db, async (transaction) => {
+                await transaction.set(ticketDoc, addedTicketObject)
+                fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+                    method: 'GET',
+                })
+                if(eventData.seated) {
+                    await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                }
+                else {
+                    await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                }
+                await transaction.update(userDoc, { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [ticketDoc.id] : [...(user?.cart?.tickets ?? []), ticketDoc.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
+                await transaction.update(newTicketDoc, { id: ticketDoc.id })
             })
-            if(eventData.seated) {
-                await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
-            }
-            else {
-                await updateDoc(doc(db, 'events', event.id), { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
-            }
-            await updateDoc(doc(db, 'users', user?.id ?? ''), { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [addedTicket.id] : [...(user?.cart?.tickets ?? []), addedTicket.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
-            await updateDoc(doc(db, 'tickets', addedTicket.id), { id: addedTicket.id })
+
             // const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
             // await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
             setLoading(false)

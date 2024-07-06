@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { useContext, useEffect, useMemo, useState } from "react"
 import FormattedPrice from "./FormattedPrice"
 import { ExchangeRate } from "@/lib/types/eventTypes"
-import { Timestamp, arrayUnion, deleteDoc, deleteField, doc, getDoc, updateDoc } from "firebase/firestore"
+import { Timestamp, arrayUnion, deleteDoc, deleteField, doc, getDoc, runTransaction, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import { usePathname, useRouter } from "next/navigation"
 import { PromoCode, TicketType } from "@/lib/types/ticketTypes"
@@ -52,16 +52,24 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
 
     const handleBuy = async () => {
         setLoading(true)
-        const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
-        await updateDoc(doc(db, 'users', user?.id ?? ''), { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
-        await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + totalNumberTickets + totalNumberParkingPasses, updatedAt: Timestamp.now() })
-        if(discount > 0) {
-            if(promoCodes.find(pCode => pCode.promo === promoCode)?.quantity === 1) await deleteDoc(doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!))
-            else await updateDoc(doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!), { quantity: promoCodes.find(pCode => pCode.promo === context.promoCode)?.quantity! - 1 })
-        }
-        const ticketsUpdate = tickets.map(async ticket => await updateDoc(doc(db, 'tickets', ticket.id), { status: 'paid' }))
 
-        await Promise.all(ticketsUpdate)
+        const salesDocument = doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!)
+        const userDoc = doc(db, 'users', user?.id ?? '')
+
+        await runTransaction(db, async (transaction) => {
+            const salesDoc = await transaction.get(salesDocument)
+
+            await transaction.update(userDoc, { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
+            await transaction.update(salesDocument, { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + totalNumberTickets + totalNumberParkingPasses, updatedAt: Timestamp.now() })
+            if(discount > 0) {
+                const promoCodesDoc = doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!)
+                if(promoCodes.find(pCode => pCode.promo === promoCode)?.quantity === 1) await transaction.delete(promoCodesDoc)
+                else await transaction.update(promoCodesDoc, { quantity: promoCodes.find(pCode => pCode.promo === context.promoCode)?.quantity! - 1 })
+            }
+            const ticketsUpdate = tickets.map(async ticket => await transaction.update(doc(db, 'tickets', ticket.id), { status: 'paid' }))
+    
+            await Promise.all(ticketsUpdate)
+        })
 
         setLoading(false)
         router.push(`/success/${tickets[0].id}`)
