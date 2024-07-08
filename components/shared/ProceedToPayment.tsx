@@ -60,7 +60,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
             const salesDoc = await transaction.get(salesDocument)
 
             await transaction.update(userDoc, { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
-            await transaction.update(salesDocument, { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + totalNumberTickets + totalNumberParkingPasses, updatedAt: Timestamp.now() })
+            await transaction.update(salesDocument, { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + (isNaN(totalNumberTickets) ? 0 : totalNumberTickets) + (isNaN(totalNumberParkingPasses) ? 0 : totalNumberParkingPasses), updatedAt: Timestamp.now() })
             if(discount > 0) {
                 const promoCodesDoc = doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!)
                 if(promoCodes.find(pCode => pCode.promo === promoCode)?.quantity === 1) await transaction.delete(promoCodesDoc)

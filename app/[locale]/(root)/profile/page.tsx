@@ -5,6 +5,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import MyProfile from "@/components/auth/profile/MyProfile"
 import { revalidatePath } from "next/cache"
+import { Timestamp } from "firebase/firestore"
 
 type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
@@ -25,11 +26,13 @@ export default async function Profile()
 
     const user = token?.sub ? (await admin.firestore().collection('users')?.doc(token?.sub as string).get()).data() as UserType : null
 
+    const userData = user ? { ...user, cart: {...user.cart, createdAt: (user.cart?.createdAt as unknown as Timestamp)?.toDate()} } as UserType : undefined
+
     if(!user?.verified) return redirect('/sign-in')
 
     revalidatePath('/profile?show=my-tickets')
 
     return (
-        <MyProfile user={user} />
+        <MyProfile user={userData!} />
     )
 }

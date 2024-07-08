@@ -201,41 +201,189 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
             const addedTicketObject = {
                 userId: user?.id,
                 eventId: event.id,
-                tickets: purchasedTickets,
-                seats: confirmedSeats,
                 seated: eventData.seated,
-                parkingPass: purchasedParkingPass,
                 country: country,
                 totalPaid: total * selectedExchangeRate,
                 createdAt: Timestamp.now(),
             }
 
-            const ticketsCollection = collection(db, 'tickets')
-            const ticketDoc = doc(ticketsCollection)
+            if(eventData.seated)
+            {
+                let ticketsArray: { tickets: {}, seats: {} }[] = [];
+                const tempSeats = {...confirmedSeats}
+    
+                Object.entries(purchasedTickets).forEach(([type, count]) => {
+                    for (let i = 0; i < count; i++) {
+                        const seatKey = Object.keys(tempSeats).find(seat => {
+                            const seatData = seat.split("_")
+                            return seatData[0] === type
+                        });
+                    
+                        if (seatKey) {
+                            ticketsArray.push({
+                            tickets: {
+                                [type]: 1
+                            },
+                            seats: {
+                                [seatKey]: tempSeats[seatKey]
+                            }
+                            });
+                    
+                            delete tempSeats[seatKey];
+                        }
+                    }
+                });
 
-            const eventDoc = doc(db, 'events', event.id)
+                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket}))
 
-            const userDoc = doc(db, 'users', user?.id ?? '')
+                const ticketsCollection = collection(db, 'tickets')
+                const eventDoc = doc(db, 'events', event.id)
+                const userDoc = doc(db, 'users', user?.id ?? '')
 
-            const newTicketDoc = doc(db, 'tickets', ticketDoc.id)
+                let newCart = { tickets: [] as string[], createdAt: Timestamp.now(), status: 'pending' }
 
-            await runTransaction(db, async (transaction) => {
-                await transaction.set(ticketDoc, addedTicketObject)
-                fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
-                    method: 'GET',
+                const finalTicketsDocs = finalTicketsArray.map(async (ticket) => {
+                    await runTransaction(db, async (transaction) => {
+                        const ticketDoc = doc(ticketsCollection)
+                        const newTicketDoc = doc(db, 'tickets', ticketDoc.id)
+                        newCart.tickets.push(ticketDoc.id)
+                        await transaction.set(ticketDoc, ticket)
+                        await transaction.update(newTicketDoc, { id: ticketDoc.id })
+                        fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+                            method: 'GET',
+                        })
+                    })
                 })
-                if(eventData.seated) {
-                    await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
-                }
-                else {
-                    await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
-                }
-                await transaction.update(userDoc, { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [ticketDoc.id] : [...(user?.cart?.tickets ?? []), ticketDoc.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
-                await transaction.update(newTicketDoc, { id: ticketDoc.id })
-            })
 
-            // const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
-            // await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
+                await Promise.all(finalTicketsDocs)
+
+                await runTransaction(db, async (transaction) => {
+                    await transaction.update(userDoc, { cart: newCart })
+                })
+
+                await runTransaction(db, async (transaction) => {
+                    if(eventData.seated) {
+                        await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                    }
+                    else {
+                        await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                    }
+                })
+
+                // await runTransaction(db, async (transaction) => {
+                //     const finalTicketsDocs = finalTicketsArray.map(async (ticket) => {
+                //         const ticketDoc = doc(ticketsCollection)
+                //         const newTicketDoc = doc(db, 'tickets', ticketDoc.id)    
+                //         await transaction.set(ticketDoc, ticket)
+                //         await transaction.update(userDoc, { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [ticketDoc.id] : [...(user?.cart?.tickets ?? []), ticketDoc.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
+                //         await transaction.update(newTicketDoc, { id: ticketDoc.id })
+                //         fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+                //             method: 'GET',
+                //         })
+                //     })
+
+                //     await Promise.all(finalTicketsDocs)
+
+                //     if(eventData.seated) {
+                //         await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                //     }
+                //     else {
+                //         await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                //     }
+                // })
+            }
+            else 
+            {
+                let ticketsArray: { tickets: {}, seats: {} }[] = [];
+    
+                Object.entries(purchasedTickets).forEach(([type, count]) => {
+                    for (let i = 0; i < count; i++) {
+                            ticketsArray.push({
+                            tickets: {
+                                [type]: 1
+                            },
+                            seats: {
+                            }
+                            });
+                    
+                        }
+                });
+
+                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket}))
+
+                const ticketsCollection = collection(db, 'tickets')
+                const eventDoc = doc(db, 'events', event.id)
+                const userDoc = doc(db, 'users', user?.id ?? '')
+
+                let newCart = { tickets: [] as string[], createdAt: Timestamp.now(), status: 'pending' }
+
+                const finalTicketsDocs = finalTicketsArray.map(async (ticket) => {
+                    await runTransaction(db, async (transaction) => {
+                        const ticketDoc = doc(ticketsCollection)
+                        const newTicketDoc = doc(db, 'tickets', ticketDoc.id)
+                        newCart.tickets.push(ticketDoc.id)
+                        await transaction.set(ticketDoc, ticket)
+                        await transaction.update(newTicketDoc, { id: ticketDoc.id })
+                        fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+                            method: 'GET',
+                        })
+                    })
+                })
+
+                await Promise.all(finalTicketsDocs)
+
+                await runTransaction(db, async (transaction) => {
+                    await transaction.update(userDoc, { cart: newCart })
+                })
+
+                await runTransaction(db, async (transaction) => {
+                    if(eventData.seated) {
+                        await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                    }
+                    else {
+                        await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+                    }
+                })
+            }
+            
+            // const addedTicketObject = {
+            //     userId: user?.id,
+            //     eventId: event.id,
+            //     tickets: purchasedTickets,
+            //     seats: confirmedSeats,
+            //     seated: eventData.seated,
+            //     parkingPass: purchasedParkingPass,
+            //     country: country,
+            //     totalPaid: total * selectedExchangeRate,
+            //     createdAt: Timestamp.now(),
+            // }
+
+            // const ticketsCollection = collection(db, 'tickets')
+            // const ticketDoc = doc(ticketsCollection)
+
+            // const eventDoc = doc(db, 'events', event.id)
+
+            // const userDoc = doc(db, 'users', user?.id ?? '')
+
+            // const newTicketDoc = doc(db, 'tickets', ticketDoc.id)
+
+            // await runTransaction(db, async (transaction) => {
+            //     await transaction.set(ticketDoc, addedTicketObject)
+            //     fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+            //         method: 'GET',
+            //     })
+            //     if(eventData.seated) {
+            //         await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), seatPattern: RemainingSeats, ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+            //     }
+            //     else {
+            //         await transaction.update(eventDoc, { tickets: availableTickets.map(ticket => ({...ticket, quantity: ticket.quantity - purchasedTickets[ticket.name] })), ticketsSold: addValues(eventData.ticketsSold, purchasedTickets), parkingSold: eventData.parkingSold + purchasedParkingPass, totalRevenue: eventData.totalRevenue + total, parkingPass: {...eventData.parkingPass, quantity: eventData.parkingPass.quantity - purchasedParkingPass}, updatedAt: Timestamp.now() })
+            //     }
+            //     await transaction.update(userDoc, { cart: { tickets: (user?.cart?.tickets?.length ?? 0) === 0 ? [ticketDoc.id] : [...(user?.cart?.tickets ?? []), ticketDoc.id], createdAt: (user?.cart?.tickets?.length ?? 0) === 0 ? Timestamp.now() : user?.cart?.createdAt, status: 'pending' } })
+            //     await transaction.update(newTicketDoc, { id: ticketDoc.id })
+            // })
+
+            // // const salesDoc = await getDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!))
+            // // await updateDoc(doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!), { totalRevenue: salesDoc.data()?.totalRevenue + total, totalTicketsSold: salesDoc.data()?.totalTicketsSold + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), totalSales: salesDoc.data()?.totalSales + + purchasedParkingPass + Object.values(purchasedTickets).reduce((acc, ticket) => acc + ticket , 0), updatedAt: Timestamp.now() })
             setLoading(false)
             setSelectedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
             setPurchasedTickets(availableTickets.reduce((acc, ticket) => ({...acc, [ticket.name]: 0 }), {} as { [x: string]: number }))
