@@ -10,7 +10,6 @@ import { Category, EventType, ExchangeRate } from "@/lib/types/eventTypes";
 import { months } from "@/constants";
 import FormattedPrice from "../shared/FormattedPrice";
 import { useTranslation } from "react-i18next";
-import useSWR from "swr";
 
 type Props = {
     events: EventType[],
