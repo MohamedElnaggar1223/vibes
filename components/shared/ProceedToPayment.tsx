@@ -56,23 +56,40 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
         const salesDocument = doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!)
         const userDoc = doc(db, 'users', user?.id ?? '')
 
-        await runTransaction(db, async (transaction) => {
-            const salesDoc = await transaction.get(salesDocument)
-
-            await transaction.update(userDoc, { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
-            await transaction.update(salesDocument, { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + (isNaN(totalNumberTickets) ? 0 : totalNumberTickets) + (isNaN(totalNumberParkingPasses) ? 0 : totalNumberParkingPasses), updatedAt: Timestamp.now() })
-            if(discount > 0) {
-                const promoCodesDoc = doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!)
-                if(promoCodes.find(pCode => pCode.promo === promoCode)?.quantity === 1) await transaction.delete(promoCodesDoc)
-                else await transaction.update(promoCodesDoc, { quantity: promoCodes.find(pCode => pCode.promo === context.promoCode)?.quantity! - 1 })
-            }
-            const ticketsUpdate = tickets.map(async ticket => await transaction.update(doc(db, 'tickets', ticket.id), { status: 'paid' }))
-    
-            await Promise.all(ticketsUpdate)
-        })
+        const response = await fetch('/api/begin-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount_cents: ((tickets[0].country === 'EGP' ? totalValue * exchangeRate.USDToEGP : tickets[0].country === 'AED' ? totalValue * exchangeRate.USDToAED : totalValue * exchangeRate.USDToSAR) * 100).toString(),
+                currency: tickets[0].country,
+                items: [...tickets.map(ticket => ({ name: Object.keys(ticket.tickets)[0], amount_cents: (ticket.totalPaid * 100).toString(), "quantity": "1" })), totalNumberParkingPasses ? { name: 'Parking Pass', amount_cents: (parkingTotal * 100).toString(), "quantity": totalNumberParkingPasses.toString() } : null].filter(Boolean),
+                user: { first_name: user.firstname, last_name: user.lastname, email: user.email, phone_number: `${user.countryCode}${user.phoneNumber}` }
+            })
+        }).then(res => res.json())
 
         setLoading(false)
-        router.push(`/success/${tickets[0].id}`)
+
+        router.push(response.redirect)
+
+        // await runTransaction(db, async (transaction) => {
+        //     const salesDoc = await transaction.get(salesDocument)
+
+        //     await transaction.update(userDoc, { tickets: arrayUnion(...tickets.map(ticket => ticket.id)), cart: { tickets: [], createdAt: null, status: 'pending' } })
+        //     await transaction.update(salesDocument, { totalRevenue: salesDoc.data()?.totalRevenue + totalValue, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalNumberTickets, totalSales: salesDoc.data()?.totalSales + (isNaN(totalNumberTickets) ? 0 : totalNumberTickets) + (isNaN(totalNumberParkingPasses) ? 0 : totalNumberParkingPasses), updatedAt: Timestamp.now() })
+        //     if(discount > 0) {
+        //         const promoCodesDoc = doc(db, 'promoCodes', promoCodes.find(pCode => pCode.promo === context.promoCode)?.id!)
+        //         if(promoCodes.find(pCode => pCode.promo === promoCode)?.quantity === 1) await transaction.delete(promoCodesDoc)
+        //         else await transaction.update(promoCodesDoc, { quantity: promoCodes.find(pCode => pCode.promo === context.promoCode)?.quantity! - 1 })
+        //     }
+        //     const ticketsUpdate = tickets.map(async ticket => await transaction.update(doc(db, 'tickets', ticket.id), { status: 'paid' }))
+    
+        //     await Promise.all(ticketsUpdate)
+        // })
+
+        // setLoading(false)
+        // router.push(`/success/${tickets[0].id}`)
     }
 
     const handlePromoCodeChange = () => {
