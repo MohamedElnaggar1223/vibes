@@ -70,7 +70,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
         }).then(res => res.json())
 
         setLoading(false)
-
+        
         router.push(response.redirect)
 
         // await runTransaction(db, async (transaction) => {

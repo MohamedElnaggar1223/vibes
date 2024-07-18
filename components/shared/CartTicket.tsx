@@ -154,14 +154,14 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
                         <p className='font-poppins flex-1 text-center text-white text-nowrap font-light text-xs lg:text-base'><FormattedPrice price={event.parkingPass.price!} exchangeRate={exchangeRate} currency={ticket.country} /></p>
                     </div>
                 )}
-                {Object.keys(ticket.seats).length > 0 && Object.keys(ticket.seats).map(seat => {
+                {Object.keys(ticket.seats).length > 0 && Object.keys(ticket.seats).map((seat, index) => {
                     const seatData = seat.split("_")
                     const seatType = seatData[0]
                     const seatRow = seatData[1].split("-")[1]
                     const seatNumber = seatData[2].split("-")[1]
 
                     return (
-                        <div className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
+                        <div key={index} className='flex items-center justify-between px-12 bg-[rgba(0,0,0,0.4)] my-1 py-4 gap-4'>
                             <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>{seatType}</p>
                             <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>Row: {seatRow}</p>
                             <p className='font-poppins flex-1 text-center text-white font-light text-nowrap text-xs lg:text-base'>Number: {seatNumber}</p>

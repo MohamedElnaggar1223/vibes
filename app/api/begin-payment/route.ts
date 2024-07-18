@@ -32,7 +32,7 @@ export async function POST(req: Request) {
             body: JSON.stringify({
                 auth_token: tokenRequest.token,
                 delivery_needed: 'false',
-                amount_cents,
+                amount_cents: 10,
                 currency,
                 items
             })
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify({
                 auth_token: tokenRequest.token,
-                amount_cents,
+                amount_cents: 10,
                 currency,
                 order_id: orderRequest.id.toString(),
                 billing_data: {
