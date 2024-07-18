@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 export async function GET(req: Request) {
     const admin = await initAdmin()
 
-    admin.firestore().collection('payments').add({
+    await admin.firestore().collection('payments').add({
         ...req
     })
 
