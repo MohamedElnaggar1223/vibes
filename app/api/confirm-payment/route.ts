@@ -60,6 +60,8 @@ export async function POST(req: Request) {
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
     
         const admin = await initAdmin()
+
+        await admin.firestore().collection('payments').add(query)
     
         const exchangeRate = await admin.firestore().collection('rates').get().then(doc => doc.docs[0].data()) as ExchangeRate
 
