@@ -9,7 +9,7 @@ export async function POST(req: Request) {
         const admin = await initAdmin()
     
         await admin.firestore().collection('payments').add({
-            ...query
+            success: query.success,
         })
     }
     catch(e)
