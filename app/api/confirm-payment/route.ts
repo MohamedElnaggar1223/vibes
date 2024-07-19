@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     }
     catch(e)
     {
-        
+      //console.log(e)  
     }
 
     return NextResponse.redirect('https://vibes-2yce-git-paymob-mohamedelnaggar1223s-projects.vercel.app/')
