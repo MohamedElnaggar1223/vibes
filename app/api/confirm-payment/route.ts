@@ -34,14 +34,26 @@ export async function POST(req: Request) {
         let hmacData = ''
 
         hmacRequiredFields.forEach(field => {
+            if(field === 'order.id') {
+                hmacData += query.order.id
+                return
+            }
+            if(field === 'source_data.pan') {
+                hmacData += query.source_data.pan
+                return
+            }
+            if(field === 'source_data.sub_type') {
+                hmacData += query.source_data.sub_type
+                return
+            }
+            if(field === 'source_data.type') {
+                hmacData += query.source_data.type
+                return
+            }
             hmacData += query[field]
         })
 
         const hmacCalculated = createHmac('sha512', process.env.PAYMOB_HMAC!).update(hmacData).digest('hex')
-
-        console.log(hmacData)
-        console.log(hmacCalculated)
-        console.log(hmac)
 
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
     
