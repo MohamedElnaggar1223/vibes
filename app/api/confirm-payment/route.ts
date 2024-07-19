@@ -5,11 +5,15 @@ export async function POST(req: Request) {
     try
     {
         const query = await req.json()
+        const params = req.url
+        const data = req.body
     
         const admin = await initAdmin()
     
         await admin.firestore().collection('payments').add({
-            ...query
+            ...query,
+            params,
+            ...data,
         })
     }
     catch(e)
@@ -17,9 +21,5 @@ export async function POST(req: Request) {
       //console.log(e)  
     }
 
-    return NextResponse.redirect('https://vibes-2yce-git-paymob-mohamedelnaggar1223s-projects.vercel.app/')
-}
-
-export async function GET() {
     return NextResponse.redirect('https://vibes-2yce-git-paymob-mohamedelnaggar1223s-projects.vercel.app/')
 }
