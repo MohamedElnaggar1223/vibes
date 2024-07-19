@@ -39,6 +39,9 @@ export async function POST(req: Request) {
 
         const hmacCalculated = createHmac('sha512', process.env.PAYMOB_HMAC!).update(hmacData).digest('hex')
 
+        console.log(hmacCalculated)
+        console.log(hmac)
+
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
     
         const admin = await initAdmin()
