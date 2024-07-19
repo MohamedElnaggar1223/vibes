@@ -1,3 +1,4 @@
+import { PromoCode } from "@/lib/types/ticketTypes"
 import { NextResponse } from "next/server"
 
 type RequestType = { 
@@ -5,6 +6,7 @@ type RequestType = {
     currency: string, 
     items: { name: string, amount_cents: string, quantity: string }[],
     user: { first_name: string, last_name: string, email: string, phone_number: string }
+    promoCode: PromoCode | undefined
 }
 
 export async function POST(req: Request) {
@@ -32,9 +34,9 @@ export async function POST(req: Request) {
             body: JSON.stringify({
                 auth_token: tokenRequest.token,
                 delivery_needed: 'false',
-                amount_cents: 10,
+                amount_cents,
                 currency,
-                items
+                items,
             })
         }).then(res => res.json()) as { id: number }
 
@@ -45,7 +47,7 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify({
                 auth_token: tokenRequest.token,
-                amount_cents: 10,
+                amount_cents,
                 currency,
                 order_id: orderRequest.id.toString(),
                 billing_data: {
