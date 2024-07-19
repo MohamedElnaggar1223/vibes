@@ -61,8 +61,6 @@ export async function POST(req: Request) {
     
         const admin = await initAdmin()
 
-        await admin.firestore().collection('payments').add(query)
-    
         const exchangeRate = await admin.firestore().collection('rates').get().then(doc => doc.docs[0].data()) as ExchangeRate
 
         const amountInUSD = query.currency === 'EGP' ? ((parseInt(query.amount_cents) / 100) / exchangeRate.USDToEGP) : query.currency === 'AED' ? (parseInt(query.amount_cents) / 100) / exchangeRate.USDToAED : (parseInt(query.amount_cents) / 100) / exchangeRate.USDToSAR
@@ -105,5 +103,19 @@ export async function POST(req: Request) {
       //console.log(e)  
     }
 
-    return NextResponse.redirect('https://vibes-2yce-git-paymob-mohamedelnaggar1223s-projects.vercel.app/')
+    return NextResponse.redirect('https://www.vibes-events.com/')
+}
+
+export async function GET(req: Request) {
+    const params = req.url.includes('success=false') ? 'error' : 'success'
+
+    // if(params === 'success') {
+        const admin = await initAdmin()
+        
+        const ticket = await admin.firestore().collection('tickets').get().then(doc => doc.docs[0].data())
+
+        return NextResponse.redirect(`https://www.vibes-events.com/success/${ticket.id}`)
+    // }
+
+    // return NextResponse.redirect('https://www.vibes-events.com')
 }
