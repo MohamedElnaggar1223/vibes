@@ -283,6 +283,67 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             }
         }
         else {
+            const pdfs = Object.values(ticket.tickets).map(async (ticketQuantity, index) => {
+                if(ticketQuantity > 0)
+                {
+                    console.log(ticket.tickets)
+    
+                    const dirRef = await admin.storage().bucket().getFiles()
+                    const ticketsFiles = dirRef[0].slice().filter((file: File) => file.name.includes(`${eventData.ticketFilesPath}/${Object.keys(ticket.tickets)[index]}`))
+    
+                    console.log(`${eventData.ticketFilesPath}/${Object.keys(ticket.tickets)[index]}`)
+                    dirRef[0].forEach((file: File) => console.log(file.name))
+    
+                    for(let i = 0; i < ticketQuantity; i++) 
+                    {
+                        const pdfData = await ticketsFiles[i].download()
+                        attachments.push({
+                            filename: `${Object.keys(ticket.tickets)[index]}`,
+                            content: pdfData[0],
+                            contentType: 'application/pdf'
+                        })
+                        await ticketsFiles[i].delete()
+                    }
+        
+                }
+            })
+        
+            await Promise.all(pdfs)
+        
+            const mailOptions = {
+                from: 'Vibes',
+                to: [user?.email],
+                subject: `Vibes ${eventData.name}`,
+                attachments: attachments
+            }
+
+            const postReq = {
+                ticket,
+                event: {...event.data(), id: event.id} 
+            }
+
+            try
+            {
+                const data = await fetch('https://www.vibes-events.com/api/sendTicket', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postReq)
+                }).then(res => res.json())
+
+                const newMailOptions = {
+                    ...mailOptions,
+                    html: data.emailHtml
+                }
+
+                await transporter.sendMail(newMailOptions)
+            }
+            catch(e: any)
+            {
+                console.log(e)
+            }
+
             // await fetch(process.env.NODE_ENV === 'production' ? 'https://vibes-woad.vercel.app/api/sendPdfs' : 'http://localhost:3000/api/sendPdfs', {
             //     method: 'POST',
             //     body: JSON.stringify({

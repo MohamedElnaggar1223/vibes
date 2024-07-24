@@ -5,7 +5,9 @@ export type TicketType = {
     id: string,
     parkingPass: number,
     seats: {},
-    tickets: any,
+    tickets: {
+        [x: string]: number
+    },
     totalPaid: number,
     userId: string,
     status: 'pending' | 'paid'

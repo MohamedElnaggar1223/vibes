@@ -324,9 +324,9 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                         newCart.tickets.push(ticketDoc.id)
                         await transaction.set(ticketDoc, ticket)
                         await transaction.update(newTicketDoc, { id: ticketDoc.id })
-                        fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
-                            method: 'GET',
-                        })
+                        // fetch(process.env.NODE_ENV === 'production' ? `https://vibes-woad.vercel.app/api/sendMail?ticketId=${ticketDoc.id}` : `http://localhost:3000/api/sendMail?ticketId=${ticketDoc.id}`, {
+                        //     method: 'GET',
+                        // })
                     })
                 })
 
