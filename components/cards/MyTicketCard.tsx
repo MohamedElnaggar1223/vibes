@@ -141,8 +141,8 @@ export default function MyTicketCard({ ticket, event, first }: Props)
                             {event.seated && Object.keys(ticket.seats).map(seat => {
                                 const seatData = seat.split("_")
                                 const seatType = seatData[0]
-                                const seatRow = seatData[1].split("-")[1]
-                                const seatNumber = seatData[2].split("-")[1]
+                                const seatRow = seatData[1]?.split("-")[1]
+                                const seatNumber = seatData[2]?.split("-")[1]
                                 
                                 return (
                                     <p className='font-poppins text-[0.6rem] gap-1 max-xl:leading-[1rem] xl:text-xs font-normal text-white flex xl:flex-col items-center'>
