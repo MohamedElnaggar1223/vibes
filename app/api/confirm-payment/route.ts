@@ -58,6 +58,8 @@ export async function POST(req: Request) {
         const hmacCalculated = createHmac('sha512', process.env.PAYMOB_HMAC!).update(hmacData).digest('hex')
 
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
+
+        if(query.success === 'false') return NextResponse.redirect('https://www.vibes-events.com/')
     
         const admin = await initAdmin()
 
@@ -67,19 +69,10 @@ export async function POST(req: Request) {
         const totalTicketsSold = query.order.items.filter((item: any) => item.name !== 'Parking Pass').length
         const totalItemsSold = query.order.items.length
 
-        console.log(amountInUSD)
-        console.log(totalTicketsSold)
-        console.log(totalItemsSold)
-
         const userId = query.order.items[0].name.split('-')[1]
         const promoCode = query.order.items[0].name.split('-').length > 2 ? query.order.items[0].name.split('-')[2] : undefined
 
-        console.log(userId)
-        console.log(promoCode)
-
         const ticketsIds = query.order.items.filter((item: any) => item.name !== 'Parking Pass').map((item: any) => item.name.split('-')[0])
-
-        console.log(ticketsIds)
 
         await admin.firestore().runTransaction(async transaction => {
             const salesDoc = await transaction.get(admin.firestore().collection('sales').doc(process.env.NEXT_PUBLIC_SALES_ID!))
@@ -109,13 +102,13 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
     const params = req.url.includes('success=false') ? 'error' : 'success'
 
-    // if(params === 'success') {
+    if(params === 'success') {
         const admin = await initAdmin()
         
         const ticket = await admin.firestore().collection('tickets').get().then(doc => doc.docs[0].data())
 
         return NextResponse.redirect(`https://www.vibes-events.com/success/${ticket.id}`)
-    // }
+    }
 
-    // return NextResponse.redirect('https://www.vibes-events.com')
+    return NextResponse.redirect('https://www.vibes-events.com')
 }
