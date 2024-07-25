@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     }
     catch(e)
     {
-        return NextResponse.json({ error: 'An error occurred' }, { status: 500 })
+        return NextResponse.json({ error: 'An error occurred.' }, { status: 500 })
     }
 
 }
