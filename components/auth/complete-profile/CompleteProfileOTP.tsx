@@ -107,7 +107,9 @@ export default function CompleteProfileOTP({ user }: Props)
                 title: 'Code Sent Successfully!',
             })  
 
-            const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container')
+            const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                size: 'invisible'
+            })
             const confirmationResult = await signInWithPhoneNumber(auth, `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`, recaptchaVerifier)
             setVerificationId(confirmationResult.verificationId);
 
