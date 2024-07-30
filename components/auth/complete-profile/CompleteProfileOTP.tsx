@@ -20,7 +20,7 @@ import { z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
+import { deleteUser, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithPhoneNumber, signOut } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -45,6 +45,7 @@ export default function CompleteProfileOTP({ user }: Props)
 
     const [loading, setLoading] = useState(false)
     const [sentOtp, setSentOtp] = useState(false)
+    const [verificationId, setVerificationId] = useState('')
     // const [timer, setTimer] = useState(60)
     const [error, setError] = useState('')
     const { toast } = useToast()
@@ -105,16 +106,21 @@ export default function CompleteProfileOTP({ user }: Props)
                 ),
                 title: 'Code Sent Successfully!',
             })  
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                'size': 'invisible',
-                'callback': async (response: any) => {
-                    await handleSendCode()
-                    await window.recaptchaVerifier?.clear()
-                },
-                'expired-callback': () => {
-                }
-            })
-            window.recaptchaVerifier.render()
+
+            const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container')
+            const confirmationResult = await signInWithPhoneNumber(auth, `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`, recaptchaVerifier)
+            setVerificationId(confirmationResult.verificationId);
+
+            // window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            //     'size': 'invisible',
+            //     'callback': async (response: any) => {
+            //         await handleSendCode()
+            //         await window.recaptchaVerifier?.clear()
+            //     },
+            //     'expired-callback': () => {
+            //     }
+            // })
+            // window.recaptchaVerifier.render()
         }
         catch(e: any)
         {
@@ -123,31 +129,34 @@ export default function CompleteProfileOTP({ user }: Props)
         }
     }
     
-    const handleSendCode = async () => {
-        try
-        {
-            const appVerifier = window.recaptchaVerifier
-            const fullPhoneNumber = `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`
-            await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier!)
-            .then((confirmationResult) => {
-                window.confirmationResult = confirmationResult
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(error.message)
-            })
-        }
-        catch(e: any)
-        {
-            console.error(e)
-            setError('Something went wrong33')
-        }
-    }
+    // const handleSendCode = async () => {
+    //     try
+    //     {
+    //         const appVerifier = window.recaptchaVerifier
+    //         const fullPhoneNumber = `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`
+    //         await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier!)
+    //         .then((confirmationResult) => {
+    //             window.confirmationResult = confirmationResult
+    //         })
+    //         .catch((error) => {
+    //             console.error(error)
+    //             setError(error.message)
+    //         })
+    //     }
+    //     catch(e: any)
+    //     {
+    //         console.error(e)
+    //         setError('Something went wrong33')
+    //     }
+    // }
     
     const handleSubmitOtp = async (otp: string) => {
-        await window.confirmationResult?.confirm(otp).then(async (result: any) => {
-            await updateDoc(doc(db, "users", user.id!), { verified: true })
-        })
+        const credential = PhoneAuthProvider.credential(verificationId, otp)
+        await signInWithCredential(auth, credential)
+        await updateDoc(doc(db, "users", user.id!), { verified: true })
+        // await window.confirmationResult?.confirm(otp).then(async (result: any) => {
+        //     await updateDoc(doc(db, "users", user.id!), { verified: true })
+        // })
     }
 
     const onSubmit = async (values: z.infer<typeof OtpSchema>) => {
