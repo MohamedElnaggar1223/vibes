@@ -119,7 +119,7 @@ export default function CompleteProfileOTP({ user }: Props)
         catch(e: any)
         {
             setError('Something went wrong22')
-console.error(e)
+            console.error(e)
         }
     }
     
@@ -139,7 +139,7 @@ console.error(e)
         }
         catch(e: any)
         {
-console.error(e)
+            console.error(e)
             setError('Something went wrong33')
         }
     }
@@ -210,7 +210,7 @@ console.error(e)
                         </>
                     ) : (
                         <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:sendCode')}</span>
-                        )}
+                    )}
                 <div id="recaptcha-container" /> 
                 </form>
             </Form>

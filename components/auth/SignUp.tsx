@@ -68,7 +68,7 @@ export default function SignUp({ locale }: { locale: string | undefined })
         },
     })
 
-    const handlePhoneNumberChage = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: string) => void) => {
+    const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: string) => void) => {
         const value = e.target.value
         onChange(value.replace(/[^\d]/g, ''))
     }
@@ -231,7 +231,7 @@ export default function SignUp({ locale }: { locale: string | undefined })
                                                 placeholder={t('auth:number')}
                                                 className='placeholder:text-[rgba(0,0,0,0.5)] font-poppins py-5 text-base px-10 w-full outline-none rounded-md flex-1'
                                                 {...field}
-                                                onChange={(e) => handlePhoneNumberChage(e, field.onChange)}
+                                                onChange={(e) => handlePhoneNumberChange(e, field.onChange)}
                                             />
                                         </FormControl>
                                         <FormMessage className="absolute font-poppins text-[#7F1D1D]" />
