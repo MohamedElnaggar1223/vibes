@@ -106,7 +106,7 @@ export default function CompleteProfileOTP({ user }: Props)
                 title: 'Code Sent Successfully!',
             })  
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                'size': 'normal',
+                'size': 'invisible',
                 'callback': async (response: any) => {
                     await handleSendCode()
                     await window.recaptchaVerifier?.clear()
@@ -165,16 +165,21 @@ export default function CompleteProfileOTP({ user }: Props)
     }
 
     useEffect(() => {
+        initiateRecaptcha()
+    }, [])
+
+    useEffect(() => {
         if(error !== '') setTimeout(() => setError(''), 3000)
     }, [error])
+
         
     return (
         <section className={cn('h-screen flex flex-col justify-center items-center bg-black w-fit z-10 lg:px-24 pt-12 max-lg:max-w-[100vw] max-lg:w-screen', pathname?.includes('/ar') ? 'mr-auto' : 'ml-auto')}>
             <p className='font-poppins font-base mb-6 text-white'>{t('auth:verifyNumber')}</p>
             <Form {...form}>
                 <form dir='ltr' onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10">
-                    {
-                        sentOtp ? (
+                    {/* { */}
+                        {/* sentOtp ? ( */}
                             <FormField
                                 control={form.control}
                                 name="otp"
@@ -199,18 +204,18 @@ export default function CompleteProfileOTP({ user }: Props)
                                     </FormItem>
                                 )}
                             />
-                        ) : (
+                        {/* ) : ( */}
                             <p className='font-poppins text-md mb-6 text-white'>{t('auth:codeSent')} {user.countryCode}{user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}</p>
-                        )
-                    }
-                    {sentOtp ? (
-                        <>
+                        {/* ) */}
+                    {/* } */}
+                    {/* {sentOtp ? ( */}
+                        {/* // <> */}
                             <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:verify')}</button>
                             {/* <span onClick={handleSendCode} className={('flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10')}>Resend Code ({timer})</span> */}
-                        </>
-                    ) : (
-                        <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:sendCode')}</span>
-                    )}
+                        {/* </> */}
+                    {/* ) : ( */}
+                        {/* <span onClick={initiateRecaptcha} className='flex items-center justify-center text-center cursor-pointer rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:sendCode')}</span> */}
+                    {/* )} */}
                 <div id="recaptcha-container" /> 
                 </form>
             </Form>
