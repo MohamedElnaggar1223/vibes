@@ -64,7 +64,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
             body: JSON.stringify({
                 amount_cents: ((tickets[0].country === 'EGP' ? totalValue * exchangeRate.USDToEGP : tickets[0].country === 'AED' ? totalValue * exchangeRate.USDToAED : totalValue * exchangeRate.USDToSAR) * 100).toString(),
                 currency: tickets[0].country,
-                items: [...tickets.map(ticket => ({ name: `${ticket.id}-${user.id}${promoCodes.find(pCode => pCode.promo === context.promoCode) ? `-${promoCodes.find(pCode => pCode.promo === context.promoCode)}` : ''}`, amount_cents: (ticket.totalPaid * 100).toString(), "quantity": "1" })), totalNumberParkingPasses ? { name: 'Parking Pass', amount_cents: (parkingTotal * 100).toString(), "quantity": totalNumberParkingPasses.toString() } : null].filter(Boolean),
+                items: [...tickets.map(ticket => ({ name: `${ticket.id}-${user.id}${promoCodes.find(pCode => pCode.promo === context.promoCode) ? `-${promoCodes.find(pCode => pCode.promo === context.promoCode)}` : ''}`, amount: (ticket.totalPaid * 100).toString(), "quantity": "1" })), totalNumberParkingPasses ? { name: 'Parking Pass', amount: (parkingTotal * 100).toString(), "quantity": totalNumberParkingPasses.toString() } : null].filter(Boolean),
                 user: { first_name: user.firstname, last_name: user.lastname, email: user.email, phone_number: `${user.countryCode}${user.phoneNumber}` },
             })
         }).then(res => res.json())
