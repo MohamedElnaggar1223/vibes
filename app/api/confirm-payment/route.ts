@@ -10,6 +10,7 @@ export async function POST(req: Request) {
         const { obj: query } = await req.json()
         console.log(req.url)
         const hmac = req.url.replace('https://www.vibes-events.com/api/confirm-payment?hmac=', '')
+        console.log(hmac)
 
         const hmacRequiredFields = [
             'amount_cents',
