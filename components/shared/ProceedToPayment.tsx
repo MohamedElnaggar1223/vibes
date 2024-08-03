@@ -50,11 +50,21 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
         context.setPromoCodes(promoCodes)
     }, [])
 
+    console.log(totalValue)
+    const amountInCents = ((tickets[0].country === 'EGP' ? totalValue * exchangeRate.USDToEGP : tickets[0].country === 'AED' ? totalValue * exchangeRate.USDToAED : totalValue * exchangeRate.USDToSAR) * 100).toString()
+
+    console.log(amountInCents)
+    console.log(tickets)
+
     const handleBuy = async () => {
         setLoading(true)
 
         const salesDocument = doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!)
         const userDoc = doc(db, 'users', user?.id ?? '')
+
+        console.log(totalValue)
+
+        const amountInCents = ((tickets[0].country === 'EGP' ? totalValue * exchangeRate.USDToEGP : tickets[0].country === 'AED' ? totalValue * exchangeRate.USDToAED : totalValue * exchangeRate.USDToSAR) * 100).toString()
 
         const response = await fetch('/api/begin-payment', {
             method: 'POST',
@@ -62,7 +72,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                amount_cents: ((tickets[0].country === 'EGP' ? totalValue * exchangeRate.USDToEGP : tickets[0].country === 'AED' ? totalValue * exchangeRate.USDToAED : totalValue * exchangeRate.USDToSAR) * 100).toString(),
+                amount_cents: amountInCents,
                 currency: tickets[0].country,
                 items: [...tickets.map(ticket => ({ name: `${ticket.id}-${user.id}${promoCodes.find(pCode => pCode.promo === context.promoCode) ? `-${promoCodes.find(pCode => pCode.promo === context.promoCode)}` : ''}`, amount: (ticket.totalPaid * 100).toString(), "quantity": "1" })), totalNumberParkingPasses ? { name: 'Parking Pass', amount: (parkingTotal * 100).toString(), "quantity": totalNumberParkingPasses.toString() } : null].filter(Boolean),
                 user: { first_name: user.firstname, last_name: user.lastname, email: user.email, phone_number: `${user.countryCode}${user.phoneNumber}` },

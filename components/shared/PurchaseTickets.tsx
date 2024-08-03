@@ -203,7 +203,6 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 eventId: event.id,
                 seated: eventData.seated,
                 country: country,
-                totalPaid: total * selectedExchangeRate,
                 createdAt: Timestamp.now(),
             }
 
@@ -234,7 +233,9 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                     }
                 });
 
-                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket}))
+                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket, totalPaid: (eventData.tickets.find(eventTicket => eventTicket.name === Object.keys(ticket.tickets)[0])?.price ?? 0) * selectedExchangeRate}))
+
+                console.log(finalTicketsArray)
 
                 const ticketsCollection = collection(db, 'tickets')
                 const eventDoc = doc(db, 'events', event.id)
@@ -309,7 +310,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                         }
                 });
 
-                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket}))
+                const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket, totalPaid: (eventData.tickets.find(eventTicket => eventTicket.name === Object.keys(ticket.tickets)[0])?.price ?? 0) * selectedExchangeRate}))
 
                 const ticketsCollection = collection(db, 'tickets')
                 const eventDoc = doc(db, 'events', event.id)
