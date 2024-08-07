@@ -16,9 +16,13 @@ export async function POST(req: Request) {
 
     console.log(amount_cents, currency, items, user)
 
+    console.log(process.env.PAYMOB_SECRET_KEY)
+    console.log(process.env.PAYMOB_INTEGRATION_ID)
+    console.log(process.env.PAYMOB_PUBLIC_KEY)
+
     try
     {
-        
+
         // const tokenRequest = await fetch('https://accept.paymob.com/api/auth/tokens', {
         //     method: 'POST',
         //     headers: {
