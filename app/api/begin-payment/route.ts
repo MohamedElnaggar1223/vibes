@@ -85,11 +85,7 @@ export async function POST(req: Request) {
             body: JSON.stringify({
                 "amount": parseFloat(amount_cents),
                 "currency": currency,
-                "payment_methods": [
-                    process.env.PAYMOB_INTEGRATION_ID,
-                    "card",
-                    "you can add Integration id directly or your integration name"
-                ],
+                "payment_methods": [process.env.PAYMOB_INTEGRATION_ID],
                 "items": newItems,
                 "billing_data": {
                     "first_name": user.first_name,
