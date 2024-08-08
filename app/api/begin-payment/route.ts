@@ -90,9 +90,6 @@ export async function POST(req: Request) {
                     "card",
                     "you can add Integration id directly or your integration name"
                 ],
-                "integrations": [
-                    process.env.PAYMOB_INTEGRATION_ID
-                ],
                 "items": newItems,
                 "billing_data": {
                     "first_name": user.first_name,
