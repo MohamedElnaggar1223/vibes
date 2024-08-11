@@ -78,12 +78,12 @@ export default async function EventPage({ params }: Props)
                         height={500}
                         index={parseInt(params.id.toString())}
                         imageClassName="rounded-t-xl"
-                        className="w-full object-contain h-full max-h-[212px] overflow-hidden"
+                        className="w-full object-contain h-full min-h-[180px] max-h-[212px] overflow-hidden"
                         priority={true}
                         layoutId={params.id.toString()}
                         eventPage={true}
                     />
-                    <div className='flex flex-col p-3 gap-4 flex-1'>
+                    <div className='flex flex-col p-3 gap-4 flex-1 overflow-auto'>
                         <p className='font-poppins text-lg lg:text-2xl font-bold text-white'>{params.locale === 'ar' ? selectedEvent?.nameArabic : selectedEvent?.name}</p>
                         <div className='w-full flex justify-between items-center'>
                             <p className='font-poppins text-xs lg:text-md font-extralight text-white'>{params.locale === 'ar' ? selectedEvent?.venueArabic : selectedEvent?.venue}</p>
