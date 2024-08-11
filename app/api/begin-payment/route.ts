@@ -74,7 +74,7 @@ export async function POST(req: Request) {
         //     })
         // }).then(res => res.json()) as { token: string }
 
-        const newItems = items.map(item => ({ amount: parseFloat(item.amount), name: item.name, quantity: parseInt(item.quantity) }))
+        const newItems = items.map(item => ({ "name": item.name, "amount": parseFloat(item.amount), "quantity": parseInt(item.quantity) }))
 
         const intentionInitiationRequest = await fetch('https://accept.paymob.com/v1/intention/', {
             method: 'POST',
@@ -83,13 +83,10 @@ export async function POST(req: Request) {
                 'Authorization': `Token ${process.env.PAYMOB_SECRET_KEY}`,
             },
             body: JSON.stringify({
-                "amount": 10000,
-                "currency": "EGP",
-                "payment_methods": [4224317],
-                "items": [
-                    { "name": "test", "amount": 5000, "quantity": 1 },
-                    { "name": "test2", "amount": 5000, "quantity": 1 }
-                ],
+                "amount": amount_cents,
+                "currency": currency,
+                "payment_methods": [parseInt(process.env.PAYMOB_INTEGRATION_ID!)],
+                "items": newItems,
                 "billing_data": {
                     "first_name": "test",
                     "last_name": "test",
