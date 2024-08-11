@@ -83,28 +83,54 @@ export async function POST(req: Request) {
                 'Authorization': `Token ${process.env.PAYMOB_SECRET_KEY}`,
             },
             body: JSON.stringify({
-                "amount": parseFloat(amount_cents),
-                "currency": currency,
-                "payment_methods": [process.env.PAYMOB_INTEGRATION_ID],
-                "items": newItems,
+                "amount": 10000,
+                "currency": "EGP",
+                "payment_methods": [4224317],
+                "items": [
+                    { "name": "test", "amount": 5000, "quantity": 1 },
+                    { "name": "test2", "amount": 5000, "quantity": 1 }
+                ],
                 "billing_data": {
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "email": user.email,
-                    "phone_number": user.phone_number,
-                    "street": 'NA',
-                    "building": 'NA',
-                    "country": 'NA',
-                    "apartment": 'NA',
-                    "floor": 'NA',
-                    "state": 'NA'
+                    "first_name": "test",
+                    "last_name": "test",
+                    "email": "test@test.com",
+                    "phone_number": "+201022991613",
+                    "street": "NA",
+                    "building": "NA",
+                    "country": "NA",
+                    "apartment": "NA",
+                    "floor": "NA",
+                    "state": "NA"
                 },
                 "customer": {
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "email": user.email,
-                },
+                    "first_name": "test",
+                    "last_name": "test",
+                    "email": "test@test.com"
+                }
             })
+            // body: JSON.stringify({
+            //     "amount": parseFloat(amount_cents),
+            //     "currency": currency,
+            //     "payment_methods": [process.env.PAYMOB_INTEGRATION_ID],
+            //     "items": newItems,
+            //     "billing_data": {
+            //         "first_name": user.first_name,
+            //         "last_name": user.last_name,
+            //         "email": user.email,
+            //         "phone_number": user.phone_number,
+            //         "street": 'NA',
+            //         "building": 'NA',
+            //         "country": 'NA',
+            //         "apartment": 'NA',
+            //         "floor": 'NA',
+            //         "state": 'NA'
+            //     },
+            //     "customer": {
+            //         "first_name": user.first_name,
+            //         "last_name": user.last_name,
+            //         "email": user.email,
+            //     },
+            // })
         }).then(res => res.json()) as { client_secret: string }
 
         console.log(intentionInitiationRequest)
