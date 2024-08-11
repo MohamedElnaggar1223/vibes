@@ -88,10 +88,10 @@ export async function POST(req: Request) {
                 "payment_methods": [4224317],
                 "items": newItems,
                 "billing_data": {
-                    "first_name": "test",
-                    "last_name": "test",
-                    "email": "test@test.com",
-                    "phone_number": "+201022991613",
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "phone_number": user.phone_number,
                     "street": "NA",
                     "building": "NA",
                     "country": "NA",
@@ -100,9 +100,9 @@ export async function POST(req: Request) {
                     "state": "NA"
                 },
                 "customer": {
-                    "first_name": "test",
-                    "last_name": "test",
-                    "email": "test@test.com"
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email
                 }
             })
             // body: JSON.stringify({
