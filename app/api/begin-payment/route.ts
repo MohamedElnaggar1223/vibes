@@ -83,7 +83,7 @@ export async function POST(req: Request) {
                 'Authorization': `Token ${process.env.PAYMOB_SECRET_KEY}`,
             },
             body: JSON.stringify({
-                "amount": amount_cents,
+                "amount": parseFloat(amount_cents),
                 "currency": currency,
                 "payment_methods": [4224317],
                 "items": newItems,
