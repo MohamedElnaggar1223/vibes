@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import ProceedToPayment from "@/components/shared/ProceedToPayment";
 import { Timestamp } from "firebase/firestore";
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -20,6 +21,7 @@ type Props = {
 
 export default async function Cart({ params }: Props)
 {
+    noStore()
     revalidatePath('/cart')
 
     const user = await getUser()
