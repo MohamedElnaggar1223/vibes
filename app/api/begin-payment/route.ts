@@ -85,7 +85,7 @@ export async function POST(req: Request) {
             body: JSON.stringify({
                 "amount": parseFloat(amount_cents),
                 "currency": currency,
-                "payment_methods": [4224317],
+                "payment_methods": [4628268],
                 "items": newItems,
                 "billing_data": {
                     "first_name": user.first_name,
