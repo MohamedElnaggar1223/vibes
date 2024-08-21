@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
+import { allowFacebookLogin } from "@/flags"
 
 export default async function SignInPage()
 {
@@ -19,9 +20,11 @@ export default async function SignInPage()
         if(user?.verified) return redirect('/')
     }
 
+    const facebookLogin = await allowFacebookLogin()
+
     return (
         <Suspense>
-            <SignIn />
+            <SignIn facebookLogin={facebookLogin} />
         </Suspense>
     )
 }

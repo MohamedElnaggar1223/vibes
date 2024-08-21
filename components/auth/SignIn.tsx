@@ -23,7 +23,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { cn } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
 
-export default function SignIn()
+export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
 {
     const router = useRouter()
     const pathname = usePathname()
@@ -223,14 +223,17 @@ export default function SignIn()
                                 alt='google'
                             />
                         </span>
-                        <span onClick={handleFacebookSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
-                            <Image
-                                src='/assets/facebook.svg' 
-                                width={19}
-                                height={19}
-                                alt='facebook'
-                            />
-                        </span>
+                        {
+                            facebookLogin &&
+                            <span onClick={handleFacebookSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                                <Image
+                                    src='/assets/facebook.svg' 
+                                    width={19}
+                                    height={19}
+                                    alt='facebook'
+                                />
+                            </span>
+                        }
                         <span onClick={handleXSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                             <Image
                                 src='/assets/x.svg'
