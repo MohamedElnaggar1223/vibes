@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props)
     const selectedEvent = await getEvent(params.id)
 
     return {
-        title: `${selectedEvent?.name} - Vibes`,
+        title: `${selectedEvent?.name} - Whim Zee`,
         description: selectedEvent?.description,
     }
 }

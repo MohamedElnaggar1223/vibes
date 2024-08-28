@@ -54,9 +54,9 @@ export async function POST(req: Request)
         await Promise.all(pdfs)
     
         const mailOptions = {
-            from: 'Vibes',
+            from: 'Whim Zee',
             to: [email],
-            subject: `Vibes ${event.name}`,
+            subject: `Whim Zee ${event.name}`,
             attachments: attachments
         }
     

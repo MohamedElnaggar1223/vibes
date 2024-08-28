@@ -55,7 +55,7 @@ export default function TicketEmail({ event, ticket }: Props)
                                     />
                                 </Column>
                                 <Column width={466} align="right" className=''>
-                                    <Link href="https://www.vibes-events.com/profile">My Profile</Link>
+                                    <Link href="https://www.whim-zee.com/profile">My Profile</Link>
                                 </Column>
                             </Row>
                         </Section>
@@ -92,7 +92,7 @@ export default function TicketEmail({ event, ticket }: Props)
                                     <Text className='text-3xl font-bold text-black text-left font-[Ppoppins'>Payment Summary</Text>
                                 </Column>
                                 <Column width={466} align="right" className=''>
-                                    <Link href={`https://www.vibes-events.com/profile?show=my-tickets&id=${ticket.id}`} className='text-2xl'>View Details</Link>
+                                    <Link href={`https://www.whim-zee.com/profile?show=my-tickets&id=${ticket.id}`} className='text-2xl'>View Details</Link>
                                 </Column>
                             </Row>
                         </Section>

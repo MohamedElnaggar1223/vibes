@@ -18,7 +18,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "Vibes",
+  title: "Whim Zee",
   description: "Buy and sell your tickets online",
 };
 

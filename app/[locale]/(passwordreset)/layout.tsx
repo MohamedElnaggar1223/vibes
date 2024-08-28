@@ -14,7 +14,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "Reset Password - Vibes",
+  title: "Reset Password - Whim Zee",
   description: "Buy and sell your tickets online",
 };
 

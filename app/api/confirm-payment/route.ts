@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
 
-        if(query.success === 'false') return NextResponse.redirect('https://www.vibes-events.com/')
+        if(query.success === 'false') return NextResponse.redirect('https://www.whim-zee.com/')
     
         const admin = await initAdmin()
 
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       //console.log(e)  
     }
 
-    return NextResponse.redirect('https://www.vibes-events.com/')
+    return NextResponse.redirect('https://www.whim-zee.com/')
 }
 
 export async function GET(req: Request) {
@@ -109,8 +109,8 @@ export async function GET(req: Request) {
         
         const ticket = await admin.firestore().collection('tickets').get().then(doc => doc.docs[0].data())
 
-        return NextResponse.redirect(`https://www.vibes-events.com/success/${ticket.id}`)
+        return NextResponse.redirect(`https://www.whim-zee.com/success/${ticket.id}`)
     }
 
-    return NextResponse.redirect('https://www.vibes-events.com')
+    return NextResponse.redirect('https://www.whim-zee.com/')
 }

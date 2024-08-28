@@ -44,8 +44,8 @@ export default async function Header({ params }: Props)
             <Link href='/'>
                 <Image
                     src="/assets/logo.png"
-                    width={195}
-                    height={73}
+                    width={110}
+                    height={53}
                     alt="logo"
                     className='cursor-pointer max-lg:w-[120px] max-lg:h-[45px]'
                     priority

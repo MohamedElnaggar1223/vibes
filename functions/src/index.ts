@@ -95,7 +95,7 @@ export const clearCarts = onSchedule("* * * * *", async () => {
 
     await Promise.all(usersUpdate)
 
-    fetch('https://www.vibes-events.com/api/refreshCart')
+    fetch('https://www.whim-zee.com/api/refreshCart')
 
 })
 
@@ -195,9 +195,9 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
         
         
             const mailOptions = {
-                from: 'Vibes',
+                from: 'Whim Zee',
                 to: [user?.email],
-                subject: `Vibes ${eventData?.name}`,
+                subject: `Whim Zee ${eventData?.name}`,
                 attachments: attachments
             }
 
@@ -249,9 +249,9 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             await Promise.all(seatsPdfs!) 
 
             const mailOptions = {
-                from: 'Vibes',
+                from: 'Whim Zee',
                 to: [user?.email],
-                subject: `Vibes ${eventData?.name}`,
+                subject: `Whim Zee ${eventData?.name}`,
                 attachments: attachments
             }
 
@@ -311,9 +311,9 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             await Promise.all(pdfs)
         
             const mailOptions = {
-                from: 'Vibes',
+                from: 'Whim Zee',
                 to: [user?.email],
-                subject: `Vibes ${eventData.name}`,
+                subject: `Whim Zee ${eventData.name}`,
                 attachments: attachments
             }
 

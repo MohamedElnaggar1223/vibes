@@ -80,9 +80,9 @@ export async function GET(req: Request)
     const emailHtml = render(<TicketEmail event={eventData} ticket={ticketData} />);
 
     const mailOptions = {
-        from: 'Vibes',
+        from: 'Whim Zee',
         to: 'maelnaggar1223@gmail.com',
-        subject: `Vibes ${eventData.name}`,
+        subject: `Whim Zee ${eventData.name}`,
         html: emailHtml
     }
 

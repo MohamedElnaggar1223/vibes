@@ -14,7 +14,7 @@ type Props = {
 export async function generateMetadata({ searchParams }: Props) 
 {
     return {
-        title: `${typeof searchParams.show !== 'string' ? 'My Profile' : searchParams.show === 'personal' ? 'My Profile' : searchParams.show === 'change-password' ? 'Change Password' : searchParams.show === 'my-tickets' ? 'My Tickets' : 'My Profile'} - Vibes`,
+        title: `${typeof searchParams.show !== 'string' ? 'My Profile' : searchParams.show === 'personal' ? 'My Profile' : searchParams.show === 'change-password' ? 'Change Password' : searchParams.show === 'my-tickets' ? 'My Tickets' : 'My Profile'} - Whim Zee`,
     }
 }
 

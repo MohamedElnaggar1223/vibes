@@ -7,7 +7,7 @@ import Loading from "./loading";
 import EventsLoading from "./eventsLoading";
 
 export const metadata: Metadata = {
-    title: 'Categories - Vibes',
+    title: 'Categories - Whim Zee',
     description: 'Find the best events in KSA, UAE, or Egypt!',
 }
 
