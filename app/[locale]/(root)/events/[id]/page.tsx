@@ -1,6 +1,7 @@
 import { EventType } from "@/lib/types/eventTypes"
 import { getEvents } from "@/lib/utils"
 import EventPageContainer from "./event-page-container"
+import { Suspense } from "react"
 
 export const revalidate = 60
  
@@ -16,5 +17,9 @@ export async function generateStaticParams() {
 
 export default function Page({ params }: { params: { id: string } }) 
 {
-    return <EventPageContainer params={params} />
+    return (
+        <Suspense>
+            <EventPageContainer params={params} />
+        </Suspense>
+    )
 }
