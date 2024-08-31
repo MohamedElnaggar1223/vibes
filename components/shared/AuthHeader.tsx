@@ -24,11 +24,11 @@ export default function AuthHeader()
         <section className='py-2 pr-4 lg:px-20 min-w-full flex justify-between items-center fixed top-0 z-[9999] bg-transparent max-lg:bg-black'>
             <Link href='/'>
                 <Image
-                    src="/assets/logo.png"
-                    width={195}
-                    height={73}
+                    src="/assets/logoWhite.png"
+                    width={110}
+                    height={53}
                     alt="logo"
-                    className='cursor-pointer z-[9999] max-lg:w-[120px] max-lg:h-[45px]'
+                    className='cursor-pointer z-[9999] max-lg:w-[100px] max-lg:h-[53px]'
                 /> 
             </Link>
             <div className="flex gap-8 lg:gap-24 items-center z-[9999]">

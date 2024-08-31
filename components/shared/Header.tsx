@@ -47,7 +47,7 @@ export default async function Header({ params }: Props)
                     width={110}
                     height={53}
                     alt="logo"
-                    className='cursor-pointer max-lg:w-[120px] max-lg:h-[45px]'
+                    className='cursor-pointer max-lg:w-[100px] max-lg:h-[53px]'
                     priority
                 />
             </Link>

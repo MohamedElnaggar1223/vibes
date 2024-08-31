@@ -87,7 +87,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 						width={195}
 						height={73}
 						alt="logo"
-						className='cursor-pointer z-[9999] max-lg:w-[120px] max-lg:h-[45px]'
+						className='cursor-pointer z-[9999] max-lg:w-[100px] max-lg:h-[53px]'
 						priority
 						fetchPriority="high"
 					/>
