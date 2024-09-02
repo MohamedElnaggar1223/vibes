@@ -110,7 +110,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                         ))}
                     </CarouselContent>
                 </Carousel>
-                <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl max-lg:h-[34rem] lg:h-80'>
+                {events.length > 0 && <div className='flex flex-col gap-3 w-full pt-6 pb-4 pl-4 lg:pl-14 pr-4 bg-[rgba(217,217,217,0.2)] mb-4 mt-[4.65rem] lg:mt-4 z-10 text-white rounded-2xl max-lg:h-[34rem] lg:h-80'>
                     {(currentWidth ?? 0) > 1024 ? (
                         <>
                             <div dir={pathname?.includes('/ar') ? 'rtl' : 'ltr'} className='flex flex-col lg:flex-row justify-between items-center w-full gap-4'>
@@ -155,7 +155,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                         </>
                     )
                     }
-                </div>
+                </div>}
             </section>
         </AnimatePresence>
     )
