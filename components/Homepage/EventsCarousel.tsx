@@ -76,8 +76,8 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                             //     key={index} 
                             //     className={cn('max-h-[448px] basis-1/4', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'max-h-[550px] h-[550px] basis-1/2 w-full z-10 cursor-pointer' : 'blur-sm mt-14', events.length < 2 && 'basis-auto', events.length === 2 && 'basis-1/2', events.length === 3 || events.length === 4 && 'basis-1/3 max-w-[400px]', events.length === 1 && 'mx-auto basis-auto', (events.length === 3 || events.length === 4) && (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) && 'min-w-[800px]' )} 
                             //     onClick={() => {
-                            //         if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
-                            //         else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                            //         if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event?.id}`)
+                            //         else if(index - 1 === selectedIndex) router.push(`/events/${event?.id}`)
                             //         api?.scrollTo(index === 0 ? events.length - 1 : index - 1)
                             //         setTimeout(() => {
                             //             setSelectedIndex(index === 0 ? events.length - 1 : index - 1)
@@ -88,8 +88,8 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                 key={index} 
                                 className={cn('max-h-[448px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
                                 onClick={() => {
-                                    if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event.id}`)
-                                    else if(index - 1 === selectedIndex) router.push(`/events/${event.id}`)
+                                    if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event?.id}`)
+                                    else if(index - 1 === selectedIndex) router.push(`/events/${event?.id}`)
                                     api?.scrollTo(index === 0 ? events.length - 1 : index - 1)
                                     setTimeout(() => {
                                         setSelectedIndex(index === 0 ? events.length - 1 : index - 1)
@@ -103,7 +103,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                     height={448} 
                                     imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg max-w-[calc(50vw-5rem)] min-h-[125%] max-lg:min-h-[220px] max-lg:min-w-[280px] max-h-[125%] z-[99999999]' : "max-lg:absolute max-lg:min-w-[180px] max-lg:min-h-[150px] rounded-lg object-cover h-full w-full max-w-[872px]"}
                                     priority={true}
-                                    layoutId={event.id}
+                                    layoutId={event?.id}
                                     eventPage={false}
                                 />
                             </CarouselItem>
