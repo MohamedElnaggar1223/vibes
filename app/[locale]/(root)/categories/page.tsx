@@ -3,7 +3,6 @@ import CategoriesFilters from "@/components/shared/CategoriesFilters";
 import Categorie from "@/components/shared/Category";
 import { getCategories, getEvents, initTranslations } from "@/lib/utils";
 import { Suspense } from "react";
-import Loading from "./loading";
 import EventsLoading from "./eventsLoading";
 
 export const metadata: Metadata = {
