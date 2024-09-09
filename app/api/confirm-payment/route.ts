@@ -61,9 +61,8 @@ export async function POST(req: Request) {
 
         if(hmacCalculated !== hmac) return NextResponse.json({ error: 'HMAC mismatch' }, { status: 400 })
 
+        if(query.success == false) return NextResponse.redirect('https://www.whim-zee.com/')
         console.log(query.success)
-
-        if(query.success === 'false') return NextResponse.redirect('https://www.whim-zee.com/')
     
         const admin = await initAdmin()
 
