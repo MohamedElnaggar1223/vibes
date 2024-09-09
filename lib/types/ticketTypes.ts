@@ -11,6 +11,7 @@ export type TicketType = {
     totalPaid: number,
     userId: string,
     status: 'pending' | 'paid'
+    sentMail: boolean | undefined
 }
 
 export type PromoCode = {

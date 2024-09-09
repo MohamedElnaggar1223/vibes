@@ -102,7 +102,7 @@ export const clearCarts = onSchedule("* * * * *", async () => {
 export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }).firestore.document('tickets/{documentId}').onUpdate(async (snap, context) => {
     const ticket = {...snap.after.data(), id: snap.after.id} as TicketType
 
-    if(ticket.status !== 'paid') return
+    if(ticket.status !== 'paid' || ticket.sentMail) return
 
     const event = await db.collection('events').doc(ticket.eventId).get()
 
@@ -222,6 +222,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 }
 
                 await transporter.sendMail(newMailOptions)
+                await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)
             {
@@ -276,6 +277,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 }
 
                 await transporter.sendMail(newMailOptions)
+                await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)
             {
@@ -338,6 +340,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 }
 
                 await transporter.sendMail(newMailOptions)
+                await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)
             {
