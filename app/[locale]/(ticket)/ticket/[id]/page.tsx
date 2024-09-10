@@ -29,7 +29,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 	const event = {
 		...eventData.data(),
 		createdAt: eventData.data()?.createdAt.toDate(),
-		eventTime: eventData.data()?.eventTime.toDate(),
+		eventTime: eventData.data()?.eventTime?.toDate(),
 		eventDate: eventData.data()?.eventDate.toDate(),
 		updatedAt: eventData.data()?.updatedAt?.toDate(),
 		gatesOpen: eventData.data()?.gatesOpen?.toDate(),

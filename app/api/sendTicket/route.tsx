@@ -65,7 +65,7 @@ export async function GET(req: Request)
     const eventData = {
         ...event,
         createdAt: event?.createdAt.toDate(),
-        eventTime: event?.eventTime.toDate(),
+        eventTime: event?.eventTime?.toDate(),
         eventDate: event?.eventDate.toDate(),
         updatedAt: event?.updatedAt?.toDate(),
         gatesClose: event?.gatesClose?.toDate(),

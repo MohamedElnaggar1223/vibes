@@ -19,7 +19,7 @@ export default async function CarouselCategory({ locale, title, subTitle, events
         return {
             ...eventDoc.data(),
             createdAt: eventDoc.data()?.createdAt.toDate(),
-            eventTime: eventDoc.data()?.eventTime.toDate(),
+            eventTime: eventDoc.data()?.eventTime?.toDate(),
             eventDate: eventDoc.data()?.eventDate.toDate(),
             updatedAt: eventDoc.data()?.updatedAt?.toDate(),
             gatesOpen: eventDoc.data()?.gatesOpen?.toDate(),

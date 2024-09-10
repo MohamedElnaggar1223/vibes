@@ -25,7 +25,7 @@ const getEvent = cache(async (id: string) => {
     const selectedEvent = {
         ...fetchedEvent.data(),
         createdAt: fetchedEvent.data()?.createdAt.toDate(),
-        eventTime: fetchedEvent.data()?.eventTime.toDate(),
+        eventTime: fetchedEvent.data()?.eventTime?.toDate(),
         eventDate: fetchedEvent.data()?.eventDate.toDate(),
         updatedAt: fetchedEvent.data()?.updatedAt?.toDate(),
         gatesOpen: fetchedEvent.data()?.gatesOpen?.toDate(),
