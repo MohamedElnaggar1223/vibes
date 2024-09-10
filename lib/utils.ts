@@ -27,6 +27,7 @@ export function getDaySuffix(day: number) {
 }
 
 export const formatTime = (date: Date) => {
+    if(!date) return ''
     let hours = date.getHours()
     let minutes = date.getMinutes().toString()
 
@@ -168,6 +169,7 @@ export async function initTranslations(
 }
 
 export const toArabicNums = (price: string) => {
+  if(!price) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
@@ -186,6 +188,7 @@ export const toArabicNums = (price: string) => {
 }
 
 export const toArabicDate = (date: string) => {
+  if(!date) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
@@ -243,6 +246,7 @@ export const toArabicDate = (date: string) => {
 }
 
 export const toArabicTime = (time: string) => {
+  if(!time) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
