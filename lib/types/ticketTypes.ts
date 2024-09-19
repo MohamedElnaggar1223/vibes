@@ -5,13 +5,15 @@ export type TicketType = {
     id: string,
     parkingPass: number,
     seats: {},
-    tickets: {
-        [x: string]: number
-    },
+    tickets: any,
     totalPaid: number,
     userId: string,
     status: 'pending' | 'paid'
-    sentMail: boolean | undefined
+    forSale?: boolean
+    salePrice?: number | string
+    saleStatus?: 'pending' | 'sold' | 'cancelled' | 'onSale' | 'inEscrow'
+    sentMail?: boolean
+    bundleID?: string
 }
 
 export type PromoCode = {
@@ -25,4 +27,24 @@ export type PromoCode = {
     quantityUsed: number,
     singleEvent: boolean,
     type: '$' | '%'
+}
+
+export type Bundle = {
+    id: string,
+    eventId: string,
+    createdAt: Date,
+    price: number,
+    status: 'pending' | 'sold' | 'cancelled' | 'onSale' | 'inEscrow'
+    userId: string
+    tickets: string[]
+}
+
+export type BundleWithTickets = {
+    id: string,
+    eventId: string,
+    createdAt: Date,
+    price: number,
+    status: 'pending' | 'sold' | 'cancelled' | 'onSale' | 'inEscrow'
+    userId: string
+    tickets: TicketType[]
 }

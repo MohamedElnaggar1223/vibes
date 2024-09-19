@@ -54,6 +54,8 @@ export type EventType = {
     updatedAt?: Date,
     uploadedTickets: boolean,
     ticketFilesPath: string,
+    reselling: boolean,
+    resellMarkup?: number
 }
 
 export type ExchangeRate = {

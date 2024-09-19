@@ -78,6 +78,24 @@ export const getEvents = cache(async () => {
     return events
 })
 
+export const getEventsResell = cache(async () => {
+  const admin = await initAdmin()
+  const eventsData = (await admin.firestore().collection('events').where('reselling', '==', true).get()).docs
+  const eventsDocs = eventsData?.map(async (event) => {
+      return {
+          ...event.data(),
+          createdAt: event.data()?.createdAt?.toDate(),
+          eventTime: event.data()?.eventTime?.toDate(),
+          eventDate: event.data()?.eventDate?.toDate(),
+          updatedAt: event.data()?.updatedAt?.toDate(),
+      } as EventType
+
+  })
+  const events = await Promise.all(eventsDocs || [])
+
+  return events
+})
+
 export const getEvent = cache(async (id: string) => {
     const admin = await initAdmin()
     const event = (await admin.firestore().collection('events').doc(id).get())

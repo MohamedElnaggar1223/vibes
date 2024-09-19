@@ -56,6 +56,7 @@ export default async function Header({ params }: Props)
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
+                <Link href='/resell-market' className='font-poppins text-sm md:text-lg font-[300] z-[9999] text-white'>Resell Market</Link>
                 <LocaleSwitcher params={params} />
                 {
                     !session?.user || !user?.id ? (
