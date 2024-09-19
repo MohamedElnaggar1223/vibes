@@ -286,7 +286,8 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
         }
         else {
             const pdfs = Object.values(ticket.tickets).map(async (ticketQuantity, index) => {
-                if(ticketQuantity > 0)
+
+                if((ticketQuantity as number) > 0)
                 {
                     console.log(ticket.tickets)
     
@@ -296,7 +297,7 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                     console.log(`${eventData.ticketFilesPath}/${Object.keys(ticket.tickets)[index]}`)
                     dirRef[0].forEach((file: File) => console.log(file.name))
     
-                    for(let i = 0; i < ticketQuantity; i++) 
+                    for(let i = 0; i < (ticketQuantity as number); i++) 
                     {
                         const pdfData = await ticketsFiles[i].download()
                         attachments.push({
