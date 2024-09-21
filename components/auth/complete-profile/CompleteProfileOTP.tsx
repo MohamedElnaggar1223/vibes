@@ -108,9 +108,10 @@ export default function CompleteProfileOTP({ user }: Props)
             })  
 
             const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                size: 'invisible'
+                size: 'invisible',
             })
-            const confirmationResult = await signInWithPhoneNumber(auth, `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`, recaptchaVerifier)
+
+            const confirmationResult = await signInWithPhoneNumber(auth, `${user.countryCode}${user.phoneNumber?.startsWith('0') ? user.phoneNumber.slice(1) : user.phoneNumber}`, recaptchaVerifier)            
             setVerificationId(confirmationResult.verificationId);
 
             // window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
@@ -126,8 +127,8 @@ export default function CompleteProfileOTP({ user }: Props)
         }
         catch(e: any)
         {
+            console.log(e)
             setError('Something went wrong22')
-            console.error(e)
         }
     }
     

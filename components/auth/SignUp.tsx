@@ -325,14 +325,14 @@ export default function SignUp({ locale }: { locale: string | undefined })
                                     alt='google'
                                 />
                             </span>
-                            <span onClick={handleFacebookSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
+                            {/* <span onClick={handleFacebookSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                                 <Image
                                     src='/assets/facebook.svg' 
                                     width={19}
                                     height={19}
                                     alt='facebook'
                                 />
-                            </span>
+                            </span> */}
                             <span onClick={handleXSignIn} className='cursor-pointer hover:bg-[#f1f1f1] w-[5.5rem] h-11 bg-white rounded-md shadow-md flex items-center justify-center'>
                                 <Image
                                     src='/assets/x.svg'
