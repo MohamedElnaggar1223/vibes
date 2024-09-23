@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { useTranslation } from "react-i18next"
 
-export default function SignUp({ locale }: { locale: string | undefined })
+export default function SignUp({ locale, redirectUrl }: { locale: string | undefined, redirectUrl: string | undefined })
 {
     const router = useRouter()
     const pathname = usePathname()
@@ -82,7 +82,7 @@ export default function SignUp({ locale }: { locale: string | undefined })
                 const userRef = doc(db, "users", userCredentials.user.uid) 
                 //set verified to false when OTP
                 await setDoc(userRef, { firstname: values.firstname, lastname: values.lastname, email: values.email, countryCode: values.countryCode, phoneNumber: values.phoneNumber, verified: false, provider: 'credentials', id: userCredentials.user.uid, tickets: [] })
-                await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
+                await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: false })
                 setLoading(false)
             })
         }
@@ -100,8 +100,9 @@ export default function SignUp({ locale }: { locale: string | undefined })
             if(user.user) 
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e)
@@ -118,8 +119,9 @@ export default function SignUp({ locale }: { locale: string | undefined })
             if(user.user) 
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e)
@@ -136,8 +138,9 @@ export default function SignUp({ locale }: { locale: string | undefined })
             if(user.user)
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e)
@@ -344,7 +347,7 @@ export default function SignUp({ locale }: { locale: string | undefined })
                         </div>
                         <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:signUp')}</button>
                     </form>
-                    <p className='text-white mt-2 font-poppins text-sm mb-3'>{t('auth:already')} <span onClick={() => router.push('/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signIn')}</span></p>
+                    <p className='text-white mt-2 font-poppins text-sm mb-3'>{t('auth:already')} <span onClick={() => router.push(redirectUrl ? `/sign-in?redirectUrl=${redirectUrl}` : '/sign-in')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signIn')}</span></p>
                 </Form>
             </div>
             <Dialog open={loading}>

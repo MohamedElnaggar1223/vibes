@@ -23,7 +23,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { cn } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
 
-export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
+export default function SignIn({ facebookLogin, redirectUrl }: { facebookLogin: boolean, redirectUrl: string | undefined })
 {
     const router = useRouter()
     const pathname = usePathname()
@@ -67,7 +67,7 @@ export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
         {
             await signInWithEmailAndPassword(auth, values.email, values.password)
             .then(async (userCredentials) => {
-                await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: true, callbackUrl: '/' })
+                await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: false })
                 setLoading(false)
             })
         }
@@ -90,8 +90,9 @@ export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
             if(user.user) 
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e: any)
@@ -113,8 +114,9 @@ export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
             if(user.user) 
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e: any)
@@ -136,8 +138,9 @@ export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
             if(user.user)
             {
                 setLoading(true)
-                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: true, callbackUrl: '/' })
+                await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: false })
                 setLoading(false)
+                router.push(redirectUrl ?? '/')
             }
         }
         catch(e: any)
@@ -245,7 +248,7 @@ export default function SignIn({ facebookLogin }: { facebookLogin: boolean })
                     </div>
                     <button type="submit" className='rounded-md font-light py-5 px-10 bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] w-full text-white font-poppins'>{t('auth:signIn')}</button>
                 </form>
-                <p className='text-white mt-2 font-poppins text-sm text-center text-nowrap'>{t('auth:noaccount')} <span onClick={() => router.push('/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signUp')}</span></p>
+                <p className='text-white mt-2 font-poppins text-sm text-center text-nowrap'>{t('auth:noaccount')} <span onClick={() => router.push(redirectUrl ? `/sign-up?redirectUrl=${redirectUrl}` : '/sign-up')} className='text-[#E72377] font-medium font-poppins text-sm cursor-pointer'>{t('auth:signUp')}</span></p>
             </Form>
             <Dialog open={loading}>
                 <DialogContent className='flex items-center justify-center bg-transparent border-none outline-none'>

@@ -10,11 +10,14 @@ import Loading from "./loading"
 type Props = {
     params: {
         locale?: string
-    }
+    },
+    searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function SignUpPage({ params }: Props)
+export default async function SignUpPage({ params, searchParams }: Props)
 {
+    const redirectUrl = typeof searchParams.redirectUrl === 'string' ? searchParams.redirectUrl : undefined
+
     const admin = await initAdmin()
     const cookiesData = cookies()
     const token = await decode({ token: cookiesData.get(process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token')?.value, secret: process.env.NEXTAUTH_SECRET! })
@@ -22,12 +25,12 @@ export default async function SignUpPage({ params }: Props)
     if(token?.sub)
     {
         const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
-        if(user?.verified) return redirect('/')
+        if(user?.verified) return redirectUrl ? redirect(redirectUrl) : redirect('/')
     }
 
     return (
         <Suspense fallback={<Loading />}>
-            <SignUp locale={params.locale} />
+            <SignUp locale={params.locale} redirectUrl={redirectUrl} />
         </Suspense>
     )
 }
