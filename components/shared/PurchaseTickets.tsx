@@ -713,6 +713,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                 onClick={() => {
                                     updateEvent({...foundEvent, purchasedTickets: foundEvent.selectedTickets})
                                     setDialogOpen(false)
+                                    if(event.seated) setShowSeats(true)
                                 }}
                             >
                                 {t('common:addTickets')}
