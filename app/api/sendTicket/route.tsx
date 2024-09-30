@@ -6,14 +6,24 @@ import { render } from '@react-email/render'
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     host: 'smtp.gmail.com',
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: 'maelnaggar1223@gmail.com',
+//         pass: 'nwlb vxnh kxru hkga', 
+//     }
+// })
+
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
+    host: 'smtp-relay.brevo.com',
     port: 587,
     secure: false,
     auth: {
-        user: 'maelnaggar1223@gmail.com',
-        pass: 'nwlb vxnh kxru hkga', 
+        user: process.env.GMAIL_MAIL,
+        pass: process.env.GMAIL_PASS,
     }
 })
 

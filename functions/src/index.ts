@@ -29,14 +29,23 @@ const db = admin.firestore()
 //   response.send("Hello from Firebase!");
 // });
 
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp-relay.brevo.com',
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: '7b1b8d001@smtp-brevo.com',
+//         pass: 'CjWRNKk6ya8bDLxn', 
+//     }
+// })
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
     auth: {
-        user: 'maelnaggar1223@gmail.com',
-        pass: 'sukw cebr vvee lvva', 
+        user: functions.config().api.gmail_mail,
+        pass: functions.config().api.gmail_pass, 
     }
 })
 
@@ -102,6 +111,9 @@ export const clearCarts = onSchedule("* * * * *", async () => {
 export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }).firestore.document('tickets/{documentId}').onUpdate(async (snap, context) => {
     const ticket = {...snap.after.data(), id: snap.after.id} as TicketType
 
+    console.log(functions.config().api.gmail_mail)
+    console.log(functions.config().api.gmail_pass)
+
     if(ticket.status !== 'paid' || ticket.sentMail) return
 
     const event = await db.collection('events').doc(ticket.eventId).get()
@@ -157,37 +169,40 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
             })
 
             const parkingPassPdf = [...Array(ticket.parkingPass)].map(async (_, i) => {
-                const browser = await puppeteer.launch({
-                    args: [...chrome.args, '--disable-features=site-per-process'],
-                    defaultViewport: chrome.defaultViewport,
-                    executablePath: await chrome.executablePath(),
-                    headless: false,
-                })
+                if(ticket.parkingPass > 0)
+                {
+                    const browser = await puppeteer.launch({
+                        args: [...chrome.args, '--disable-features=site-per-process'],
+                        defaultViewport: chrome.defaultViewport,
+                        executablePath: await chrome.executablePath(),
+                        headless: false,
+                    })
+        
+                    const page = await browser.newPage()
+        
+        
+                    await page.goto(`https://vibes-woad.vercel.app/ticket/${ticket?.id}?type=ParkingPass`, {
+                        waitUntil: 'networkidle2'
+                    })
+        
+                    const pdfBuffer = await page.pdf({
+                        format: 'A4',
+                        printBackground: true,
+                        margin: {
+                            top: '2cm',
+                            right: '2cm',
+                            bottom: '2cm',
+                            left: '2cm',
+                        },
+                    })
     
-                const page = await browser.newPage()
+                    attachments.push({
+                        filename: `${eventData?.name}-ParkingPass.pdf`,
+                        content: pdfBuffer
+                    })
     
-    
-                await page.goto(`https://vibes-woad.vercel.app/ticket/${ticket?.id}?type=ParkingPass`, {
-                    waitUntil: 'networkidle2'
-                })
-    
-                const pdfBuffer = await page.pdf({
-                    format: 'A4',
-                    printBackground: true,
-                    margin: {
-                        top: '2cm',
-                        right: '2cm',
-                        bottom: '2cm',
-                        left: '2cm',
-                    },
-                })
-
-                attachments.push({
-                    filename: `${eventData?.name}-ParkingPass.pdf`,
-                    content: pdfBuffer
-                })
-
-                await browser.close()
+                    await browser.close()
+                }
             })
 
             await Promise.all(parkingPassPdf!)            
@@ -222,6 +237,34 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 }
 
                 await transporter.sendMail(newMailOptions)
+
+                console.log(functions.config().api.key)
+
+                // const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'api-key': functions.config().api.key,
+                //         'content-Type': 'application/json',
+                //         'accept': 'application/json',
+                //         'Accpet': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         "sender": {
+                //             "name": "Whim Zee",
+                //             "email": "7b1b8d001@smtp-brevo.com",
+                //         },
+                //         "to": newMailOptions.to.map(to => ({ "email": to, "name": "Whim Zee" })),
+                //         "subject": newMailOptions.subject,
+                //         "htmlContent": newMailOptions.html,
+                //         "attachments": newMailOptions.attachments
+                //     })
+                // })
+
+                // const dataFetch = await res.json()
+
+                // console.log(dataFetch)
+                
                 await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)
@@ -277,6 +320,30 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                 }
 
                 await transporter.sendMail(newMailOptions)
+                // const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'api-key': functions.config().api.key,
+                //         'content-Type': 'application/json',
+                //         'accept': 'application/json',
+                //         'Accpet': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         "sender": {
+                //             "name": "Whim Zee",
+                //             "email": "7b1b8d001@smtp-brevo.com",
+                //         },
+                //         "to": newMailOptions.to.map(to => ({ "email": to, "name": "Whim Zee" })),
+                //         "subject": newMailOptions.subject,
+                //         "htmlContent": newMailOptions.html,
+                //         "attachments": newMailOptions.attachments
+                //     })
+                // })
+
+                // const dataFetch = await res.json()
+
+                // console.log(dataFetch)
                 await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)
@@ -340,7 +407,33 @@ export const sendPdfs = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }
                     html: data.emailHtml
                 }
 
+                console.log(functions.config().api.key)
+
                 await transporter.sendMail(newMailOptions)
+                // const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'api-key': functions.config().api.key,
+                //         'content-Type': 'application/json',
+                //         'accept': 'application/json',
+                //         'Accpet': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         "sender": {
+                //             "name": "Whim Zee",
+                //             "email": "7b1b8d001@smtp-brevo.com",
+                //         },
+                //         "to": newMailOptions.to.map(to => ({ "email": to, "name": "Whim Zee" })),
+                //         "subject": newMailOptions.subject,
+                //         "htmlContent": newMailOptions.html,
+                //         "attachments": newMailOptions.attachments
+                //     })
+                // })
+
+                // const dataFetch = await res.json()
+
+                // console.log(dataFetch)
                 await admin.firestore().collection('tickets').doc(ticket.id).update({ sentMail: true })
             }
             catch(e: any)

@@ -23,6 +23,7 @@ export default async function TicketPagePdf({ params, searchParams }: Props)
 
 	const ticket = {
 		...ticketData.data(),
+		id: ticketData.id,
 		createdAt: ticketData.data()?.createdAt.toDate(),
 	} as TicketType
 
