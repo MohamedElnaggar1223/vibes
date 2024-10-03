@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 type RequestType = { 
     amount_cents: string, 
     currency: string, 
-    items: { name: string, amount: string, quantity: string }[],
+    items: { name: string, amount: string, quantity: string }[] | { name: string, amount: string, quantity: string, type: string }[],
     user: { first_name: string, last_name: string, email: string, phone_number: string }
     promoCode: PromoCode | undefined
 }
@@ -13,12 +13,6 @@ export async function POST(req: Request) {
     const { amount_cents, currency, items, user } = await req.json() as RequestType
 
     if(!amount_cents || !currency || !items || !user) return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-
-    console.log(amount_cents, currency, items, user)
-
-    console.log(process.env.PAYMOB_SECRET_KEY)
-    console.log(process.env.PAYMOB_INTEGRATION_ID)
-    console.log(process.env.PAYMOB_PUBLIC_KEY)
 
     try
     {
