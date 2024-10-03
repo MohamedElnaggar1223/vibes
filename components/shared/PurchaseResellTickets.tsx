@@ -174,6 +174,10 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
         }, 0)
     }, [country, selectedTickets])
 
+    const totalValue = useMemo(() => {
+
+    }, [selectedTickets])
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (loading) {
@@ -197,44 +201,58 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
 
     const handleBuy = async () => {
         setLoading(true)
-        console.log(selectedTickets)
-        if(event.uploadedTickets) {
-            await runTransaction(db, async (transaction) => {
-                await Promise.all(selectedTickets.map(async (ticket) => {
-                    if(ticket.type === 'individual') {
-                        await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'inEscrow', requested: true, requestStatus: 'pending' }) 
-                    }
-                    else if(ticket.type === 'bundle') {
-                        const bundle = bundlesWithTickets.find(bundle => bundle.id === ticket.id) ?? { id: ticket.id, tickets: [] }
-                        await Promise.all(bundle.tickets.map(async (ticket) => {
-                            await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'inEscrow' })
-                        }))
-                        await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'inEscrow', requested: true, requestStatus: 'pending' })
-                    }
-                }))
 
-                setSelectedTickets([])
-            })
-        }
-        else {
-            await runTransaction(db, async (transaction) => {
-                await Promise.all(selectedTickets.map(async (ticket) => {
-                    if(ticket.type === 'individual') {
-                        await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'sold' }) 
-                    }
-                    else if(ticket.type === 'bundle') {
-                        const bundle = bundlesWithTickets.find(bundle => bundle.id === ticket.id) ?? { id: ticket.id, tickets: [] }
-                        await Promise.all(bundle.tickets.map(async (ticket) => {
-                            await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'sold' })
-                        }))
-                        await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'sold' })
-                    }
-                }))
+        const amountInCents = selectedTickets.reduce((total, ticket) => total + ticket.price, 0) * 100
 
-                setSelectedTickets([])
+        const response = await fetch('/api/begin-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount_cents: amountInCents,
+                currency: selectedTickets[0].country,
+                items: selectedTickets.map(ticket => ({ name: 'Ticket', amount: ticket.price * 100, "quantity": "1", type: ticket.type, ticketId: ticket.id })),
+                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}` },
             })
-        }
-        router.refresh()
+        }).then(res => res.json())
+
+        setLoading(false)
+        
+        router.push(response.redirect)
+        // if(event.uploadedTickets) {
+        //     await runTransaction(db, async (transaction) => {
+        //         await Promise.all(selectedTickets.map(async (ticket) => {
+        //             if(ticket.type === 'individual') {
+        //                 await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'inEscrow', requested: true, requestStatus: 'pending' }) 
+        //             }
+        //             else if(ticket.type === 'bundle') {
+        //                 const bundle = bundlesWithTickets.find(bundle => bundle.id === ticket.id) ?? { id: ticket.id, tickets: [] }
+        //                 await Promise.all(bundle.tickets.map(async (ticket) => {
+        //                     await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'inEscrow' })
+        //                 }))
+        //                 await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'inEscrow', requested: true, requestStatus: 'pending' })
+        //             }
+        //         }))
+        //     })
+        // }
+        // else {
+        //     await runTransaction(db, async (transaction) => {
+        //         await Promise.all(selectedTickets.map(async (ticket) => {
+        //             if(ticket.type === 'individual') {
+        //                 await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'sold' }) 
+        //             }
+        //             else if(ticket.type === 'bundle') {
+        //                 const bundle = bundlesWithTickets.find(bundle => bundle.id === ticket.id) ?? { id: ticket.id, tickets: [] }
+        //                 await Promise.all(bundle.tickets.map(async (ticket) => {
+        //                     await transaction.update(doc(db, 'tickets', ticket.id), { saleStatus: 'sold' })
+        //                 }))
+        //                 await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'sold' })
+        //             }
+        //         }))
+        //     })
+        // }
+        // router.refresh()
         setLoading(false)
     }
 

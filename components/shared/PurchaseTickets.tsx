@@ -250,8 +250,6 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
 
                 const finalTicketsArray = ticketsArray.map((ticket) => ({...addedTicketObject, ...ticket, totalPaid: (eventData.tickets.find(eventTicket => eventTicket.name === Object.keys(ticket.tickets)[0])?.price ?? 0) * selectedExchangeRate}))
 
-                console.log(finalTicketsArray)
-
                 const ticketsCollection = collection(db, 'tickets')
                 const eventDoc = doc(db, 'events', event.id)
                 const userDoc = doc(db, 'users', user?.id ?? '')
