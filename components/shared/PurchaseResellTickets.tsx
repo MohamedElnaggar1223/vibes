@@ -212,6 +212,8 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                         await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'inEscrow', requested: true, requestStatus: 'pending' })
                     }
                 }))
+
+                setSelectedTickets([])
             })
         }
         else {
@@ -228,6 +230,8 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                         await transaction.update(doc(db, 'bundles', bundle.id), { saleStatus: 'sold' })
                     }
                 }))
+
+                setSelectedTickets([])
             })
         }
         router.refresh()
@@ -276,6 +280,27 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>{t('common:mustSignIn')}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ) : selectedTickets.length === 0 ? (
+                                <TooltipProvider delayDuration={100}>
+                                    <Tooltip open={buyToolTip} onOpenChange={setButToolTip}>
+                                        <TooltipTrigger asChild className="max-lg:flex-1">
+                                            <motion.button 
+                                                onClick={() => {
+                                                    setButToolTip(true)
+                                                    setTimeout(() => setButToolTip(false), 2000)
+                                                }}  
+                                                layout={true} 
+                                                disabled={(currentWidth ?? 0) > 1024} 
+                                                className='max-lg:flex-1 font-poppins text-xs lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
+                                            >
+                                                {t('common:buy')}
+                                            </motion.button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>{t('common:mustAddTickets')}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>

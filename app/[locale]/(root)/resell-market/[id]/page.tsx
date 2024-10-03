@@ -44,8 +44,7 @@ export default async function ResellEventPage({ params }: Props)
 
     return (
         <Suspense fallback={<Loader2 size={52} className='animate-spin' />}>
-            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex relative flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-16'>
-                <Link className='absolute -left-16 top-2 w-9 h-9 text-white bg-[#FFFFFF80] flex items-center justify-center rounded-[5px]' href='/resell-market'><ChevronLeft size={24} /></Link>
+            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex relative flex-col w-full self-center gap-4 lg:h-[calc(100vh-7rem)] lg:max-h-[750px] lg:flex-row max-lg:items-center mt-2'>
                 <div className='flex flex-col w-full max-w-[390px] rounded-xl bg-[rgba(217,217,217,0.2)] gap-1 h-fit'>
                     <ImageMotion
                         selectedEvent={selectedEvent}
