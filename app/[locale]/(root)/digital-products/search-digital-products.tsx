@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-export default function SearchHotelReservations({ search, locale }: { search?: string, locale?: string }) 
+export default function SearchDigitalProducts({ search, locale }: { search?: string, locale?: string }) 
 {
     const router = useRouter()
 
@@ -18,8 +18,8 @@ export default function SearchHotelReservations({ search, locale }: { search?: s
         e?.preventDefault()
 
         let query = searchValue
-        if(query) router.push(`/hotel-reservations?search=${query}`)
-        else router.push('/hotel-reservations')
+        if(query) router.push(`/digital-products?search=${query}`)
+        else router.push('/digital-products')
     }
 
     return (

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { MapPinIcon } from "lucide-react";
 import PurchaseHotelReservation from "./purchase-hotel-reservation";
 
-export default async function HotelReservation({ locale, hotel, user }: { locale: string | undefined, hotel: Hotel, user: UserType })
+export default async function HotelReservation({ buy, locale, hotel, user }: { buy: boolean, locale: string | undefined, hotel: Hotel, user: UserType })
 {
     return (
         <AccordionItem className="!border-none max-w-[960px] mx-auto" value={hotel.id}>
@@ -117,7 +117,7 @@ export default async function HotelReservation({ locale, hotel, user }: { locale
                             </div>
                         </div>
                     </div>
-                    <PurchaseHotelReservation user={user!} hotel={hotel} />
+                    {buy && <PurchaseHotelReservation user={user!} hotel={hotel} />}
                 </div>
             </AccordionContent>
         </AccordionItem>

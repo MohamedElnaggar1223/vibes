@@ -10,6 +10,7 @@ import { i18nConfig } from '@/i18nConfig';
 import { PromoCode, TicketType } from "./types/ticketTypes";
 import { UserType } from "./types/userTypes";
 import { Hotel } from "./types/hotelTypes";
+import { DigitalProduct } from "./types/digitalProductTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -101,6 +102,33 @@ export const getHotelReservations = cache(async () => {
     const admin = await initAdmin()
     const hotelReservationsData = (await admin.firestore().collection('hotels').where("status", '==', 'onSale').get()).docs
   
+    const hotelReservations = hotelReservationsData.map(doc => ({...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() }})) as unknown as Hotel[]
+
+    return hotelReservations
+})
+
+export const getDigitalProducts = cache(async () => {
+    const admin = await initAdmin()
+    const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("status", '==', 'onSale').get()).docs
+
+    const digitalProducts = digitalProductsData.map(doc => ({...doc.data(), id: doc.id})) as unknown as DigitalProduct[]
+
+    return digitalProducts
+})
+
+export const getMyDigitalProducts = cache(async (userId: string) => {
+    const admin = await initAdmin()
+    const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("buyerId", '==', userId).get()).docs
+
+    const digitalProducts = digitalProductsData.map(doc => ({...doc.data(), id: doc.id})) as unknown as DigitalProduct[]
+
+    return digitalProducts
+})
+
+export const getMyHotelReservations = cache(async (userId: string) => {
+    const admin = await initAdmin()
+    const hotelReservationsData = (await admin.firestore().collection('hotels').where("buyerId", '==', userId).get()).docs
+
     const hotelReservations = hotelReservationsData.map(doc => ({...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() }})) as unknown as Hotel[]
 
     return hotelReservations

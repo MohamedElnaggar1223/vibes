@@ -1,10 +1,8 @@
-import ResellMarketFilters from "@/components/shared/ResellMarketFilters"
-import { cn, getHotelReservations, getMyHotelReservations, initTranslations } from "@/lib/utils"
+import { cn, getDigitalProducts, getMyDigitalProducts, initTranslations } from "@/lib/utils"
 import { Suspense } from "react"
 import EventsLoading from "../categories/eventsLoading"
-import CategorieResell from "@/components/shared/CategoryResell"
-import SearchHotelReservations from "./search-hotel-reservations"
-import HotelReservation from "./hotel-reservation"
+import SearchDigitalProducts from "./search-digital-products"
+import DigitalProduct from "./digital-products"
 import { Accordion } from "@/components/ui/accordion"
 import { getUser } from "../layout"
 import Link from "next/link"
@@ -22,7 +20,7 @@ const countries = {
     'Egypt': 'Egypt'
 }
 
-export default async function HotelReservations({ searchParams, params }: Props) 
+export default async function DigitalProducts({ searchParams, params }: Props) 
 {
     const tab = typeof searchParams.tab === 'string' ? searchParams.tab : undefined
 
@@ -30,59 +28,60 @@ export default async function HotelReservations({ searchParams, params }: Props)
 
     const user = await getUser()
 
-    const hotelReservations = await getHotelReservations()
-    const myHotelReservations = await getMyHotelReservations(user?.id!)
+    const digitalProducts = await getDigitalProducts()
+    const myDigitalProducts = await getMyDigitalProducts(user?.id!)
 
     const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
 
-    console.log(myHotelReservations)
+    console.log(digitalProducts)
+    console.log(tab)
 
     return (
         <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex max-md:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16 py-8' key={Math.random()}>
             <div className="flex w-full md:flex-col md:w-[200px] gap-4">
-                <Link href='/hotel-reservations?tab=explore' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', (tab !== 'my-reservations') ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>Explore</Link>
-                <Link href='/hotel-reservations?tab=my-reservations' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', tab === 'my-reservations' ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>My Reservations</Link>
+                <Link href='/digital-products?tab=explore' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', (tab !== 'my-products') ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>Explore</Link>
+                <Link href='/digital-products?tab=my-products' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', tab === 'my-products' ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>My Products</Link>
             </div>
             <div className="flex flex-col flex-1 gap-6 items-start justify-start">
                 <div className='flex w-full items-center justify-center'>
-                    <SearchHotelReservations search={search} />
+                    <SearchDigitalProducts search={search} />
                 </div>
                 {
-                    tab === 'my-reservations' ? 
-                    (myHotelReservations
-                    .filter(hotel => search ? hotel.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
+                    tab === 'my-products' ? 
+                    (myDigitalProducts
+                    .filter(hotel => search ? hotel.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
                     .length === 0 ? (
                         <p className='flex items-center justify-center text-white w-full text-lg text-center font-poppins font-semibold h-52 flex-1 max-lg:w-full'>{t('noHotels')}</p>
                     ) : (
                         <Suspense fallback={<EventsLoading />}>
                             <div className='flex flex-col flex-1 gap-8 w-full items-center mt-8'>
                                 <Accordion type='multiple' className="!border-none !divide-none w-full">
-                                    {myHotelReservations
-                                        .filter(hotel => search ? hotel.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
-                                        .map(hotel => (
-                                        <HotelReservation buy={false} user={user!} locale={params.locale} key={hotel.id} hotel={hotel} /> 
+                                    {myDigitalProducts
+                                        .filter(digitalProduct => search ? digitalProduct.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
+                                        .map(digitalProduct => (
+                                        <DigitalProduct buy={false} user={user!} locale={params.locale} key={digitalProduct.id} digitalProduct={digitalProduct} /> 
                                     ))}
                                 </Accordion>
                             </div>
                         </Suspense>
                     )) :
-                    (hotelReservations
-                    .filter(hotel => search ? hotel.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
+                    digitalProducts
+                    .filter(hotel => search ? hotel.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
                     .length === 0 ? (
                         <p className='flex items-center justify-center text-white w-full text-lg text-center font-poppins font-semibold h-52 flex-1 max-lg:w-full'>{t('noHotels')}</p>
                     ) : (
                         <Suspense fallback={<EventsLoading />}>
                             <div className='flex flex-col flex-1 gap-8 w-full items-center mt-8'>
                                 <Accordion type='multiple' className="!border-none !divide-none w-full">
-                                    {hotelReservations
-                                        .filter(hotel => search ? hotel.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
-                                        .map(hotel => (
-                                        <HotelReservation buy={true} user={user!} locale={params.locale} key={hotel.id} hotel={hotel} /> 
+                                    {digitalProducts
+                                        .filter(digitalProduct => search ? digitalProduct.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
+                                        .map(digitalProduct => (
+                                        <DigitalProduct buy={true} user={user!} locale={params.locale} key={digitalProduct.id} digitalProduct={digitalProduct} /> 
                                     ))}
                                 </Accordion>
                             </div>
                         </Suspense>
-                    ))
+                    )
                 }
             </div>
         </section>
