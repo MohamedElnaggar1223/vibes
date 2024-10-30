@@ -1,5 +1,6 @@
 import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
+import { Hotel } from "@/lib/types/hotelTypes"
 import { Bundle, TicketType } from "@/lib/types/ticketTypes"
 import { FieldValue, Timestamp } from "firebase-admin/firestore"
 import { NextResponse } from "next/server"
@@ -11,6 +12,8 @@ export async function POST(req: Request) {
         const { obj: query } = await req.json()
         console.log(req.url)
         const hmac = req.url.replace('https://www.vibes-events.com/api/confirm-payment?hmac=', '')
+
+        console.log(query)
 
         const hmacRequiredFields = [
             'amount_cents',
@@ -71,15 +74,16 @@ export async function POST(req: Request) {
         const totalTicketsSold = query.order.items.filter((item: any) => item.name !== 'Parking Pass').length
         const totalItemsSold = query.order.items.length
 
-        const userId = query.order.items[0].name.split('-')[1]
+        const type = query.order.items[0].name.split('-')[0] === 'type'
+        const userId = type ? query.order.items[0].name.split('-')[3] : query.order.items[0].name.split('-')[1]
 
-        if(query.orders.items[0].type)
+        if(type)
         {
             await admin.firestore().runTransaction(async transaction => {
                 await Promise.all(query.order.items.map(async (item: { name: string, amount: string, quantity: string, type: string, ticketId: string }) => {
-                    if(item.type === 'individual')
+                    if(item.name.split('-')[1] === 'individual')
                     {
-                        const ticketDoc = (await transaction.get(admin.firestore().collection('tickets').doc(item.ticketId)))
+                        const ticketDoc = (await transaction.get(admin.firestore().collection('tickets').doc(item.name.split('-')[1])))
                         const ticket = ticketDoc.data() as TicketType
                         const event = (await transaction.get(admin.firestore().collection('events').doc(ticket.eventId))).data() as EventType
         
@@ -92,9 +96,9 @@ export async function POST(req: Request) {
                             await transaction.update(ticketDoc.ref, { saleStatus: 'sold' })
                         }
                     }
-                    else 
+                    else if(item.name.split('-')[1] === 'bundle')
                     {
-                        const bundleDoc = (await transaction.get(admin.firestore().collection('bundles').doc(item.ticketId)))
+                        const bundleDoc = (await transaction.get(admin.firestore().collection('bundles').doc(item.name.split('-')[1])))
                         const bundle = bundleDoc.data() as Bundle
                         const event = (await transaction.get(admin.firestore().collection('events').doc(bundle.eventId))).data() as EventType
 
@@ -106,6 +110,14 @@ export async function POST(req: Request) {
                         {
                             await transaction.update(bundleDoc.ref, { status: 'sold' })
                         }
+                    }
+                    else if(item.name.split('-')[1] === 'hotel') 
+                    {
+                        await transaction.update(admin.firestore().collection('hotels').doc(item.name.split('-')[1]), { status: 'sold', buyerId: userId })
+                    }
+                    else if(item.name.split('-')[1] === 'digitalProduct') 
+                    {
+                        await transaction.update(admin.firestore().collection('digitalProducts').doc(item.name.split('-')[1]), { status: 'sold', buyerId: userId })
                     }
                 }))
             })
