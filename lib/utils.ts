@@ -9,6 +9,7 @@ import resourcesToBackend from 'i18next-resources-to-backend';
 import { i18nConfig } from '@/i18nConfig';
 import { PromoCode, TicketType } from "./types/ticketTypes";
 import { UserType } from "./types/userTypes";
+import { Hotel } from "./types/hotelTypes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -94,6 +95,15 @@ export const getEventsResell = cache(async () => {
   const events = await Promise.all(eventsDocs || [])
 
   return events
+})
+
+export const getHotelReservations = cache(async () => {
+    const admin = await initAdmin()
+    const hotelReservationsData = (await admin.firestore().collection('hotels').where("status", '==', 'onSale').get()).docs
+  
+    const hotelReservations = hotelReservationsData.map(doc => ({...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() }})) as unknown as Hotel[]
+
+    return hotelReservations
 })
 
 export const getEvent = cache(async (id: string) => {
