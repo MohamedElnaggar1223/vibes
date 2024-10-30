@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 type RequestType = { 
     amount_cents: string, 
     currency: string, 
-    items: { name: string, amount: string, quantity: string }[] | { name: string, amount: string, quantity: string, type: string }[],
+    items: { name: string, amount: string, quantity: string, userId: string, promoCode?: string, type?: string }[],
     user: { first_name: string, last_name: string, email: string, phone_number: string }
     promoCode: PromoCode | undefined
 }
@@ -97,6 +97,9 @@ export async function POST(req: Request) {
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "email": user.email
+                },
+                "extras": {
+                    items: items
                 }
             })
             // body: JSON.stringify({

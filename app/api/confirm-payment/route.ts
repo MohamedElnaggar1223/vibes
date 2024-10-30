@@ -74,16 +74,15 @@ export async function POST(req: Request) {
         const totalTicketsSold = query.order.items.filter((item: any) => item.name !== 'Parking Pass').length
         const totalItemsSold = query.order.items.length
 
-        const type = query.order.items[0].name.split('-')[0] === 'type'
-        const userId = type ? query.order.items[0].name.split('-')[3] : query.order.items[0].name.split('-')[1]
+        const items = query.extras.creation_extras.items
 
-        if(type)
+        if(items[0]?.type)
         {
             await admin.firestore().runTransaction(async transaction => {
-                await Promise.all(query.order.items.map(async (item: { name: string, amount: string, quantity: string, type: string, ticketId: string }) => {
-                    if(item.name.split('-')[1] === 'individual')
+                await Promise.all(items.map(async (item: { name: string, amount: string, quantity: string, type: string, userId: string, id?: string }) => {
+                    if(item.type === 'individual')
                     {
-                        const ticketDoc = (await transaction.get(admin.firestore().collection('tickets').doc(item.name.split('-')[1])))
+                        const ticketDoc = (await transaction.get(admin.firestore().collection('tickets').doc(item?.id!)))
                         const ticket = ticketDoc.data() as TicketType
                         const event = (await transaction.get(admin.firestore().collection('events').doc(ticket.eventId))).data() as EventType
         
@@ -96,9 +95,9 @@ export async function POST(req: Request) {
                             await transaction.update(ticketDoc.ref, { saleStatus: 'sold' })
                         }
                     }
-                    else if(item.name.split('-')[1] === 'bundle')
+                    else if(item.type === 'bundle')
                     {
-                        const bundleDoc = (await transaction.get(admin.firestore().collection('bundles').doc(item.name.split('-')[1])))
+                        const bundleDoc = (await transaction.get(admin.firestore().collection('bundles').doc(item?.id!)))
                         const bundle = bundleDoc.data() as Bundle
                         const event = (await transaction.get(admin.firestore().collection('events').doc(bundle.eventId))).data() as EventType
 
@@ -111,22 +110,22 @@ export async function POST(req: Request) {
                             await transaction.update(bundleDoc.ref, { status: 'sold' })
                         }
                     }
-                    else if(item.name.split('-')[1] === 'hotel') 
+                    else if(item.type === 'hotel') 
                     {
-                        await transaction.update(admin.firestore().collection('hotels').doc(item.name.split('-')[1]), { status: 'sold', buyerId: userId })
+                        await transaction.update(admin.firestore().collection('hotels').doc(item?.id!), { status: 'sold', buyerId: item.userId })
                     }
-                    else if(item.name.split('-')[1] === 'digitalProduct') 
+                    else if(item.type === 'digitalProduct') 
                     {
-                        await transaction.update(admin.firestore().collection('digitalProducts').doc(item.name.split('-')[1]), { status: 'sold', buyerId: userId })
+                        await transaction.update(admin.firestore().collection('digitalProducts').doc(item?.id!), { status: 'sold', buyerId: item.userId })
                     }
                 }))
             })
         }
         else 
         {
-            const promoCode = query.order.items[0].name.split('-').length > 2 ? query.order.items[0].name.split('-')[2] : undefined
+            const promoCode = items[0]?.promoCode
     
-            const ticketsIds = query.order.items.filter((item: any) => item.name !== 'Parking Pass').map((item: any) => item.name.split('-')[0])
+            const ticketsIds = items.filter((item: any) => item.name !== 'Parking Pass').map((item: any) => item.ticketId)
     
             await admin.firestore().runTransaction(async transaction => {
                 const salesDoc = await transaction.get(admin.firestore().collection('sales').doc(process.env.NEXT_PUBLIC_SALES_ID!))
@@ -137,7 +136,7 @@ export async function POST(req: Request) {
                     else await transaction.update(promoCodesDoc.ref, { quantity: promoCodesDoc.data()?.quantity - 1 })
                 }
     
-                await transaction.update(admin.firestore().collection('users').doc(userId), { tickets: FieldValue.arrayUnion(...ticketsIds), cart: { tickets: [], createdAt: null, status: 'pending' } })
+                await transaction.update(admin.firestore().collection('users').doc(items[0]?.userId!), { tickets: FieldValue.arrayUnion(...ticketsIds), cart: { tickets: [], createdAt: null, status: 'pending' } })
                 await transaction.update(salesDoc.ref, { totalRevenue: salesDoc.data()?.totalRevenue + amountInUSD, totalTicketsSold: salesDoc.data()?.totalTicketsSold + totalTicketsSold, totalSales: salesDoc.data()?.totalSales + totalItemsSold, updatedAt: Timestamp.now() })
             
                 const ticketsUpdate = ticketsIds.map(async (ticketId: string) => await transaction.update(admin.firestore().collection('tickets').doc(ticketId), { status: 'paid' }))
