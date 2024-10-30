@@ -22,11 +22,11 @@ export default async function SignInPage({ searchParams }: { searchParams: { [ke
         if(user?.verified) return redirectUrl ? redirect(redirectUrl) : redirect('/')
     }
 
-    const facebookLogin = await allowFacebookLogin()
+    // const facebookLogin = await allowFacebookLogin()
 
     return (
         <Suspense>
-            <SignIn redirectUrl={redirectUrl} facebookLogin={facebookLogin} />
+            <SignIn redirectUrl={redirectUrl} facebookLogin={false} />
         </Suspense>
     )
 }
