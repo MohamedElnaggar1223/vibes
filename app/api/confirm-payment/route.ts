@@ -74,7 +74,7 @@ export async function POST(req: Request) {
         const totalTicketsSold = query.order.items.filter((item: any) => item.name !== 'Parking Pass').length
         const totalItemsSold = query.order.items.length
 
-        const items = query.extras.creation_extras.items
+        const items = query.payment_key_claims.extra.items
 
         if(items[0]?.type)
         {
