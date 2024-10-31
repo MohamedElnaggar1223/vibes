@@ -32,26 +32,24 @@ export default async function HotelReservations({ searchParams, params }: Props)
     const user = await getUser()
 
     const hotelReservations = await getHotelReservations()
-    const myHotelReservations = await getMyHotelReservations(user?.id!)
+    const myHotelReservations = user ? await getMyHotelReservations(user?.id!) : []
 
     const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
-
-    console.log(myHotelReservations)
 
     return (
         <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex flex-col relative flex-1 items-center justify-start p-4 md:p-12 gap-8 md:max-h-screen'>
             <ResellMarketHeaders locale={params.locale} />
-            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex max-md:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16 py-8' key={Math.random()}>
-                <div className="flex w-full md:flex-col md:w-[200px] gap-4">
+            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='relative flex max-md:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16 py-8 overflow-auto' key={Math.random()}>
+                <div className="flex w-full md:flex-col md:w-[200px] gap-4 sticky top-0">
                     <Link href='/hotel-reservations?tab=explore' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', (tab !== 'my-reservations') ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>{t("explore")}</Link>
-                    <Link href='/hotel-reservations?tab=my-reservations' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', tab === 'my-reservations' ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>{t("myReservations")}</Link>
+                    {user && <Link href='/hotel-reservations?tab=my-reservations' className={cn('rounded-[4px] font-light py-2 flex-1 max-w-[197px] w-screen px-2 font-poppins text-center flex items-center justify-center', tab === 'my-reservations' ? 'bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] text-white' : 'bg-white text-black')}>{t("myReservations")}</Link>}
                 </div>
                 <div className="flex flex-col flex-1 gap-6 items-start justify-start mx-auto">
                     <div className='flex w-full items-center justify-center'>
                         <SearchHotelReservations search={search} />
                     </div>
                     {
-                        tab === 'my-reservations' ? 
+                        (tab === 'my-reservations' && user) ? 
                         (myHotelReservations
                         .filter(hotel => search ? hotel.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) : true)
                         .length === 0 ? (

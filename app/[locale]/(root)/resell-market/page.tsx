@@ -31,8 +31,8 @@ export default async function ResellMarket({ searchParams, params }: Props)
     return (
         <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex flex-col relative flex-1 items-center justify-start p-4 md:p-12 gap-8 md:max-h-screen'>
             <ResellMarketHeaders locale={params.locale} />
-            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='flex max-lg:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16' key={Math.random()}>
-                <div className='flex lg:flex-col mt-2 lg:mt-16 gap-1 w-full lg:w-48'>
+            <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='relative flex max-lg:flex-col flex-1 w-full gap-6 items-start lg:items-start justify-start mb-16 overflow-auto' key={Math.random()}>
+                <div className='flex lg:flex-col mt-2 lg:mt-16 gap-1 w-full lg:w-48 sticky top-0'>
                     <p className='font-poppins text-white font-light max-lg:hidden'>{t('filters')}</p>
                     <ResellMarketFilters locale={params.locale} />
                 </div>
