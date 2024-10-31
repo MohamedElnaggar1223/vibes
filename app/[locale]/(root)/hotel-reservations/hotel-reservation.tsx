@@ -8,19 +8,19 @@ import PurchaseHotelReservation from "./purchase-hotel-reservation";
 export default async function HotelReservation({ buy, locale, hotel, user }: { buy: boolean, locale: string | undefined, hotel: Hotel, user: UserType })
 {
     return (
-        <AccordionItem className="!border-none max-w-[960px] mx-auto" value={hotel.id}>
+        <AccordionItem className="!border-none max-md:max-w-[320px] max-w-[960px] mx-auto" value={hotel.id}>
             <AccordionTrigger className='w-full bg-[#EAEAEA] rounded-[12px]'>
                 <div className="flex items-center justify-between min-w-[98%] border-none px-6">
                     <div className='flex flex-col gap-2 items-start justify-center'>
                         <p className='text-lg text-black font-semibold font-poppins'>{hotel.name}</p>
-                        <p className='text-sm text-black font-normal font-poppins flex items-center justify-center gap-1'>
-                            <MapPinIcon />
+                        <p className='text-xs lg:text-sm text-black font-normal font-poppins flex items-center justify-center gap-1'>
+                            <MapPinIcon size={16} />
                             {hotel.address}
                         </p>
                     </div>
                     <div className='flex flex-col gap-2 items-start justify-center'>
-                        <p className='text-sm text-black font-normal font-poppins'>Room Type: {hotel.roomType}</p>
-                        <p className='text-sm text-black font-normal font-poppins'>Board Type: {hotel.boardType}</p>
+                        <p className='text-xs lg:text-sm text-black font-normal font-poppins'>Room Type: {hotel.roomType}</p>
+                        <p className='text-xs lg:text-sm text-black font-normal font-poppins'>Board Type: {hotel.boardType}</p>
                     </div>
                 </div>
             </AccordionTrigger>
@@ -34,8 +34,8 @@ export default async function HotelReservation({ buy, locale, hotel, user }: { b
                             </div> */}
                             {/* <div className='flex gap-2 items-center'>
                                 <div className='p-1 bg-[#55555580] rounded-[4px] flex items-center justify-center text-center'>
-                                    <input autoFocus={false} value={price} onChange={(e) => (/^-?\d*\.?\d+$/.test(e.target.value) || e.target.value === '') ? setPrice(e.target.value) : setPrice(prev => prev)} placeholder="0.00" className='text-center text-white font-poppins text-sm font-normal bg-transparent outline-none w-[3.5rem]' />
-                                    <p className='font-medium text-sm font-poppins text-white'>{hotel.country}</p>
+                                    <input autoFocus={false} value={price} onChange={(e) => (/^-?\d*\.?\d+$/.test(e.target.value) || e.target.value === '') ? setPrice(e.target.value) : setPrice(prev => prev)} placeholder="0.00" className='text-center text-white font-poppins text-xs lg:text-sm font-normal bg-transparent outline-none w-[3.5rem]' />
+                                    <p className='font-medium text-xs lg:text-sm font-poppins text-white'>{hotel.country}</p>
                                 </div>
                                 {(typeof price === 'string' ? parseFloat(price) : price) !== hotel.price && <div className='cursor-pointer rounded-full w-5 h-5 bg-white flex items-center justify-center' onClick={() => handleUpdatePrice(typeof price === 'string' ? parseFloat(price) : price!)}><Check size={16} /></div>}
                             </div> */}
@@ -51,7 +51,7 @@ export default async function HotelReservation({ buy, locale, hotel, user }: { b
                             {hotel.fullName}
                         </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2 w-full">
+                    <div className="flex items-center justify-center gap-2 w-full max-lg:flex-col">
                         <div className="flex flex-col gap-1 items-start justify-center w-full">
                             <p>Phone Number</p>
                             <div className={cn('flex gap-2 w-full items-center justify-between bg-black px-4 py-2 text-white')}>
@@ -89,7 +89,7 @@ export default async function HotelReservation({ buy, locale, hotel, user }: { b
                             {hotel.date.from.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}).replace(/(\d+)/, '$1')} - {hotel.date.to.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}).replace(/(\d+)/, '$1')}
                         </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2 w-full">
+                    <div className="flex items-center justify-center gap-2 w-full max-lg:flex-col">
                         <div className="flex flex-col gap-1 items-start justify-center w-full">
                             <p>Adults</p>
                             <div className={cn('flex gap-2 w-full items-center justify-between bg-black px-4 py-2 text-white')}>
@@ -103,7 +103,7 @@ export default async function HotelReservation({ buy, locale, hotel, user }: { b
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2 w-full">
+                    <div className="flex items-center justify-center gap-2 w-full max-lg:flex-col">
                         <div className="flex flex-col gap-1 items-start justify-center w-full">
                             <p>Itenirary Number</p>
                             <div className={cn('flex gap-2 w-full items-center justify-between bg-black px-4 py-2 text-white')}>

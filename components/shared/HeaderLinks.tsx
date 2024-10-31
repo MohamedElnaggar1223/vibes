@@ -60,10 +60,10 @@ function HeaderLinks({ setOpen }: Props)
 
     return (
         <>
-            <Link onClick={() => setOpen(false)} href='/hotel-reservations' className="cursor-pointer items-center justify-center px-8 py-4 font-poppins font-normal text-base w-full text-center flex gap-4">Hotel Reservations</Link>
+            {/* <Link onClick={() => setOpen(false)} href='/hotel-reservations' className="cursor-pointer items-center justify-center px-8 py-4 font-poppins font-normal text-base w-full text-center flex gap-4">Hotel Reservations</Link>
             <Separator color="black" />
             <Link onClick={() => setOpen(false)} href='/digital-products' className="cursor-pointer items-center justify-center px-8 py-4 font-poppins font-normal text-base w-full text-center flex gap-4">Digital Products</Link>
-            <Separator color="black" />
+            <Separator color="black" /> */}
             <span onClick={(e) => e.stopPropagation()} className='items-center justify-center flex gap-4 px-8 py-4 font-poppins font-normal text-base w-full text-center z-[99999999999999999]'>
                 {t('selectCountry')}
                 <Select open={countryOpen} onOpenChange={setCountryOpen} defaultValue={defaultValue} onValueChange={(value) => {

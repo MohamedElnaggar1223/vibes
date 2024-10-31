@@ -86,7 +86,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                             // >
                             <CarouselItem 
                                 key={index} 
-                                className={cn('max-h-[448px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
+                                className={cn('max-h-[448px] overflow-visible', events.length === 1 ? 'min-w-[728px] min-h-[448px] mx-auto max-lg:min-w-full' : events.length === 2 ? 'flex-1 basis-1/2 mx-auto' : 'basis-1/3', (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'z-[9999] cursor-pointer' : 'blur-sm mt-14')}
                                 onClick={() => {
                                     if(index === 0 && events.length - 1 === selectedIndex) router.push(`/events/${event?.id}`)
                                     else if(index - 1 === selectedIndex) router.push(`/events/${event?.id}`)
@@ -101,7 +101,7 @@ function EventsCarousel({ events, exchangeRate, locale, categories }: Props)
                                     className='rounded-lg object-cover h-full w-full flex items-center justify-center'
                                     width={728}
                                     height={448} 
-                                    imageClassName={(index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg max-w-[calc(50vw-5rem)] min-h-[125%] max-lg:min-h-[220px] max-lg:min-w-[280px] max-h-[125%] z-[99999999]' : "max-lg:absolute max-lg:min-w-[180px] max-lg:min-h-[150px] rounded-lg object-cover h-full w-full max-w-[872px]"}
+                                    imageClassName={events.length === 1 ? 'w-full mr-6' : (index === 0 ? selectedIndex === events.length - 1 : selectedIndex === index - 1) ? 'absolute rounded-lg max-w-[calc(50vw-5rem)] min-h-[125%] max-lg:min-h-[220px] max-lg:min-w-[280px] max-h-[125%] z-[99999999]' : "max-lg:absolute max-lg:min-w-[180px] max-lg:min-h-[150px] rounded-lg object-cover h-full w-full max-w-[872px]"}
                                     priority={true}
                                     layoutId={event?.id}
                                     eventPage={false}

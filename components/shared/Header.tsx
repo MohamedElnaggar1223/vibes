@@ -56,14 +56,14 @@ export default async function Header({ params }: Props)
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='/resell-market' className='font-poppins text-sm md:text-lg font-[300] z-[9999] text-white'>Resell Market</Link>
-                {/* <Link href='/hotel-reservations' className='font-poppins text-sm md:text-lg font-[300] z-[9999] text-white'>Hotel Reservations</Link>
-                <Link href='/digital-products' className='font-poppins text-sm md:text-lg font-[300] z-[9999] text-white'>Digital Products</Link> */}
+                <Link href='/resell-market' className='font-poppins text-nowrap text-xs md:text-lg font-[300] z-[9999] text-white'>{t('common:resellMarket')}</Link>
+                {/* <Link href='/hotel-reservations' className='font-poppins text-xs md:text-lg font-[300] z-[9999] text-white'>Hotel Reservations</Link>
+                <Link href='/digital-products' className='font-poppins text-xs md:text-lg font-[300] z-[9999] text-white'>Digital Products</Link> */}
                 <LocaleSwitcher params={params} />
                 {
                     !session?.user || !user?.id ? (
                         <Link href='/sign-in'>
-                            <button className='font-poppins text-sm md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white'>
+                            <button className='font-poppins text-xs md:text-[16px] bg-gradient-to-r from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%] rounded-full px-3 py-1 md:px-6 md:py-2 text-white'>
                                 {t('common:sign-in')}
                             </button>
                         </Link>

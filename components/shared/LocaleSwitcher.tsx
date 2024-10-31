@@ -7,7 +7,7 @@ export default function LocaleSwitcher({ params }: { params: { locale?: string |
     const pathname = usePathname()
 
     return (
-        <p onClick={() => router.push(params.locale === 'en' ? '/ar' + pathname! : pathname?.replace('/ar', '/en')!)} className='text-white font-poppins text-sm md:text-lg font-semibold cursor-pointer'>
+        <p onClick={() => router.push(params.locale === 'en' ? '/ar' + pathname! : pathname?.replace('/ar', '/en')!)} className='text-white font-poppins text-xs md:text-lg font-semibold cursor-pointer'>
             {params.locale === 'en' ? 'AR' : 'EN'}
         </p>    
     )

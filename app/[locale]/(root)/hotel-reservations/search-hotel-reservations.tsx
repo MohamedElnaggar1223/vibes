@@ -23,7 +23,7 @@ export default function SearchHotelReservations({ search, locale }: { search?: s
     }
 
     return (
-        <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-screen max-w-[400px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4'>
+        <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-screen max-w-[250px] lg:max-w-[400px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}

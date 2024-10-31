@@ -21,7 +21,7 @@ export default function CategoriesHeaderLink({ categories }: Props)
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger>
-                <p className={cn('font-poppins text-sm md:text-lg font-[300] z-[9999]', pathname?.includes('/categories') ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-white')}>{t('categories')}</p>
+                <p className={cn('font-poppins text-xs md:text-lg font-[300] z-[9999]', pathname?.includes('/categories') ? 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text' : 'text-white')}>{t('categories')}</p>
             </PopoverTrigger>
             <PopoverContent className={cn('z-[9999999999999999] w-[180px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>
                 <div className='px-4 divide-y'>

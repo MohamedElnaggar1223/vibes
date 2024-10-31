@@ -42,7 +42,7 @@ export default function SignedInHeader({ user }: Props)
         <>
             <CartHeaderLink user={user} />
             <Select onOpenChange={setOpen} open={open}>
-                <SelectTrigger className={cn("w-[90px] lg:w-[140px] border-none bg-transparent text-white font-poppins text-sm lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
+                <SelectTrigger className={cn("w-[68px] lg:w-[140px] max-md:!p-0 border-none bg-transparent text-white font-poppins text-xs lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
                     <SelectValue placeholder={t('profile')} />
                 </SelectTrigger>
                 <SelectContent className={cn('z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>

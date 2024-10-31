@@ -30,6 +30,7 @@ export default function CartHeaderLink({ user }: Props)
                     width={23}
                     height={27}
                     alt="cart-active" 
+                    className='max-md:max-w-5'
                 />
             ) : hovered ? (
                 <Image
@@ -37,6 +38,7 @@ export default function CartHeaderLink({ user }: Props)
                     width={19}
                     height={23}
                     alt="cart-active" 
+                    className='max-md:max-w-5'
                 />
             ) : (
                 <Image
