@@ -11,12 +11,17 @@ import ChangePassword from "./ChangePassword"
 import InfoLoading from "./tickets/InfoLoading"
 import MyTickets from "./MyTickets"
 import { useTranslation } from "react-i18next"
+import MyHotelReservations from "@/components/shared/MyHotelReservations"
+import MyDigitalProducts from "@/components/shared/MyDigitalProducts"
 
 type Props = {
     user: UserType
+    params: {
+        locale?: string | undefined
+    }
 }
 
-export default function MyProfile({ user }: Props)
+export default function MyProfile({ user, params }: Props)
 {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
@@ -76,7 +81,27 @@ export default function MyProfile({ user }: Props)
                             }} 
                             className='py-8 min-w-[19rem] flex items-center justify-center rounded-t-lg bg-[rgba(82,82,82,0.60)] cursor-pointer'
                         >
-                            <p className={cn('font-poppins text-base font-normal text-white', !(selectedTab === 'change-password' || selectedTab === 'my-tickets')  && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('personalInformation')}</p>
+                            <p className={cn('font-poppins text-base font-normal text-white', !(selectedTab === 'change-password' || selectedTab === 'my-tickets' || selectedTab === 'hotel-reservations' || selectedTab === 'digital-products')  && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('personalInformation')}</p>
+                        </div>
+                        <div 
+                            onClick={() => {
+                                startTransition(() => {
+                                    router.push('?show=hotel-reservations', { scroll: false })
+                                })
+                            }} 
+                            className='py-8 min-w-[19rem] flex items-center justify-center bg-[rgba(82,82,82,0.60)] cursor-pointer'
+                        >
+                            <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'hotel-reservations' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('hotelReservations')}</p>
+                        </div>
+                        <div 
+                            onClick={() => {
+                                startTransition(() => {
+                                    router.push('?show=digital-products', { scroll: false })
+                                })
+                            }} 
+                            className='py-8 min-w-[19rem] flex items-center justify-center bg-[rgba(82,82,82,0.60)] cursor-pointer'
+                        >
+                            <p className={cn('font-poppins text-base font-normal text-white', selectedTab === 'digital-products' && 'bg-[linear-gradient(90deg,rgba(231,35,119,1)50%,rgba(235,94,27,1)100%)] text-transparent bg-clip-text')}>{t('digitalProducts')}</p>
                         </div>
                         {
                             user.provider === 'credentials' &&
@@ -115,6 +140,10 @@ export default function MyProfile({ user }: Props)
                     </Suspense>
                 ) : selectedTab === 'my-tickets' ? (
                     <MyTickets user={user} />
+                ) : selectedTab === 'hotel-reservations' ? (
+                    <MyHotelReservations params={params} user={user} />
+                ) : selectedTab === 'digital-products' ? (
+                    <MyDigitalProducts params={params} user={user} />
                 ) : (
                     <Suspense fallback={<InfoLoading />}>
                         <PersonalInformation user={user} setLoading={setLoading} setError={setError} setSuccess={setSuccess} />

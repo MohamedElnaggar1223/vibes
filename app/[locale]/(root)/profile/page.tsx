@@ -9,6 +9,9 @@ import { Timestamp } from "firebase/firestore"
 
 type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
+    params: {
+        locale?: string | undefined
+    }
 }
 
 export async function generateMetadata({ searchParams }: Props) 
@@ -18,7 +21,7 @@ export async function generateMetadata({ searchParams }: Props)
     }
 }
 
-export default async function Profile()
+export default async function Profile({ params }: Props)
 {
     const admin = await initAdmin()
     const cookiesData = cookies()
@@ -33,6 +36,6 @@ export default async function Profile()
     revalidatePath('/profile?show=my-tickets')
 
     return (
-        <MyProfile user={userData!} />
+        <MyProfile user={userData!} params={params} />
     )
 }
