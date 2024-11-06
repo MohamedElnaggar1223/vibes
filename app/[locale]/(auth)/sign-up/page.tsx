@@ -25,7 +25,15 @@ export default async function SignUpPage({ params, searchParams }: Props)
     if(token?.sub)
     {
         const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
-        if(user?.verified) return redirectUrl ? redirect(redirectUrl) : redirect('/')
+        if(user?.verified) {
+            if(redirectUrl) {
+                return redirect(redirectUrl)
+            }
+            else {
+                return redirect('/')
+            }
+        }
+        else return redirect('/complete-profile')
     }
 
     return (

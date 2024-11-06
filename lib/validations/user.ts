@@ -18,7 +18,7 @@ export const UserSignUpSchema = z.object({
         return true
     }, { message: 'Email already exists' }),
     countryCode: z.enum(countryCodes),
-    phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
+    phoneNumber: z.string().min(8, { message: 'Invalid phone number' })
         .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', ''))
         .refine(async (phoneNumber) => {
             const userCollection = collection(db, 'users')

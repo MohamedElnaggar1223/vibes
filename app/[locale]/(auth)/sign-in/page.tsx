@@ -20,6 +20,7 @@ export default async function SignInPage({ searchParams }: { searchParams: { [ke
     {
         const user = (await admin.firestore().collection('users').doc(token?.sub as string).get()).data() as UserType
         if(user?.verified) return redirectUrl ? redirect(redirectUrl) : redirect('/')
+        else return redirect('/complete-profile')
     }
 
     // const facebookLogin = await allowFacebookLogin()
