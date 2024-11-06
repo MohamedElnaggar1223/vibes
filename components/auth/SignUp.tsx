@@ -85,6 +85,7 @@ export default function SignUp({ locale, redirectUrl }: { locale: string | undef
                 await signIn("credentials", { email: values.email, password: values.password, id: userCredentials.user.uid, redirect: false })
                 setLoading(false)
             })
+            router.refresh()
         }
         catch(e)
         {
@@ -102,7 +103,8 @@ export default function SignUp({ locale, redirectUrl }: { locale: string | undef
                 setLoading(true)
                 await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'google', redirect: false })
                 setLoading(false)
-                router.push(redirectUrl ?? '/')
+                // router.push(redirectUrl ?? '/')
+                router.refresh()
             }
         }
         catch(e)
@@ -121,7 +123,8 @@ export default function SignUp({ locale, redirectUrl }: { locale: string | undef
                 setLoading(true)
                 await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'twitter', redirect: false })
                 setLoading(false)
-                router.push(redirectUrl ?? '/')
+                // router.push(redirectUrl ?? '/')
+                router.refresh()
             }
         }
         catch(e)
@@ -140,7 +143,8 @@ export default function SignUp({ locale, redirectUrl }: { locale: string | undef
                 setLoading(true)
                 await signIn('credentials', { name: user.user.displayName, phoneNumber: user.user.phoneNumber ?? '',  email: user.user.email, password: '', id: user.user.uid, provider: 'facebook', redirect: false })
                 setLoading(false)
-                router.push(redirectUrl ?? '/')
+                // router.push(redirectUrl ?? '/')
+                router.refresh()
             }
         }
         catch(e)
