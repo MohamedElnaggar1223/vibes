@@ -1,1 +1,24 @@
-{"resellMarket": "Resell Market", "addCart":"Add to Cart","addTickets":"Add Tickets","AED":"AED","AR":"Arabic","book":"Book Now","buy":"Buy Now","choosetickets":"Choose one or more type of tickets","chooseticketsbody":"Choose Your Tickets & They’ll Appear Here","chooseticketshead":"Choose Your Tickets","EGP":"EGP","map":"Map","mustAddTickets":"Add tickets to continue!","mustSignIn":"You must be signed in!","numberOfParking":"Parking Pass","numberOfTickets":"Number of tickets","price":"{{price}}","SAR":"SAR","sign-in":"Sign In","soldout":"Sold Out!","total":"Total"}
+{
+    "resellMarket": "Resell Market",
+    "addCart": "Add to Cart",
+    "addTickets": "Add Tickets",
+    "AED": "AED",
+    "AR": "Arabic",
+    "book": "Book Now",
+    "buy": "Buy Now",
+    "choosetickets": "Choose one or more type of tickets",
+    "chooseticketsbody": "Choose Your Tickets & They’ll Appear Here",
+    "chooseticketshead": "Choose Your Tickets",
+    "EGP": "EGP",
+    "map": "Map",
+    "mustAddTickets": "Add tickets to continue!",
+    "mustSignIn": "You must be signed in!",
+    "numberOfParking": "Parking Pass",
+    "numberOfTickets": "Number of tickets",
+    "price": "{{price}}",
+    "SAR": "SAR",
+    "sign-in": "Sign In",
+    "soldout": "Sold Out!",
+    "total": "Total",
+    "sellTickets": "Resell"
+}
