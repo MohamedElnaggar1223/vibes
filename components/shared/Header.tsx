@@ -52,12 +52,12 @@ export default async function Header({ params }: Props)
                 />
             </Link>
             <div className="flex gap-6 lg:gap-24 items-center max-lg:mr-4">
-                <Link href='/resell-market' className='font-poppins text-nowrap text-xs md:text-lg font-[300] z-[9999] text-white'>{t('common:sellTickets')}</Link>
+                <Link href='https://seller.whim-zee.com/' className='font-poppins text-nowrap text-xs md:text-lg font-[300] z-[9999] text-white'>{t('common:sellTickets')}</Link>
                 <CategoriesHeaderLink categories={categories} />
                 {/* <Link href='/' className='text-white font-poppins text-lg font-[300]'>
                     Sell Your Tickets
                 </Link> */}
-                <Link href='https://seller.whim-zee.com/' className='font-poppins text-nowrap text-xs md:text-lg font-[300] z-[9999] text-white'>{t('common:resellMarket')}</Link>
+                <Link href='/resell-market' className='font-poppins text-nowrap text-xs md:text-lg font-[300] z-[9999] text-white'>{t('common:resellMarket')}</Link>
                 {/* <Link href='/hotel-reservations' className='font-poppins text-xs md:text-lg font-[300] z-[9999] text-white'>Hotel Reservations</Link>
                 <Link href='/digital-products' className='font-poppins text-xs md:text-lg font-[300] z-[9999] text-white'>Digital Products</Link> */}
                 <LocaleSwitcher params={params} />
