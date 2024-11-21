@@ -15,8 +15,7 @@ type Props = {
     locale?: string | undefined
 }
 
-export default function SearchBar({ locale }: Props) 
-{
+export default function SearchBar({ locale }: Props) {
     const searchParams = useSearchParams()
     const pathname = usePathname()
 
@@ -38,11 +37,11 @@ export default function SearchBar({ locale }: Props)
     const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault()
         let query = ''
-        if(search) query += `search=${search}&`
-        if(category) query += `category=${category}&`
-        if(date) query += `date=${date.toISOString()}&`
-        if(country) query += `country=${country}`
-        if(query) router.push(`/?${query}`)
+        if (search) query += `search=${search}&`
+        if (category) query += `category=${category}&`
+        if (date) query += `date=${date.toISOString()}&`
+        if (country) query += `country=${country}`
+        if (query) router.push(`/?${query}`)
     }
 
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -50,7 +49,7 @@ export default function SearchBar({ locale }: Props)
 
     useEffect(() => {
         const handleOutsideClick = (event: any) => {
-            if(event.target === dropdownIconRef.current) return
+            if (event.target === dropdownIconRef.current) return
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setFiltersOpen(false)
             }
@@ -69,22 +68,22 @@ export default function SearchBar({ locale }: Props)
     }
 
     return (
-        <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[999999] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
+        <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full max-w-[647px] bg-white flex shadow-lg z-[9] gap-4 rounded-md items-center justify-evenly px-4 mt-12'>
             <Image
                 src='/assets/searchIcon.svg'
                 width={24}
                 height={24}
                 alt='search'
-                className='mr-[-5px] cursor-pointer max-lg:w-[20px] max-lg:h-[20px]' 
+                className='mr-[-5px] cursor-pointer max-lg:w-[20px] max-lg:h-[20px]'
                 onClick={() => handleSubmit()}
             />
-            <form                    
-                className={cn('flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins py-0.5 md:py-1.5 outline-none', locale === 'ar' ? 'pr-8' : 'pl-8')} 
+            <form
+                className={cn('flex flex-1 my-2 p-0 border-x-[1px] border-[#E5E5E5] text-[10px] font-poppins py-0.5 md:py-1.5 outline-none', locale === 'ar' ? 'pr-8' : 'pl-8')}
                 onSubmit={handleSubmit}
             >
-                <input 
+                <input
                     placeholder={t('search')}
-                    className='w-full flex-1 p-0 text-[10px] font-poppins outline-none' 
+                    className='w-full flex-1 p-0 text-[10px] font-poppins outline-none'
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
@@ -93,8 +92,8 @@ export default function SearchBar({ locale }: Props)
                 src='/assets/settingsIcon.svg'
                 width={20}
                 height={20}
-                alt='search' 
-                className='ml-[-5px] cursor-pointer max-lg:w-[16px] max-lg:h-[16px]' 
+                alt='search'
+                className='ml-[-5px] cursor-pointer max-lg:w-[16px] max-lg:h-[16px]'
                 onClick={() => setFiltersOpen(prev => !prev)}
                 ref={dropdownIconRef}
             />
@@ -120,8 +119,8 @@ export default function SearchBar({ locale }: Props)
                                         <div
                                             className="flex items-center gap-1 cursor-pointer justify-center w-fit"
                                         >
-                                        <CalendarIcon className="h-4 w-4 cursor-pointer" />
-                                        {date ? <span className='font-poppins font-extralight'>{format(date, "PPP")}</span> : <span className='font-poppins font-extralight text-nowrap'>{t('selectDate')}</span>}
+                                            <CalendarIcon className="h-4 w-4 cursor-pointer" />
+                                            {date ? <span className='font-poppins font-extralight'>{format(date, "PPP")}</span> : <span className='font-poppins font-extralight text-nowrap'>{t('selectDate')}</span>}
                                         </div>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0 z-[9999999999]">

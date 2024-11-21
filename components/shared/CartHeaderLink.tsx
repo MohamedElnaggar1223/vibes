@@ -12,13 +12,12 @@ type Props = {
 
 export const revalidate = 120
 
-export default function CartHeaderLink({ user }: Props) 
-{
+export default function CartHeaderLink({ user }: Props) {
     const pathname = usePathname()
     const [hovered, setHovered] = useState(false)
 
     return (
-        <Link onPointerEnter={() => setHovered(true)} onPointerLeave={() => setHovered(false)} href='/cart' className={cn('relative font-poppins text-sm cursor-pointer md:text-lg font-[300] z-[9999] text-white transition-all')}>
+        <Link onPointerEnter={() => setHovered(true)} onPointerLeave={() => setHovered(false)} href='/cart' className={cn('relative max-md:items-center max-md:justify-center max-md:flex max-md:py-2 max-md:!border-t max-md:!border-b max-md:!border-[#909090] max-md:w-full font-poppins cursor-pointer text-lg font-[300] z-[9999] text-white transition-all')}>
             {(user.cart?.tickets?.length ?? 0) > 0 && (
                 <div className='absolute -top-1 -right-1.5 w-2.5 h-2.5 rounded-full flex justify-center items-center'>
                     <span className='text-white text-xs font-poppins font-normal'>{pathname?.startsWith('/ar') ? toArabicNums(`${user.cart?.tickets.length}`) : user.cart?.tickets.length}</span>
@@ -29,23 +28,23 @@ export default function CartHeaderLink({ user }: Props)
                     src="/assets/bag-active.svg"
                     width={23}
                     height={27}
-                    alt="cart-active" 
-                    className='max-md:max-w-5'
+                    alt="cart-active"
+                    className=''
                 />
             ) : hovered ? (
                 <Image
                     src="/assets/bag-hover.svg"
                     width={19}
                     height={23}
-                    alt="cart-active" 
-                    className='max-md:max-w-5'
+                    alt="cart-active"
+                    className=''
                 />
             ) : (
                 <Image
                     src="/assets/bag.svg"
                     width={19}
                     height={23}
-                    alt="cart" 
+                    alt="cart"
                 />
             )}
         </Link>

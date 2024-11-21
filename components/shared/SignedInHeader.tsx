@@ -14,8 +14,7 @@ type Props = {
     user: UserType
 }
 
-export default function SignedInHeader({ user }: Props)
-{
+export default function SignedInHeader({ user }: Props) {
     const pathname = usePathname()
 
     const { t } = useTranslation()
@@ -25,11 +24,11 @@ export default function SignedInHeader({ user }: Props)
     const [currentWidth, setCurrentWidth] = useState<number>()
 
     useEffect(() => {
-        if(window) setCurrentWidth(window?.innerWidth!)
+        if (window) setCurrentWidth(window?.innerWidth!)
     }, [])
 
     useEffect(() => {
-        if(!open) setAccountMenu(false)
+        if (!open) setAccountMenu(false)
     }, [open])
 
     useEffect(() => {
@@ -42,31 +41,31 @@ export default function SignedInHeader({ user }: Props)
         <>
             <CartHeaderLink user={user} />
             <Select onOpenChange={setOpen} open={open}>
-                <SelectTrigger className={cn("w-[68px] lg:w-[140px] max-md:!p-0 border-none bg-transparent text-white font-poppins text-xs lg:text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
+                <SelectTrigger className={cn("w-[68px] lg:w-[140px] max-md:!p-0 border-none bg-transparent text-white font-poppins max-md:flex max-md:items-center max-md:justify-center max-md:w-full max-md:py-2 text-base font-medium z-[999999] outline-none", pathname === '/profile' && 'profile-span')}>
                     <SelectValue placeholder={t('profile')} />
                 </SelectTrigger>
-                <SelectContent className={cn('z-[9999999999999999] w-[240px] border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>
+                <SelectContent className={cn('z-[9999999999999999] w-[240px] max-md:w-full max-md:right-1.5 border-t-8 border-b-0 border-x-0 border-[#E72377] rounded-b-md p-0', pathname?.startsWith('/ar') ? 'left-[5%] lg:left-[5%]' : 'right-[5%] lg:right-[35%]')}>
                     <SelectGroup className='bg-white flex flex-col items-center justify-center'>
                         {
                             !accountMenu ? (
                                 <>
                                     {
                                         (currentWidth ?? 0) < 1024 ? (
-                                            <span 
+                                            <span
                                                 onClick={() => {
-                                                    setAccountMenu(true)   
+                                                    setAccountMenu(true)
                                                 }}
                                                 className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                             >
                                                 <span>{t('accountDetails')}</span>
                                             </span>
                                         ) : (
-                                            <Link 
+                                            <Link
                                                 onClick={() => {
                                                     setOpen(false)
-                                                }} 
-                                                prefetch={true} 
-                                                href='/profile' 
+                                                }}
+                                                prefetch={true}
+                                                href='/profile'
                                                 className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                             >
                                                 <span>{t('accountDetails')}</span>
@@ -78,34 +77,34 @@ export default function SignedInHeader({ user }: Props)
                                 </>
                             ) : (
                                 <>
-                                    <Link 
+                                    <Link
                                         onClick={() => {
                                             setOpen(false)
                                         }}
-                                        prefetch={true} 
-                                        href='/profile?show=personal' 
+                                        prefetch={true}
+                                        href='/profile?show=personal'
                                         className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                     >
                                         <span>{t('personalInformation')}</span>
                                     </Link>
                                     <Separator color="black" />
-                                    <Link 
+                                    <Link
                                         onClick={() => {
                                             setOpen(false)
                                         }}
-                                        prefetch={true} 
+                                        prefetch={true}
                                         href='/profile?show=change-password'
                                         className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                     >
                                         <span>{t('changePassword')}</span>
                                     </Link>
                                     <Separator color="black" />
-                                    <Link 
+                                    <Link
                                         onClick={() => {
                                             setOpen(false)
-                                        }} 
-                                        prefetch={true} 
-                                        href='/profile?show=my-tickets' 
+                                        }}
+                                        prefetch={true}
+                                        href='/profile?show=my-tickets'
                                         className='cursor-pointer px-8 py-4 font-poppins font-normal text-base w-full text-center'
                                     >
                                         <span>{t('myTickets')}</span>
