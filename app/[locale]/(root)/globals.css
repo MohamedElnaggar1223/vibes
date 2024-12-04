@@ -11,6 +11,64 @@ body{
   zoom: 1 !important;
 }
 
+.carousel-scrollbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.carousel-scrollbar-thumb {
+  position: absolute;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.carousel-with-scrollbar {
+  position: relative;
+  padding-bottom: 16px; /* Add some space for the scrollbar */
+}
+
+.carousel-with-scrollbar .embla__viewport {
+  overflow-x: auto;
+  -ms-overflow-style: none; /* Hide default scrollbar for IE and Edge */
+  scrollbar-width: none; /* Hide default scrollbar for Firefox */
+}
+
+.carousel-with-scrollbar .embla__viewport::-webkit-scrollbar {
+  display: none; /* Hide default scrollbar for Chrome, Safari, and Opera */
+}
+
+.carousel-with-scrollbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px; /* Increased height for better visibility */
+  background-color: rgba(255, 255, 255, 0.2); /* Scrollbar track color */
+  border-radius: 4px; /* Rounded corners for the track */
+}
+
+.carousel-with-scrollbar .embla__viewport::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 8px; /* Match the height of the scrollbar track */
+  background-color: rgba(255, 255, 255, 0.5); /* Scrollbar thumb color */
+  border-radius: 4px; /* Rounded corners for the thumb */
+  width: var(--scrollbar-width, 0%);
+  z-index: 1;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

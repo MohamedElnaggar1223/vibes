@@ -47,9 +47,9 @@ export default async function CarouselCategory({ locale, title, subTitle, events
                     dragFree: true,
                     direction: locale === 'ar' ? 'rtl' : 'ltr'
                 }}
-                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
+                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16 carousel-with-scrollbar"
             >
-                <CarouselContent className=''>
+                <CarouselContent className='pb-4'>
                     <CarouselItem className='max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px]'>
                         <div className='flex flex-col gap-2 text-white mb-auto mt-2'>
                             <p className='font-poppins font-black text-xl lg:text-3xl'>{title}</p>

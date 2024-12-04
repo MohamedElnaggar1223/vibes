@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -79,7 +79,7 @@ const config = {
           },
           '20%': {
             transform: 'rotateY(0deg)',
-          }, 
+          },
           '100%': {
             transform: 'rotateY(0deg)',
           }
@@ -100,7 +100,7 @@ const config = {
       }
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar')],
 } satisfies Config
 
 export default config
