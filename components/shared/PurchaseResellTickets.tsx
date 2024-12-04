@@ -4,7 +4,7 @@ import { startTransition, useContext, useEffect, useMemo, useRef, useState } fro
 import {
     Dialog,
     DialogContent,
-  } from "@/components/ui/dialog"
+} from "@/components/ui/dialog"
 import { cn, toArabicNums } from "@/lib/utils"
 import { Check, Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
@@ -16,7 +16,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-  } from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 import { Timestamp, addDoc, arrayUnion, collection, doc, onSnapshot, runTransaction, updateDoc } from "firebase/firestore"
 import { db } from "@/firebase/client/config"
 import { CountryContext } from "@/providers/CountryProvider"
@@ -37,17 +37,16 @@ type Props = {
 }
 
 function addValues(obj1: any, obj2: any) {
-    const tempObj = {...obj1}
+    const tempObj = { ...obj1 }
     Object.keys(obj2).forEach(key => {
-        tempObj[key] = (tempObj[key]?? 0) + obj2[key]
+        tempObj[key] = (tempObj[key] ?? 0) + obj2[key]
     })
     return tempObj
 }
 
-export default function PurchaseResellTickets({ bundlesWithTickets, event, exchangeRate, user, locale, bundlesForSale, ticketsForSale }: Props) 
-{
+export default function PurchaseResellTickets({ bundlesWithTickets, event, exchangeRate, user, locale, bundlesForSale, ticketsForSale }: Props) {
     const context = useContext(CountryContext)
-    if(!context) return <Loader2 className='animate-spin' />
+    if (!context) return <Loader2 className='animate-spin' />
     const { country } = context
 
     const router = useRouter()
@@ -67,13 +66,13 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
 
     const handleReserveTickets = (ticket: (TicketType | BundleWithTickets) & { type: string }) => {
         setDisabledBtn(prev => [...prev, ticket.id])
-        if(selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id)) {
+        if (selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id)) {
             setSelectedTickets(prev => prev.filter(selectedTicket => selectedTicket.id !== ticket.id))
         }
         else {
             let price = 0
             let country = ''
-            if(ticket.type === 'bundle') {
+            if (ticket.type === 'bundle') {
                 price = (((ticket as BundleWithTickets).price) + ((((event?.resellMarkup ?? 0) / 100)) * ((ticket as BundleWithTickets).price)))
                 country = (ticket as BundleWithTickets).tickets[0].country
             }
@@ -89,8 +88,8 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
 
     const displayedAccordions = useMemo(() => {
         return eventData.tickets.map(ticket => {
-            const individualTickets = ticketsForSale.filter(ticketForSale => (Object.keys(ticketForSale.tickets)[0] === ticket.name) && (!ticketForSale.bundleID)).map(ticket => ({...ticket, type: 'individual'}))
-            const bundleTickets = bundlesWithTickets.filter(bundleForSale => bundleForSale.tickets.find(bundleTicket => Object.keys(bundleTicket.tickets)[0] === ticket.name)).map(ticket => ({...ticket, type: 'bundle'}))
+            const individualTickets = ticketsForSale.filter(ticketForSale => (Object.keys(ticketForSale.tickets)[0] === ticket.name) && (!ticketForSale.bundleID)).map(ticket => ({ ...ticket, type: 'individual' }))
+            const bundleTickets = bundlesWithTickets.filter(bundleForSale => bundleForSale.tickets.find(bundleTicket => Object.keys(bundleTicket.tickets)[0] === ticket.name)).map(ticket => ({ ...ticket, type: 'bundle' }))
             const allTickets = [...individualTickets, ...bundleTickets].filter(ticket => (ticket.type === tab) || (tab === 'all'))
             const finalTickets = allTickets.length > 0 ? allTickets.sort((a, b) => a?.createdAt?.getTime() - b?.createdAt?.getTime()) : []
             return (
@@ -106,27 +105,57 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className='max-w-full flex flex-col gap-2 max-h-[325px] overflow-auto'>
-                        {finalTickets.map(ticket => (
-                            <div key={ticket.id} className='flex items-center justify-between border-none bg-[#EAEAEA] px-6 py-4'>
-                                <p className="font-poppins text-sm font-medium">
-                                    {ticket.type === 'bundle' ? `Bundle (${(ticket as BundleWithTickets).tickets.length}) tickets` : 'Individual ticket'}
-                                </p>
-                                <p className="font-poppins text-sm font-medium">
-                                    {ticket.type === 'bundle' ? (((ticket as BundleWithTickets).price) + ((((event?.resellMarkup ?? 0) / 100)) * ((ticket as BundleWithTickets).price))) + " " + (ticket as BundleWithTickets).tickets[0].country : ((parseFloat((ticket as TicketType).salePrice?.toString() ?? '0')) + ((((event?.resellMarkup ?? 0) / 100)) * (parseFloat((ticket as TicketType).salePrice?.toString() ?? '0')))) + " " + (ticket as TicketType).country}
-                                </p>
-                                <button disabled={disabledBtn.includes(ticket.id)} onMouseDown={() => handleReserveTickets(ticket)} className={cn('font-poppins disabled:opacity-60 text-xs font-light w-[115px] h-[40px] rounded-[8px] border', selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id) ? 'border-[#FF000080] bg-[#FF000033] text-black' : 'border-black bg-black text-white')}>
-                                    {selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id) ? "Remove ticket(s)" : "Reserve ticket(s)"}
-                                </button>
-                            </div>
-                        ))}
+                        {finalTickets.map(ticket => {
+
+                            // let ticketPrice = ticket.type === 'bundle' ? (ticket as BundleWithTickets).price : (typeof (ticket as TicketType).salePrice === 'string' ? parseFloat(((ticket as TicketType).salePrice as string) ?? '0') : (ticket as TicketType).salePrice as number)
+                            // const ticketCountry = ticket.type === 'bundle' ? (ticket as BundleWithTickets).tickets[0].country : (ticket as TicketType).country
+
+                            // if (ticketPrice === undefined || ticketCountry === undefined) return <></>
+
+                            // let usdPrice = 0
+                            // if (ticketCountry !== country) {
+                            //     if (ticketCountry === 'EGP') usdPrice = ticketPrice / exchangeRate.USDToEGP
+                            //     else if (ticketCountry === 'SAR') usdPrice = ticketPrice / exchangeRate.USDToSAR
+                            //     else usdPrice = ticketPrice / exchangeRate.USDToAED
+
+                            //     ticketPrice = parseFloat(((1 + ((event?.resellMarkup ?? 0) / 100)) * (usdPrice * (country === 'EGP' ? exchangeRate.USDToEGP : country === 'SAR' ? exchangeRate.USDToSAR : exchangeRate.USDToAED))).toFixed(2))
+                            // }
+
+                            let price = 0
+                            let country = ''
+                            if (ticket.type === 'bundle') {
+                                price = (((ticket as BundleWithTickets).price) + ((((event?.resellMarkup ?? 0) / 100)) * ((ticket as BundleWithTickets).price)))
+                                country = (ticket as BundleWithTickets).tickets[0].country
+                            }
+                            else {
+                                const typedTicket = ticket as TicketType
+                                country = typedTicket.country
+                                price = typeof typedTicket.salePrice === 'string' ? (parseFloat(typedTicket.salePrice ?? '0') + ((((event?.resellMarkup ?? 0) / 100)) * parseFloat(typedTicket.salePrice ?? '0'))) : ((typedTicket.salePrice!) + ((((event?.resellMarkup ?? 0) / 100)) * (typedTicket.salePrice!)))
+                            }
+
+                            const finalPrice = (country === 'EGP' ? price / exchangeRate.USDToEGP : country === 'SAR' ? price / exchangeRate.USDToSAR : price / exchangeRate.USDToAED)
+                            return (
+                                <div key={ticket.id} className='flex items-center justify-between border-none bg-[#EAEAEA] px-6 py-4'>
+                                    <p className="font-poppins text-sm font-medium">
+                                        {ticket.type === 'bundle' ? `Bundle (${(ticket as BundleWithTickets).tickets.length}) tickets` : 'Individual ticket'}
+                                    </p>
+                                    <p className="font-poppins text-sm font-medium">
+                                        <FormattedPrice price={finalPrice} exchangeRate={exchangeRate} />
+                                    </p>
+                                    <button disabled={disabledBtn.includes(ticket.id)} onMouseDown={() => handleReserveTickets(ticket)} className={cn('font-poppins disabled:opacity-60 text-xs font-light w-[115px] h-[40px] rounded-[8px] border', selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id) ? 'border-[#FF000080] bg-[#FF000033] text-black' : 'border-black bg-black text-white')}>
+                                        {selectedTickets.find(selectedTicket => selectedTicket.id === ticket.id) ? "Remove ticket(s)" : "Reserve ticket(s)"}
+                                    </button>
+                                </div>
+                            )
+                        })}
                     </AccordionContent>
                 </AccordionItem>
             )
         })
     }, [ticketsForSale, bundlesForSale, bundlesWithTickets, eventData, tab, selectedTickets])
-    
+
     useEffect(() => {
-        if(window) setCurrentWidth(window?.innerWidth!)
+        if (window) setCurrentWidth(window?.innerWidth!)
     }, [])
 
     useEffect(() => {
@@ -166,7 +195,7 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
     }, [])
 
     const total = useMemo(() => {
-        if(selectedTickets.length === 0) return 0
+        if (selectedTickets.length === 0) return 0
         return selectedTickets.reduce((total, ticket) => {
             const ticketPrice = ticket.price
             const ticketCountry = ticket.country
@@ -194,8 +223,8 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
     }, [loading])
 
     const selectedExchangeRate = useMemo(() => {
-        if(country === 'EGP') return exchangeRate.USDToEGP
-        else if(country === 'SAR') return exchangeRate.USDToSAR
+        if (country === 'EGP') return exchangeRate.USDToEGP
+        else if (country === 'SAR') return exchangeRate.USDToSAR
         else return exchangeRate.USDToAED
     }, [country])
 
@@ -218,7 +247,7 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
         }).then(res => res.json())
 
         setLoading(false)
-        
+
         router.push(response.redirect)
         // if(event.uploadedTickets) {
         //     await runTransaction(db, async (transaction) => {
@@ -284,13 +313,13 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip open={buyToolTip} onOpenChange={setButToolTip}>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
-                                            <motion.button 
+                                            <motion.button
                                                 onClick={() => {
                                                     setButToolTip(true)
                                                     setTimeout(() => setButToolTip(false), 2000)
-                                                }}  
-                                                layout={true} 
-                                                disabled={(currentWidth ?? 0) > 1024} 
+                                                }}
+                                                layout={true}
+                                                disabled={(currentWidth ?? 0) > 1024}
                                                 className='max-lg:flex-1 font-poppins text-xs lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
                                                 {t('common:buy')}
@@ -305,13 +334,13 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                                 <TooltipProvider delayDuration={100}>
                                     <Tooltip open={buyToolTip} onOpenChange={setButToolTip}>
                                         <TooltipTrigger asChild className="max-lg:flex-1">
-                                            <motion.button 
+                                            <motion.button
                                                 onClick={() => {
                                                     setButToolTip(true)
                                                     setTimeout(() => setButToolTip(false), 2000)
-                                                }}  
-                                                layout={true} 
-                                                disabled={(currentWidth ?? 0) > 1024} 
+                                                }}
+                                                layout={true}
+                                                disabled={(currentWidth ?? 0) > 1024}
                                                 className='max-lg:flex-1 font-poppins text-xs lg:text-lg w-fit font-normal px-2 lg:px-5 rounded-lg py-1.5 text-white bg-[#D9D9D9]'
                                             >
                                                 {t('common:buy')}

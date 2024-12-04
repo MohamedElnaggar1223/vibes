@@ -3,6 +3,7 @@ import { initAdmin } from "@/firebase/server/config"
 import { EventType, ExchangeRate } from "@/lib/types/eventTypes"
 import EventCard from "../cards/EventCard"
 import { getExchangeRate } from "@/lib/utils"
+import DragHint from "./DragHint"
 
 type Props = {
     locale?: string | undefined
@@ -11,8 +12,7 @@ type Props = {
     events: string[]
 }
 
-export default async function CarouselCategory({ locale, title, subTitle, events }: Props) 
-{
+export default async function CarouselCategory({ locale, title, subTitle, events }: Props) {
     const admin = await initAdmin()
     const eventsDocs = events?.map(async (event) => {
         const eventDoc = await admin.firestore().collection('events').doc(event).get()
@@ -29,9 +29,9 @@ export default async function CarouselCategory({ locale, title, subTitle, events
     const eventsDataPromise = await Promise.all(eventsDocs || [])
 
     const eventsData = eventsDataPromise.sort((a, b) => {
-        if(a.createdAt && b.createdAt) return a.createdAt.getTime() - b.createdAt.getTime()
-        else if(a.createdAt) return -1
-        else if(b.createdAt) return 1
+        if (a.createdAt && b.createdAt) return a.createdAt.getTime() - b.createdAt.getTime()
+        else if (a.createdAt) return -1
+        else if (b.createdAt) return 1
         else return 0
     })
 
@@ -39,11 +39,13 @@ export default async function CarouselCategory({ locale, title, subTitle, events
 
     return (
         <section dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row'>
+            <DragHint isRTL={locale === 'ar'} />
+
             <Carousel
                 opts={{
                     align: "start",
                     dragFree: true,
-                    direction: locale === 'ar' ? 'rtl' : 'ltr'  
+                    direction: locale === 'ar' ? 'rtl' : 'ltr'
                 }}
                 className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16"
             >
