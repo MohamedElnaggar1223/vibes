@@ -23,7 +23,7 @@ const DragHint = ({ isRTL }: { isRTL: boolean }) => {
     if (!showHint) return null;
 
     return (
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 z-[9999] animate-pulse">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 z-[9999] animate-pulse max-lg:top-0">
             <div className="flex flex-col items-center gap-2">
                 <div className="text-white text-sm font-medium">
                     {isRTL ? 'اسحب لليسار' : 'Swipe to see more'}

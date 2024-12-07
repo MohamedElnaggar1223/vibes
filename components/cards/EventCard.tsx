@@ -12,8 +12,7 @@ type Props = {
     locale: string | undefined
 }
 
-export default async function EventCard({ event, exchangeRate, locale }: Props) 
-{
+export default async function EventCard({ event, exchangeRate, locale }: Props) {
     const { t } = await initTranslations(locale!, ['homepage', 'common', 'auth'])
 
     const category = await getCategory(event?.categoryID)
@@ -21,21 +20,21 @@ export default async function EventCard({ event, exchangeRate, locale }: Props)
     const categoryColor = convertArgbToHex(category?.color)
 
     return (
-        <CarouselItem key={event?.id} className={cn('group relative max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px] h-full w-full')}>
+        <div key={event?.id} className={cn('group relative max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px] min-h-48 min-w-48 lg:min-h-[412px] lg:min-w-[412px] h-full w-screen')}>
             <Link href={`/events/${event?.id}`}>
                 <ImageMotion
                     selectedEvent={event}
                     className='object-cover'
                     width={412}
-                    height={412} 
+                    height={412}
                     imageClassName="object-cover"
                     priority={true}
                     layoutId={event?.id}
                     eventPage={false}
                 />
             </Link>
-            <div className='absolute max-lg:hidden flex z-[9999] bg-gradient-to-t from-black from-30% via-black/75 to-slate-900/25 w-[calc(100%-1rem)] h-full opacity-0 text-lg group-hover:opacity-100 bottom-0 right-[0%] duration-300 cursor-pointer'>
-                <Link href={`/events/${event?.id}`} className='absolute w-full h-full'/>
+            <div className='absolute max-lg:hidden flex z-[9999] bg-gradient-to-t from-black from-30% via-black/75 to-slate-900/25 w-[calc(100%)] h-full opacity-0 text-lg group-hover:opacity-100 bottom-0 right-[0%] duration-300 cursor-pointer'>
+                <Link href={`/events/${event?.id}`} className='absolute w-full h-full' />
                 <div className='flex flex-col gap-4 text-white mt-auto w-full h-fit pr-6 pb-3'>
                     <div className='flex flex-col justify-center items-start gap-2 h-full pl-2 border-l-[8px]' style={{ borderColor: categoryColor! }}>
                         <p className='font-poppins text-sm font-normal'>{locale === 'ar' ? event?.nameArabic : event?.name}</p>
@@ -53,6 +52,6 @@ export default async function EventCard({ event, exchangeRate, locale }: Props)
                     </div>
                 </div>
             </div>
-        </CarouselItem>
+        </div>
     )
 }

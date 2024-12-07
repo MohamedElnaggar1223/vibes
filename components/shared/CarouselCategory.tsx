@@ -38,30 +38,21 @@ export default async function CarouselCategory({ locale, title, subTitle, events
     const exchangeRate = await getExchangeRate()
 
     return (
-        <section dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row'>
+        <section dir={locale === 'ar' ? 'rtl' : 'ltr'} className='relative w-full flex items-center h-52 lg:h-[412px] justify-start gap-4 flex-row my-4'>
             <DragHint isRTL={locale === 'ar'} />
 
-            <Carousel
-                opts={{
-                    align: "start",
-                    dragFree: true,
-                    direction: locale === 'ar' ? 'rtl' : 'ltr'
-                }}
-                className="h-full max-lg:max-w-[100vw] lg:flex-1 lg:ml-12 max-lg:mt-16 carousel-with-scrollbar"
-            >
-                <CarouselContent className='pb-4'>
-                    <CarouselItem className='max-h-48 max-w-48 lg:max-h-[412px] lg:max-w-[412px]'>
-                        <div className='flex flex-col gap-2 text-white mb-auto mt-2'>
-                            <p className='font-poppins font-black text-xl lg:text-3xl'>{title}</p>
-                            <div className='w-2/3 lg:w-3/12 h-[2px] bg-white mb-4' />
-                            <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
-                        </div>
-                    </CarouselItem>
-                    {eventsData.map((event) => (
-                        <EventCard key={event.id} locale={locale} event={event} exchangeRate={exchangeRate} />
-                    ))}
-                </CarouselContent>
-            </Carousel>
+            <div className='flex items-center justify-start overflow-x-auto overflow-y-hidden gap-8 pb-4'>
+                <div className='max-h-48 max-w-48 min-h-48 min-w-48 lg:max-h-[412px] lg:max-w-[412px] lg:min-h-[412px] lg:min-w-[412px] w-screen flex items-start justify-start h-screen'>
+                    <div className='flex flex-col gap-2 text-white mb-auto mt-2 h-full'>
+                        <p className='font-poppins font-black text-xl lg:text-3xl'>{title}</p>
+                        <div className='w-2/3 lg:w-3/12 h-[2px] bg-white mb-4' />
+                        <p className='w-full font-poppins font-medium text-xs'>{subTitle}</p>
+                    </div>
+                </div>
+                {eventsData.map((event) => (
+                    <EventCard key={event.id} locale={locale} event={event} exchangeRate={exchangeRate} />
+                ))}
+            </div>
         </section>
     )
 }
