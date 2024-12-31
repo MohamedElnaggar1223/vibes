@@ -7,29 +7,27 @@ import CartTicket from "@/components/shared/CartTicket";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
+import { headers } from "next/headers";
 
 type Props = {
     params: {
-		locale?: string
-	}
+        locale?: string
+    }
 }
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function Cart({ params }: Props)
-{
-    noStore()
-    revalidatePath('/checkout')
+export default async function Cart({ params }: Props) {
+    headers()
     const user = await getUser()
-    if(!user || !user?.id) return redirect('/')
-    
+    if (!user || !user?.id) return redirect('/')
+
     const cart = await getCart(user?.id!)
-    
+
     const { t } = await initTranslations(params.locale!, ['homepage', 'common', 'auth'])
 
-    if(cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (10 * 60 * 1000)))
-    {
+    if (cart.tickets.length === 0 || (cart.createdAt?.getTime() ?? 0) <= (Timestamp.now().toMillis() - (10 * 60 * 1000))) {
         return (
             <section dir={params.locale === 'ar' ? 'rtl' : 'ltr'} className='h-[80vh] w-full flex flex-col gap-2 items-center justify-center'>
                 <div className='relative flex'>
@@ -37,7 +35,7 @@ export default async function Cart({ params }: Props)
                         src='/assets/ghost.svg'
                         width={200}
                         height={105}
-                        alt='ghost' 
+                        alt='ghost'
                         className="z-20 max-md:max-w-[150px]"
                     />
                     <div className='absolute z-10 rounded-full w-20 h-20 md:w-32 md:h-32 bg-white opacity-20 top-6 right-10' />
@@ -49,7 +47,7 @@ export default async function Cart({ params }: Props)
     }
 
     const uniqueEvents = cart.tickets.reduce((events, ticket) => {
-        if(!events.includes(ticket.eventId)) events.push(ticket.eventId)
+        if (!events.includes(ticket.eventId)) events.push(ticket.eventId)
         return events
     }, [] as string[])
 
