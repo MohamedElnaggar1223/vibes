@@ -9,7 +9,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { initAdmin } from "@/firebase/server/config";
 import { UserType } from "@/lib/types/userTypes";
 import { decode } from "next-auth/jwt";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import MobileMenu from "./MobileMenu";
 
 type Props = {
@@ -32,7 +32,7 @@ const getUser = async () => {
 }
 
 export default async function Header({ params }: Props) {
-    noStore()
+    headers()
     const { t } = await initTranslations(params?.locale ?? 'en', ['homepage', 'common'],)
     const session = await getServerSession()
     const categories = await getCategories()
