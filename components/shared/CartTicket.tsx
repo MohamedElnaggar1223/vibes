@@ -25,11 +25,10 @@ type Props = {
     user: UserType
 }
 
-export default function CartTicket({ user, ticket, event, exchangeRate }: Props) 
-{
+export default function CartTicket({ user, ticket, event, exchangeRate }: Props) {
     const context = useContext<PromoContextType>(PromoContext)
-    
-    if(!context) return null
+
+    if (!context || !event) return null
 
     const pathname = usePathname()
     const router = useRouter()
@@ -45,19 +44,19 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
         const newEventTickets = event?.tickets.map(eventTicket => {
             const foundTicket = Object.keys(ticket.tickets).find(key => key === eventTicket.name)
             if (foundTicket) {
-                return {...eventTicket, quantity: eventTicket.quantity + ticket.tickets[foundTicket]}
+                return { ...eventTicket, quantity: eventTicket.quantity + ticket.tickets[foundTicket] }
             }
             return eventTicket
         })
 
-        const newEventSeats = {...event.seatPattern, ...ticket.seats}
+        const newEventSeats = { ...event.seatPattern, ...ticket.seats }
 
         const eventDoc = doc(db, 'events', event.id)
         const ticketDoc = doc(db, 'tickets', ticket.id)
         const userDoc = doc(db, 'users', user.id!)
 
         await runTransaction(db, async (transaction) => {
-            await transaction.update(eventDoc, { tickets: newEventTickets!, seatPattern: newEventSeats})
+            await transaction.update(eventDoc, { tickets: newEventTickets!, seatPattern: newEventSeats })
             await transaction.update(userDoc, { cart: { ...user.cart, tickets: user.cart?.tickets.slice().filter(id => id !== ticket.id) } })
             await transaction.delete(ticketDoc)
         })
@@ -91,20 +90,20 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
 
     const findTicketPrice = useCallback((key: string) => {
         const ticketPrice = event.tickets.find(eventTicket => eventTicket.name === key)?.price
-        if(context.promoCodeApplied) {
+        if (context.promoCodeApplied) {
             const promoCode = context.promoCodes?.find(promoCode => promoCode.promo === context.promoCode)
             const discountPerTicket = promoCode?.discount! / ticket.tickets[key]
 
             console.log(discountPerTicket)
 
-            if(promoCode?.singleEvent && promoCode?.eventID === event.id) {
-                if(promoCode?.type === '$') {
+            if (promoCode?.singleEvent && promoCode?.eventID === event.id) {
+                if (promoCode?.type === '$') {
                     return (ticketPrice! - discountPerTicket)
                 } else {
                     return (ticketPrice! - (ticketPrice! * (promoCode?.discount / 100)))
                 }
-            } else if(!promoCode?.singleEvent) {
-                if(promoCode?.type === '$') {
+            } else if (!promoCode?.singleEvent) {
+                if (promoCode?.type === '$') {
                     return (ticketPrice! - discountPerTicket)
                 } else {
                     return (ticketPrice! - (ticketPrice! * (promoCode?.discount! / 100)))
@@ -119,7 +118,7 @@ export default function CartTicket({ user, ticket, event, exchangeRate }: Props)
         <AnimatePresence>
             <motion.div layoutId={ticket.id} dir={pathname?.startsWith('/ar') ? 'rtl' : 'ltr'} className='flex flex-col w-full'>
                 <div className='flex items-center justify-start px-3 py-2 gap-4'>
-                    <Image 
+                    <Image
                         src={event.displayPageImage}
                         width={96}
                         height={96}

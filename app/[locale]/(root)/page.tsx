@@ -15,24 +15,23 @@ type Props = {
 	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function Home({ searchParams, params }: Props)
-{
+export default async function Home({ searchParams, params }: Props) {
 	const admin = await initAdmin()
-	const displaysData = (await admin.firestore().collection('displays').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Display[]
+	const displaysData = (await admin.firestore().collection('displays').get())?.docs.map(doc => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() })) as Display[]
 	const categories = await getCategories()
 
 	const displays = displaysData.sort((a, b) => {
-        if(a.createdAt && b.createdAt) return a.createdAt.getTime() - b.createdAt.getTime()
-        else if(a.createdAt) return -1
-        else if(b.createdAt) return 1
-        else return 0
-    })
+		if (a.createdAt && b.createdAt) return a.createdAt?.getTime() - b.createdAt?.getTime()
+		else if (a.createdAt) return -1
+		else if (b.createdAt) return 1
+		else return 0
+	})
 
 	const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
 	const date = typeof searchParams.date === 'string' ? searchParams.date : undefined
 	const country = typeof searchParams.country === 'string' && (searchParams.country === 'UAE' || searchParams.country === 'Egypt' || searchParams.country === 'KSA') ? searchParams.country : undefined
 	const category = typeof searchParams.category === 'string' ? searchParams.category : undefined
-	
+
 	return (
 		<section className='flex flex-col items-center justify-center w-full overflow-x-hidden' key={Math.random()}>
 			<SearchBar locale={params.locale} />

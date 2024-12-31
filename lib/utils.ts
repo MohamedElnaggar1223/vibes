@@ -18,79 +18,79 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getDaySuffix(day: number) {
   if (day >= 11 && day <= 13) {
-      return `${day}th`;
+    return `${day}th`;
   }
   switch (day % 10) {
-      case 1: return `${day}st`;
-      case 2: return `${day}nd`;
-      case 3: return `${day}rd`;
-      default: return `${day}th`;
+    case 1: return `${day}st`;
+    case 2: return `${day}nd`;
+    case 3: return `${day}rd`;
+    default: return `${day}th`;
   }
 }
 
 export const formatTime = (date: Date) => {
-    if(!date) return ''
-    let hours = date.getHours()
-    let minutes = date.getMinutes().toString()
+  if (!date) return ''
+  let hours = date.getHours()
+  let minutes = date.getMinutes().toString()
 
-    let meridiem = "AM"
-    if (hours > 12) {
-        hours -= 12
-        meridiem = "PM"
-    }
+  let meridiem = "AM"
+  if (hours > 12) {
+    hours -= 12
+    meridiem = "PM"
+  }
 
-    if (parseInt(minutes) < 10) {
-        minutes = "0" + minutes
-    }
+  if (parseInt(minutes) < 10) {
+    minutes = "0" + minutes
+  }
 
-    const formattedTime = hours + ":" + minutes + " " + meridiem
+  const formattedTime = hours + ":" + minutes + " " + meridiem
 
-    return formattedTime
+  return formattedTime
 }
 
 export const getExchangeRate = cache(async () => {
-    const admin = await initAdmin()
-    const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({...doc.data(), updatedAt: doc.data().updatedAt.toDate()}))[0] as ExchangeRate
+  const admin = await initAdmin()
+  const exchangeRate = await (await admin.firestore().collection('rates').get()).docs.map(doc => ({ ...doc.data(), updatedAt: doc.data().updatedAt.toDate() }))[0] as ExchangeRate
 
-    return exchangeRate
+  return exchangeRate
 })
 
 export const getCategories = cache(async () => {
-    const admin = await initAdmin()
-    const categories = (await admin.firestore().collection('categories').get())?.docs.map(doc => ({...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate()})) as Category[]
+  const admin = await initAdmin()
+  const categories = (await admin.firestore().collection('categories').get())?.docs.map(doc => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() })) as Category[]
 
-    return categories
+  return categories
 })
 
 export const getEvents = cache(async () => {
-    const admin = await initAdmin()
-    const eventsData = (await admin.firestore().collection('events').get()).docs
-    const eventsDocs = eventsData?.map(async (event) => {
-        return {
-            ...event.data(),
-            createdAt: event.data()?.createdAt?.toDate(),
-            eventTime: event.data()?.eventTime?.toDate(),
-            eventDate: event.data()?.eventDate?.toDate(),
-            updatedAt: event.data()?.updatedAt?.toDate(),
-        } as EventType
+  const admin = await initAdmin()
+  const eventsData = (await admin.firestore().collection('events').get()).docs
+  const eventsDocs = eventsData?.map(async (event) => {
+    return {
+      ...event.data(),
+      createdAt: event.data()?.createdAt?.toDate(),
+      eventTime: event.data()?.eventTime?.toDate(),
+      eventDate: event.data()?.eventDate?.toDate(),
+      updatedAt: event.data()?.updatedAt?.toDate(),
+    } as EventType
 
-    })
-    const events = await Promise.all(eventsDocs || [])
+  })
+  const events = await Promise.all(eventsDocs || [])
 
-    return events
+  return events
 })
 
 export const getEventsResell = cache(async () => {
   const admin = await initAdmin()
   const eventsData = (await admin.firestore().collection('events').where('reselling', '==', true).get()).docs
   const eventsDocs = eventsData?.map(async (event) => {
-      return {
-          ...event.data(),
-          createdAt: event.data()?.createdAt?.toDate(),
-          eventTime: event.data()?.eventTime?.toDate(),
-          eventDate: event.data()?.eventDate?.toDate(),
-          updatedAt: event.data()?.updatedAt?.toDate(),
-      } as EventType
+    return {
+      ...event.data(),
+      createdAt: event.data()?.createdAt?.toDate(),
+      eventTime: event.data()?.eventTime?.toDate(),
+      eventDate: event.data()?.eventDate?.toDate(),
+      updatedAt: event.data()?.updatedAt?.toDate(),
+    } as EventType
 
   })
   const events = await Promise.all(eventsDocs || [])
@@ -99,91 +99,92 @@ export const getEventsResell = cache(async () => {
 })
 
 export const getHotelReservations = cache(async () => {
-    const admin = await initAdmin()
-    const hotelReservationsData = (await admin.firestore().collection('hotels').where("status", '==', 'onSale').get()).docs
-  
-    const hotelReservations = hotelReservationsData.map(doc => ({...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() }})) as unknown as Hotel[]
+  const admin = await initAdmin()
+  const hotelReservationsData = (await admin.firestore().collection('hotels').where("status", '==', 'onSale').get()).docs
 
-    return hotelReservations
+  const hotelReservations = hotelReservationsData.map(doc => ({ ...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() } })) as unknown as Hotel[]
+
+  return hotelReservations
 })
 
 export const getDigitalProducts = cache(async () => {
-    const admin = await initAdmin()
-    const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("status", '==', 'onSale').get()).docs
+  const admin = await initAdmin()
+  const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("status", '==', 'onSale').get()).docs
 
-    const digitalProducts = digitalProductsData.map(doc => ({...doc.data(), id: doc.id})) as unknown as DigitalProduct[]
+  const digitalProducts = digitalProductsData.map(doc => ({ ...doc.data(), id: doc.id })) as unknown as DigitalProduct[]
 
-    return digitalProducts
+  return digitalProducts
 })
 
 export const getMyDigitalProducts = cache(async (userId: string) => {
-    const admin = await initAdmin()
-    const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("buyerId", '==', userId).get()).docs
+  const admin = await initAdmin()
+  const digitalProductsData = (await admin.firestore().collection('digitalProducts').where("buyerId", '==', userId).get()).docs
 
-    const digitalProducts = digitalProductsData.map(doc => ({...doc.data(), id: doc.id})) as unknown as DigitalProduct[]
+  const digitalProducts = digitalProductsData.map(doc => ({ ...doc.data(), id: doc.id })) as unknown as DigitalProduct[]
 
-    return digitalProducts
+  return digitalProducts
 })
 
 export const getMyHotelReservations = cache(async (userId: string) => {
-    const admin = await initAdmin()
-    const hotelReservationsData = (await admin.firestore().collection('hotels').where("buyerId", '==', userId).get()).docs
+  const admin = await initAdmin()
+  const hotelReservationsData = (await admin.firestore().collection('hotels').where("buyerId", '==', userId).get()).docs
 
-    const hotelReservations = hotelReservationsData.map(doc => ({...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() }})) as unknown as Hotel[]
+  const hotelReservations = hotelReservationsData.map(doc => ({ ...doc.data(), id: doc.id, date: { from: doc.data().date.from.toDate(), to: doc.data().date.to.toDate() } })) as unknown as Hotel[]
 
-    return hotelReservations
+  return hotelReservations
 })
 
 export const getEvent = cache(async (id: string) => {
-    const admin = await initAdmin()
-    const event = (await admin.firestore().collection('events').doc(id).get())
+  const admin = await initAdmin()
+  if (!id) return null
+  const event = (await admin.firestore().collection('events').doc(id).get())
 
-    if(event === undefined) return null
-    return {
-        ...event.data(),
-        createdAt: event.data()?.createdAt.toDate(),
-        eventTime: event.data()?.eventTime?.toDate(),
-        eventDate: event.data()?.eventDate.toDate(),
-        updatedAt: event.data()?.updatedAt?.toDate(),
-        gatesClose: event.data()?.gatesClose?.toDate(),
-        gatesOpen: event.data()?.gatesOpen?.toDate(),
-    } as EventType
+  if (event === undefined) return null
+  return {
+    ...event.data(),
+    createdAt: event.data()?.createdAt.toDate(),
+    eventTime: event.data()?.eventTime?.toDate(),
+    eventDate: event.data()?.eventDate.toDate(),
+    updatedAt: event.data()?.updatedAt?.toDate(),
+    gatesClose: event.data()?.gatesClose?.toDate(),
+    gatesOpen: event.data()?.gatesOpen?.toDate(),
+  } as EventType
 
 })
 
 export const getCategory = cache(async (id: string) => {
-    const admin = await initAdmin()
-    const category = (await admin.firestore().collection('categories').doc(id).get()).data() as Category
+  const admin = await initAdmin()
+  const category = (await admin.firestore().collection('categories').doc(id).get()).data() as Category
 
-    return category
+  return category
 })
 
 export const getCart = async (id: string) => {
-    const admin = await initAdmin()
-    const user = (await admin.firestore().collection('users').doc(id).get()).data()
-    const userClient = {...user, cart: user?.cart && user?.cart.tickets.length ? {...user.cart, createdAt: user.cart?.createdAt?.toDate()} : undefined}
+  const admin = await initAdmin()
+  const user = (await admin.firestore().collection('users').doc(id).get()).data()
+  const userClient = { ...user, cart: user?.cart && user?.cart.tickets.length ? { ...user.cart, createdAt: user.cart?.createdAt?.toDate() } : undefined }
 
-    const userCart = (userClient as UserType)?.cart
+  const userCart = (userClient as UserType)?.cart
 
-    const cart = userCart?.tickets?.map(async (ticketId: string) => {
-        const ticket = (await admin.firestore().collection('tickets').doc(ticketId).get()).data()
-        return {...ticket, createdAt: ticket?.createdAt.toDate()}
-    })
+  const cart = userCart?.tickets?.map(async (ticketId: string) => {
+    const ticket = (await admin.firestore().collection('tickets').doc(ticketId).get()).data()
+    return { ...ticket, createdAt: ticket?.createdAt.toDate() }
+  })
 
-    const cartTickets = (await Promise.all(cart || [])) as TicketType[]
+  const cartTickets = (await Promise.all(cart || [])) as TicketType[]
 
-    const cartTicketsSorted = cartTickets.sort((a, b) => {
-        return a.createdAt.getTime() - b.createdAt.getTime()
-    })
+  const cartTicketsSorted = cartTickets.sort((a, b) => {
+    return (a.createdAt && b.createdAt) ? a.createdAt.getTime() - b.createdAt.getTime() : 0
+  })
 
-    return {...userCart, tickets: cartTicketsSorted}
+  return { ...userCart, tickets: cartTicketsSorted }
 }
 
 export const getPromoCodes = async () => {
-    const admin = await initAdmin()
-    const promoCodes = (await admin.firestore().collection('promoCodes').get()).docs.map(doc => ({...doc.data(), createdAt: doc.data().createdAt.toDate()}))
+  const admin = await initAdmin()
+  const promoCodes = (await admin.firestore().collection('promoCodes').get()).docs.map(doc => ({ ...doc.data(), createdAt: doc.data().createdAt.toDate() }))
 
-    return promoCodes as PromoCode[]
+  return promoCodes as PromoCode[]
 }
 
 export async function initTranslations(
@@ -225,7 +226,7 @@ export async function initTranslations(
 }
 
 export const toArabicNums = (price: string) => {
-  if(!price) return ''
+  if (!price) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
@@ -244,7 +245,7 @@ export const toArabicNums = (price: string) => {
 }
 
 export const toArabicDate = (date: string) => {
-  if(!date) return ''
+  if (!date) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
@@ -302,7 +303,7 @@ export const toArabicDate = (date: string) => {
 }
 
 export const toArabicTime = (time: string) => {
-  if(!time) return ''
+  if (!time) return ''
   const englishToArabicMap = {
     '0': '٠',
     '1': '١',
