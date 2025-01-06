@@ -4,7 +4,7 @@ import { getUser } from "../layout";
 import { cn, getCart, getEvent, getExchangeRate, initTranslations } from "@/lib/utils";
 import CartTimer from "@/components/shared/CartTimer";
 import CartTicket from "@/components/shared/CartTicket";
-import { unstable_noStore as noStore, revalidatePath } from "next/cache";
+import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import { headers } from "next/headers";
@@ -19,7 +19,9 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function Cart({ params }: Props) {
-    headers()
+    noStore();
+    headers();
+
     const user = await getUser()
     if (!user || !user?.id) return redirect('/')
 

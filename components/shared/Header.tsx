@@ -31,7 +31,11 @@ const getUser = async () => {
     return null
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Header({ params }: Props) {
+    noStore();
     headers()
     const { t } = await initTranslations(params?.locale ?? 'en', ['homepage', 'common'],)
     const session = await getServerSession()

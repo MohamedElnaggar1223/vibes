@@ -452,9 +452,9 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                 <div className='w-full flex justify-between items-center gap-1.5 lg:gap-4'>
                     <div className='flex-1 max-lg:hidden' />
                     <div className='lg:flex-auto flex max-lg:justify-start items-center justify-center gap-1.5 lg:gap-4'>
-                        <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
+                        {/* <button onClick={() => setDialogOpen(true)} className='text-white font-poppins font-semibold text-center text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
                             {t('common:chooseticketshead')}
-                        </button>
+                        </button> */}
                         {
                             availableParkingPasses?.quantity > 0 &&
                             <button onClick={() => { if (foundEvent) updateEvent({ ...foundEvent, purchasedParkingPass: (availableParkingPasses.quantity >= (foundEvent?.purchasedParkingPass ?? 0) + 1 ? (foundEvent?.purchasedParkingPass ?? 0) + 1 : (foundEvent?.purchasedParkingPass)) ?? 0 }) }} className='text-white font-poppins font-semibold text-xs lg:text-sm px-0.5 py-4 lg:py-5 lg:px-8 bg-[#232834] rounded-lg'>
@@ -505,7 +505,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                             )
                                         }
                                         <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * foundEvent.purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
-                                        {(currentWidth ?? 0) > 1024 ? (
+                                        {foundEvent.purchasedTickets[ticket] === 0 ? <></> : (currentWidth ?? 0) > 1024 ? (
                                             <div onClick={() => updateEvent({ ...foundEvent, purchasedTickets: { ...foundEvent.purchasedTickets, [ticket]: 0 } })} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
                                             </div>

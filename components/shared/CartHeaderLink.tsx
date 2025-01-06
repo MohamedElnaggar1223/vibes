@@ -10,8 +10,6 @@ type Props = {
     user: UserType
 }
 
-export const revalidate = 120
-
 export default function CartHeaderLink({ user }: Props) {
     const pathname = usePathname()
     const [hovered, setHovered] = useState(false)

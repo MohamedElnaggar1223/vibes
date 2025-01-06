@@ -11,8 +11,6 @@ import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { headers } from "next/headers";
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 type Props = {
     params: {
@@ -20,7 +18,11 @@ type Props = {
     }
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Cart({ params }: Props) {
+    noStore();
     headers()
 
     const user = await getUser()
