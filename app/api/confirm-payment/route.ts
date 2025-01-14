@@ -95,6 +95,11 @@ export async function POST(req: Request) {
                         const bundle = bundleDoc.data() as Bundle
                         const event = (await transaction.get(admin.firestore().collection('events').doc(bundle.eventId))).data() as EventType
 
+                        await Promise.all(bundle.tickets.map(async (ticketId) => {
+                            const ticketDoc = (await transaction.get(admin.firestore().collection('tickets').doc(ticketId)))
+                            await transaction.update(ticketDoc.ref, { saleStatus: 'sold', sentMail: false, userId: item.userId })
+                        }))
+
                         if (event.uploadedTickets) {
                             await transaction.update(bundleDoc.ref, { status: 'inEscrow' })
                         }

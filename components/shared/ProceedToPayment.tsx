@@ -26,11 +26,10 @@ type Props = {
     promoCodes: PromoCode[]
 }
 
-export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, exchangeRate, tickets, user, totalNumberParkingPasses, totalNumberTickets, promoCodes }: Props)
-{
+export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, exchangeRate, tickets, user, totalNumberParkingPasses, totalNumberTickets, promoCodes }: Props) {
     const context = useContext<PromoContextType>(PromoContext)
-    
-    if(!context) return null
+
+    if (!context) return null
 
     const [discount, setDiscount] = useState(0)
     const [discountValue, setDiscountValue] = useState(0)
@@ -59,7 +58,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
     const handleBuy = async () => {
         setLoading(true)
 
-        const salesDocument = doc(db,'sales', process.env.NEXT_PUBLIC_SALES_ID!)
+        const salesDocument = doc(db, 'sales', process.env.NEXT_PUBLIC_SALES_ID!)
         const userDoc = doc(db, 'users', user?.id ?? '')
 
         console.log(totalValue)
@@ -75,12 +74,12 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
                 amount_cents: amountInCents,
                 currency: tickets[0].country,
                 items: [...tickets.map(ticket => ({ promoCode: promoCodes.find(pCode => pCode.promo === context.promoCode) ? `-${promoCodes.find(pCode => pCode.promo === context.promoCode)}` : '', userId: user.id, name: `${ticket.id}`, ticketId: ticket.id, amount: (ticket.totalPaid * 100).toString(), "quantity": "1" })), totalNumberParkingPasses ? { name: 'Parking Pass', amount: (parkingTotal * 100).toString(), "quantity": totalNumberParkingPasses.toString() } : null].filter(Boolean),
-                user: { first_name: user.firstname, last_name: user.lastname, email: user.email, phone_number: `${user.countryCode}${user.phoneNumber}` },
+                user: { first_name: user.firstname, last_name: user.lastname, email: user.email, phone_number: `${user.countryCode}${user.phoneNumber}`, userId: user?.id },
             })
         }).then(res => res.json())
 
         setLoading(false)
-        
+
         router.push(response.redirect)
 
         // await runTransaction(db, async (transaction) => {
@@ -94,7 +93,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
         //         else await transaction.update(promoCodesDoc, { quantity: promoCodes.find(pCode => pCode.promo === context.promoCode)?.quantity! - 1 })
         //     }
         //     const ticketsUpdate = tickets.map(async ticket => await transaction.update(doc(db, 'tickets', ticket.id), { status: 'paid' }))
-    
+
         //     await Promise.all(ticketsUpdate)
         // })
 
@@ -104,7 +103,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
 
     const handlePromoCodeChange = () => {
         const foundPromoCode = promoCodes.find(pCode => pCode.promo === promoCode)
-        if(!foundPromoCode) {
+        if (!foundPromoCode) {
             setError('Invalid Promo Code')
             return
         }
@@ -116,22 +115,19 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
             'All': 'All'
         }
 
-        if(foundPromoCode?.country !== 'All' && countryCode[foundPromoCode?.country as 'Egypt' | 'United Arab Emirates' | 'Saudi Arabia' | 'All'] !== tickets[0].country) {
+        if (foundPromoCode?.country !== 'All' && countryCode[foundPromoCode?.country as 'Egypt' | 'United Arab Emirates' | 'Saudi Arabia' | 'All'] !== tickets[0].country) {
             setError('Invalid Promo Code')
             return
         }
 
         const ticketsEvents = tickets.map(ticket => ticket.eventId)
 
-        if(foundPromoCode?.singleEvent)
-        {
-            if(!ticketsEvents.includes(foundPromoCode.eventID))
-            {
+        if (foundPromoCode?.singleEvent) {
+            if (!ticketsEvents.includes(foundPromoCode.eventID)) {
                 setError('Invalid Promo Code')
                 return
             }
-            else
-            {
+            else {
                 const ticketsCurrency = tickets[0].country
                 const exchangeValue = ticketsCurrency === 'EGP' ? exchangeRate.USDToEGP : ticketsCurrency === 'AED' ? exchangeRate.USDToAED : exchangeRate.USDToSAR
                 setDiscountValue(foundPromoCode.discount * exchangeValue)
@@ -140,8 +136,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
                 context.setPromoCodeApplied(true)
             }
         }
-        else
-        {
+        else {
             const ticketsCurrency = tickets[0].country
             const exchangeValue = ticketsCurrency === 'EGP' ? exchangeRate.USDToEGP : ticketsCurrency === 'AED' ? exchangeRate.USDToAED : exchangeRate.USDToSAR
             setDiscountValue(foundPromoCode?.discount * exchangeValue)
@@ -166,7 +161,7 @@ export default function ProceedToPayment({ parkingTotal, ticketsTotal, total, ex
                 {!context.promoCodeApplied ? (
                     <p onClick={handlePromoCodeChange} className={cn('font-poppins font-light text-xs lg:text-sm underline cursor-pointer', context.promoCode?.length ? 'text-black' : 'text-[rgba(0,0,0,0.5)]')}>{t('applyPromo')}</p>
                 ) : (
-                    <p 
+                    <p
                         onClick={() => {
                             context.setPromoCode('')
                             context.setPromoCodeApplied(false)

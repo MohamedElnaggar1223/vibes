@@ -11,8 +11,7 @@ type Props = {
     hotel: Hotel
 }
 
-export default function PurchaseHotelReservation({ user, hotel }: Props)
-{
+export default function PurchaseHotelReservation({ user, hotel }: Props) {
     const router = useRouter()
 
     const [loading, setLoading] = useState(false)
@@ -31,12 +30,12 @@ export default function PurchaseHotelReservation({ user, hotel }: Props)
                 amount_cents: amountInCents,
                 currency: hotel.country,
                 items: [{ type: 'hotel', id: hotel.id, name: `${hotel.name}`, amount: hotel.price * 100, quantity: 1, userId: user?.id }],
-                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}` },
+                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}`, userId: user?.id },
             })
         }).then(res => res.json())
 
         setLoading(false)
-        
+
         router.push(response.redirect)
         // if(event.uploadedTickets) {
         //     await runTransaction(db, async (transaction) => {

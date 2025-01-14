@@ -12,8 +12,7 @@ type Props = {
     digitalProduct: DigitalProduct
 }
 
-export default function PurchaseDigitalProduct({ user, digitalProduct }: Props)
-{
+export default function PurchaseDigitalProduct({ user, digitalProduct }: Props) {
     const router = useRouter()
 
     const [loading, setLoading] = useState(false)
@@ -32,12 +31,12 @@ export default function PurchaseDigitalProduct({ user, digitalProduct }: Props)
                 amount_cents: amountInCents,
                 currency: digitalProduct.currency,
                 items: [{ type: 'digitalProduct', id: digitalProduct.id, name: `${digitalProduct.title}`, amount: digitalProduct.price * 100, quantity: 1, userId: user?.id }],
-                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}` },
+                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}`, userId: user?.id },
             })
         }).then(res => res.json())
 
         setLoading(false)
-        
+
         router.push(response.redirect)
         // if(event.uploadedTickets) {
         //     await runTransaction(db, async (transaction) => {
