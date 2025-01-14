@@ -242,7 +242,7 @@ export default function PurchaseResellTickets({ bundlesWithTickets, event, excha
                 amount_cents: amountInCents,
                 currency: selectedTickets[0].country,
                 items: selectedTickets.map(ticket => ({ name: `Ticket`, amount: ticket.price * 100, "quantity": "1", type: ticket.type, id: ticket.id, userId: user?.id })),
-                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}` },
+                user: { first_name: user?.firstname, last_name: user?.lastname, email: user?.email, phone_number: `${user?.countryCode}${user?.phoneNumber}`, id: user?.id },
             })
         }).then(res => res.json())
 

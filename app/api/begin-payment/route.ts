@@ -1,21 +1,20 @@
 import { PromoCode } from "@/lib/types/ticketTypes"
 import { NextResponse } from "next/server"
 
-type RequestType = { 
-    amount_cents: string, 
-    currency: string, 
+type RequestType = {
+    amount_cents: string,
+    currency: string,
     items: { name: string, amount: string, quantity: string, userId: string, promoCode?: string, type?: string }[],
-    user: { first_name: string, last_name: string, email: string, phone_number: string }
+    user: { id: string, first_name: string, last_name: string, email: string, phone_number: string }
     promoCode: PromoCode | undefined
 }
 
 export async function POST(req: Request) {
     const { amount_cents, currency, items, user } = await req.json() as RequestType
 
-    if(!amount_cents || !currency || !items || !user) return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    if (!amount_cents || !currency || !items || !user) return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
 
-    try
-    {
+    try {
 
         // const tokenRequest = await fetch('https://accept.paymob.com/api/auth/tokens', {
         //     method: 'POST',
@@ -68,7 +67,7 @@ export async function POST(req: Request) {
         //     })
         // }).then(res => res.json()) as { token: string }
 
-        const newItems = items.map(item => ({ "name": item.name, "amount": parseFloat(item.amount), "quantity": parseInt(item.quantity) }))
+        const newItems = items.map(item => ({ "name": item.name, "amount": parseFloat(item.amount), "quantity": parseInt(item.quantity), "userId": user.id }))
 
         const intentionInitiationRequest = await fetch('https://accept.paymob.com/v1/intention/', {
             method: 'POST',
@@ -129,10 +128,9 @@ export async function POST(req: Request) {
 
         console.log(intentionInitiationRequest)
 
-        return NextResponse.json({redirect: `https://accept.paymob.com/unifiedcheckout/?publicKey=${process.env.PAYMOB_PUBLIC_KEY}&clientSecret=${intentionInitiationRequest.client_secret}`})
+        return NextResponse.json({ redirect: `https://accept.paymob.com/unifiedcheckout/?publicKey=${process.env.PAYMOB_PUBLIC_KEY}&clientSecret=${intentionInitiationRequest.client_secret}` })
     }
-    catch(e)
-    {
+    catch (e) {
         return NextResponse.json({ error: 'An error occurred.' }, { status: 500 })
     }
 
