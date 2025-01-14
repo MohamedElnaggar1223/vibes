@@ -84,7 +84,7 @@ export async function POST(req: Request) {
                         const event = (await transaction.get(admin.firestore().collection('events').doc(ticket.eventId))).data() as EventType
 
                         if (event.uploadedTickets) {
-                            await transaction.update(ticketDoc.ref, { saleStatus: 'inEscrow' })
+                            await transaction.update(ticketDoc.ref, { saleStatus: 'inEscrow', sentMail: false, userId: item.userId })
                         }
                         else {
                             await transaction.update(ticketDoc.ref, { saleStatus: 'sold', sentMail: false, userId: item.userId })
