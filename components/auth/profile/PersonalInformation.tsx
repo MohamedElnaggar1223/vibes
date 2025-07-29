@@ -11,7 +11,7 @@ import {
     FormMessage,
   } from "@/components/ui/form"
 import { UserUpdateProfileSchema } from "@/lib/validations/user"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { doc, updateDoc } from "firebase/firestore"
 import { auth, db } from "@/firebase/client/config"
 import { User, signInWithEmailAndPassword, updateEmail } from "firebase/auth"
@@ -19,6 +19,8 @@ import { authErrors, countryCodes } from "@/constants"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { useTranslation } from "react-i18next"
+import { useToast } from "@/components/ui/use-toast"
+import ProfilePictureUpload from "@/components/shared/ProfilePictureUpload"
 
 type Props = {
     user: UserType,
@@ -30,8 +32,9 @@ type Props = {
 export default function PersonalInformation({ user, setError, setLoading, setSuccess }: Props) 
 {
     const router = useRouter()
-
+    const { toast } = useToast()
     const { t } = useTranslation()
+    const [loading, setLocalLoading] = useState(false)
 
     const form = useForm<z.infer<typeof UserUpdateProfileSchema>>({
         resolver: zodResolver(UserUpdateProfileSchema),
@@ -42,6 +45,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
             password: '',
             countryCode: user.countryCode,
             phoneNumber: user.phoneNumber,
+            profilePicture: user.profilePicture || '',
             id: user.id
         },
     })
@@ -55,6 +59,7 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
 
     const onSubmit = async (values: z.infer<typeof UserUpdateProfileSchema>) => {
         setLoading(true)
+        setLocalLoading(true)
         try
         {
             if(emailChanged) await signInWithEmailAndPassword(auth, user.email, values?.password ?? '')
@@ -62,26 +67,49 @@ export default function PersonalInformation({ user, setError, setLoading, setSuc
             const currentUser = auth.currentUser
             await updateEmail(currentUser as User, values.email)
             setLoading(false)
-            setSuccess('Profile Updated Successfully! ✔')
+            toast({
+                title: "Success",
+                description: "Profile updated successfully!",
+                variant: "default",
+            })
             router.refresh()
         }
         catch(e: any)
         {
             console.log(e.message)
             //@ts-expect-error authError
-            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
+            const errorMessage = Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!'
+            if(e.code !== 'auth/cancelled-popup-request') {
+                toast({
+                    title: "Error",
+                    description: errorMessage,
+                    variant: "destructive",
+                })
+            }
         }
         finally
         {
             setLoading(false)
+            setLocalLoading(false)
         }
     }
     
-    const unChanged = [form.getValues().firstname === user.firstname, form.getValues().lastname === user.lastname, form.getValues().email === user.email, form.getValues().countryCode === user.countryCode, form.getValues().phoneNumber === user.phoneNumber].every(Boolean)
+    const unChanged = [form.getValues().firstname === user.firstname, form.getValues().lastname === user.lastname, form.getValues().email === user.email, form.getValues().countryCode === user.countryCode, form.getValues().phoneNumber === user.phoneNumber, form.getValues().profilePicture === (user.profilePicture || '')].every(Boolean)
+
+    const handleProfilePictureChange = (url: string | null) => {
+        form.setValue('profilePicture', url || '')
+    }
 
     return (
         <div className='flex flex-1 flex-col space-y-10 justify-center items-center'>
             <p className='mb-4 font-poppins text-white font-medium'>{t('accountDetails')}</p>
+            <ProfilePictureUpload
+                currentProfilePicture={form.getValues().profilePicture || undefined}
+                onProfilePictureChange={handleProfilePictureChange}
+                userId={user.id || ''}
+                isLoading={loading}
+                className="mb-6"
+            />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit space-y-10 flex flex-col items-center justify-center">
                     <FormField

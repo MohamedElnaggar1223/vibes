@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { initAdmin } from "@/firebase/server/config";
 import CountryContextProvider from "@/providers/CountryProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Toaster } from "@/components/ui/toaster"
 import Footer from "@/components/shared/Footer";
 import { i18nConfig } from "@/i18nConfig";
 import TranslationsProvider from "@/providers/TranslationsProvider";
@@ -85,6 +86,7 @@ export default async function RootLayout({
               {children}
               <SpeedInsights />
             </main>
+            <Toaster />
             <Footer params={params} />
           </CountryContextProvider>
         </TranslationsProvider>

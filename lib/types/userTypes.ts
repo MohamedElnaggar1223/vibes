@@ -7,6 +7,7 @@ export type UserType = {
     phoneNumber?: string,
     verified: boolean,
     provider: string,
+    profilePicture?: string,
     tickets: string[] | undefined
     cart?: {
         tickets: string[],

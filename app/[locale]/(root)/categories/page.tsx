@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import CategoriesFilters from "@/components/shared/CategoriesFilters";
 import Categorie from "@/components/shared/Category";
-import { getCategories, getEvents, initTranslations } from "@/lib/utils";
+import { getCategories, getEvents, getExchangeRate, initTranslations } from "@/lib/utils";
 import { Suspense } from "react";
 import EventsLoading from "./eventsLoading";
 
@@ -29,7 +29,6 @@ export default async function CategoriesPage({ searchParams, params }: Props)
 
     const categories = await getCategories()
     const events = await getEvents()
-
     const date = typeof searchParams.date === 'string' ? searchParams.date : undefined
     const country = typeof searchParams.country === 'string' && (searchParams.country === 'UAE' || searchParams.country === 'Egypt' || searchParams.country === 'KSA') ? searchParams.country : undefined
     let category = typeof searchParams.category === 'string' ? searchParams.category : undefined

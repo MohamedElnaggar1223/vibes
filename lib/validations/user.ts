@@ -81,6 +81,7 @@ export const UserUpdateProfileSchema = z.object({
     password: z.string().optional(),
     phoneNumber: z.string().min(10, { message: 'Invalid phone number' })
         .refine(value => /^\d+$/.test(value), { message: 'Invalid phone number' }).transform(value => value.replace('/[^\d]/g', '')),
+    profilePicture: z.string().optional(),
     id: z.string(),
 })
 .refine(async (values) => {

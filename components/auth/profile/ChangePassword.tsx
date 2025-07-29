@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useToast } from "@/components/ui/use-toast"
 
 type Props = {
     user: UserType,
@@ -30,7 +31,7 @@ type Props = {
 export default function ChangePassword({ user, setError, setLoading, setSuccess }: Props) 
 {
     const router = useRouter()
-
+    const { toast } = useToast()
     const pathname = usePathname()
 
     const { t } = useTranslation()
@@ -56,14 +57,25 @@ export default function ChangePassword({ user, setError, setLoading, setSuccess 
             const currentUser = auth.currentUser
             await updatePassword(currentUser as User, values.newPassword)
             setLoading(false)
-            setSuccess('Password Updated Successfully! ✔')
+            toast({
+                title: "Success",
+                description: "Password updated successfully!",
+                variant: "default",
+            })
             router.refresh()
         }
         catch(e: any)
         {
             console.log(e.message)
             //@ts-expect-error authError
-            if(e.code !== 'auth/cancelled-popup-request') setError(Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!')   
+            const errorMessage = Object.keys(authErrors).includes(e.code) ? authErrors[e.code] : 'Something Went Wrong!'
+            if(e.code !== 'auth/cancelled-popup-request') {
+                toast({
+                    title: "Error",
+                    description: errorMessage,
+                    variant: "destructive",
+                })
+            }
         }
         finally
         {

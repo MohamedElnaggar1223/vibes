@@ -5,6 +5,7 @@ import FormattedPrice from "../shared/FormattedPrice";
 import ImageMotion from "../shared/ImageMotion";
 import { CarouselItem } from "../ui/carousel";
 import Link from "next/link";
+import EventBadges from "../shared/EventBadges";
 
 type Props = {
     event: EventType,
@@ -33,6 +34,12 @@ export default async function EventCard({ event, exchangeRate, locale }: Props) 
                     eventPage={false}
                 />
             </Link>
+            
+            {/* Event Badges */}
+            <EventBadges 
+                event={event} 
+                className="absolute top-2 left-2 z-10" 
+            />
             <div className='absolute max-lg:hidden flex z-[9999] bg-gradient-to-t from-black from-30% via-black/75 to-slate-900/25 w-[calc(100%)] h-full opacity-0 text-lg group-hover:opacity-100 bottom-0 right-[0%] duration-300 cursor-pointer'>
                 <Link href={`/events/${event?.id}`} className='absolute w-full h-full' />
                 <div className='flex flex-col gap-4 text-white mt-auto w-full h-fit pr-6 pb-3'>

@@ -5,7 +5,7 @@ import CarouselCategory from "@/components/shared/CarouselCategory";
 import SearchBar from "@/components/shared/SearchBar";
 import { initAdmin } from "@/firebase/server/config";
 import { Display } from "@/lib/types/eventTypes";
-import { getCategories } from "@/lib/utils";
+import { getCategories, getExchangeRate } from "@/lib/utils";
 import { Suspense } from "react";
 
 type Props = {
@@ -19,7 +19,8 @@ export default async function Home({ searchParams, params }: Props) {
 	const admin = await initAdmin()
 	const displaysData = (await admin.firestore().collection('displays').get())?.docs.map(doc => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() })) as Display[]
 	const categories = await getCategories()
-
+	const exchangeRate = await getExchangeRate()
+	
 	const displays = displaysData.sort((a, b) => {
 		if (a.createdAt && b.createdAt) return a.createdAt?.getTime() - b.createdAt?.getTime()
 		else if (a.createdAt) return -1
@@ -38,7 +39,7 @@ export default async function Home({ searchParams, params }: Props) {
 			{
 				(search || date || country || category) ? (
 					<Suspense fallback={<SearchLoading />}>
-						<Search locale={params.locale} search={search} date={date} category={category} country={country} categories={categories} />
+						<Search locale={params.locale} search={search} date={date} category={category} country={country} categories={categories} exchangeRate={exchangeRate} />
 					</Suspense>
 				) : (
 					<>

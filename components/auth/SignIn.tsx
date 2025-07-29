@@ -83,11 +83,14 @@ export default function SignIn({ facebookLogin, redirectUrl }: { facebookLogin: 
         }
     }
 
-    const handleGoogleSignIn = async ()  => {
+    const handleGoogleSignIn = async () => {
         try
         {
             const provider = new GoogleAuthProvider()
             const user = await signInWithPopup(auth, provider)
+
+            console.log(user)
+
             if(user.user) 
             {
                 setLoading(true)

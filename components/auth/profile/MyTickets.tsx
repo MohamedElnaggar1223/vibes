@@ -28,7 +28,7 @@ export default function ViewMyTickets({ user }: Props)
 
     const { t } = useTranslation()
 
-    const selectedTab = searchParams?.get('date') ?? 'current'
+    const selectedTab = searchParams?.get('date') ?? 'upcoming'
     const [optimisticSelectedTab, setOptimisticSelectedTab] = useOptimistic(selectedTab, (_, nextTab: string) => nextTab)
 
     const { data, isLoading, error } = useSWR('tickets', async (...args) => {
@@ -66,8 +66,15 @@ export default function ViewMyTickets({ user }: Props)
         const eventsData = (await getDocs(collection(db, 'events'))).docs.map(event => ({...event.data(), id: event.id, createdAt: event.data()?.createdAt?.toDate(), eventDate: event.data()?.eventDate?.toDate(), eventTime: event.data()?.eventTime?.toDate(), gatesOpen: event.data()?.gatesOpen?.toDate(), gatesClose: event.data()?.gatesClose?.toDate(), updatedAt: event.data()?.updatedAt?.toDate()})) as EventType[]
 
         return {
-            currentTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! >= Timestamp.now().toDate()),
-            pastTickets: ticketsData.filter(ticket => eventsData.find(event => event.id === ticket.eventId)?.eventDate! <= Timestamp.now().toDate()),
+            upcomingTickets: ticketsData.filter(ticket => {
+                const event = eventsData.find(event => event.id === ticket.eventId)
+                return event?.eventDate! > Timestamp.now().toDate() && ticket.status === 'paid' && (!ticket.saleStatus || ticket.saleStatus === 'pending')
+            }),
+            cancelledTickets: ticketsData.filter(ticket => ticket.saleStatus === 'cancelled'),
+            pastTickets: ticketsData.filter(ticket => {
+                const event = eventsData.find(event => event.id === ticket.eventId)
+                return event?.eventDate! <= Timestamp.now().toDate() && ticket.status === 'paid'
+            }),
             events: eventsData,
         }
     })
@@ -77,12 +84,21 @@ export default function ViewMyTickets({ user }: Props)
             <div className='flex items-start justify-evenly lg:px-12 lg:gap-12 h-fit w-full'>
                 <button 
                     onClick={() => {
-                        setOptimisticSelectedTab('current')
-                        startTransition(() => router.push('?show=my-tickets&date=current', { scroll: false }))
+                        setOptimisticSelectedTab('upcoming')
+                        startTransition(() => router.push('?show=my-tickets&date=upcoming', { scroll: false }))
                     }} 
-                    className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', optimisticSelectedTab === 'current' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
+                    className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', optimisticSelectedTab === 'upcoming' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
                 >
-                    {t('auth:currentTickets')}
+                    {t('auth:upcomingTickets')}
+                </button>
+                <button 
+                    onClick={() => {
+                        setOptimisticSelectedTab('cancelled')
+                        startTransition(() => router.push('?show=my-tickets&date=cancelled', { scroll: false }))
+                    }} 
+                    className={cn('px-2 py-2 font-poppins text-white bg-gradient-to-r rounded-md', optimisticSelectedTab === 'cancelled' ? 'font-semibold from-[#E72377] from-[-5.87%] to-[#EB5E1B] to-[101.65%]' : 'font-light bg-transparent')}
+                >
+                    {t('auth:cancelledTickets')}
                 </button>
                 <button 
                     onClick={() => {
@@ -96,12 +112,14 @@ export default function ViewMyTickets({ user }: Props)
             </div>
             <div className='info flex flex-col flex-1 w-full items-center justify-start mt-8 overflow-auto gap-12 lg:gap-12'>
                 {
-                    optimisticSelectedTab === 'current' ? (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.currentTickets!} events={data?.events!} />
-                    ) : selectedTab === 'past' ? (
+                    optimisticSelectedTab === 'upcoming' ? (
+                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.upcomingTickets!} events={data?.events!} />
+                    ) : optimisticSelectedTab === 'cancelled' ? (
+                        isLoading ? <TicketsLoading /> : <PastTickets tickets={data?.cancelledTickets!} events={data?.events!} />
+                    ) : optimisticSelectedTab === 'past' ? (
                         isLoading ? <TicketsLoading /> : <PastTickets tickets={data?.pastTickets!} events={data?.events!} />
                     ) : (
-                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.currentTickets!} events={data?.events!} />
+                        isLoading ? <TicketsLoading /> : <CurrentTickets arabic={pathname?.includes('/ar') ?? false} tickets={data?.upcomingTickets!} events={data?.events!} />
                     )
                 }
             </div>
