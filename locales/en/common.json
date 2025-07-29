@@ -20,5 +20,7 @@
     "sign-in": "Sign In",
     "soldout": "Sold Out!",
     "total": "Total",
+  "orderSummary": "Order Summary",
+  "parkingPass": "Parking Pass",
     "sellTickets": "Resell Your Tickets"
 }

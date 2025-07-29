@@ -144,7 +144,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
         if (!foundEvent) return 0
 
         return Object.keys(foundEvent.purchasedTickets).reduce((acc, ticket) => acc + foundEvent.purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0'), 0) + foundEvent.purchasedParkingPass * (availableParkingPasses.price ?? 0)
-    }, [foundEvent, country])
+    }, [foundEvent, availableTickets, availableParkingPasses, country])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -504,7 +504,7 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                                                 </div>
                                             )
                                         }
-                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1 text-end'><FormattedPrice price={(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0) * foundEvent.purchasedTickets[ticket]} exchangeRate={exchangeRate} /></p>
+                                        <p className='text-black font-poppins text-sm lg:text-base font-semibold flex-1 text-end'><FormattedPrice price={availableTickets.find(availableTicket => availableTicket.name === ticket)?.price ?? 0} exchangeRate={exchangeRate} /></p>
                                         {foundEvent.purchasedTickets[ticket] === 0 ? <></> : (currentWidth ?? 0) > 1024 ? (
                                             <div onClick={() => updateEvent({ ...foundEvent, purchasedTickets: { ...foundEvent.purchasedTickets, [ticket]: 0 } })} className='absolute cursor-pointer w-4 h-4 bg-black rounded-full top-[-10px] right-0 text-white text-center flex items-center justify-center text-xs'>
                                                 X
@@ -590,10 +590,40 @@ export default function PurchaseTickets({ event, exchangeRate, user, locale }: P
                             <p className='font-poppins text-sm lg:text-lg text-white font-semibold'>{foundEvent.purchasedParkingPass}</p>
                         </div>
                     }
-                    <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1'>
-                        <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:total')}</p>
-                        <p className='font-poppins text-sm mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
-                    </div>
+                    <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className='flex flex-col items-center min-h-full justify-between gap-4 lg:mb-1 max-lg:flex-1 cursor-help'>
+                                    <p className='font-poppins text-center text-xs lg:text-base text-white'>{t('common:total')}</p>
+                                    <p className='font-poppins text-sm mt-auto lg:text-lg text-white font-semibold'><FormattedPrice price={total} exchangeRate={exchangeRate} /></p>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent className="bg-[#232834] border-[rgba(255,255,255,0.25)] p-3 max-w-xs">
+                                <div className="text-white text-sm space-y-1">
+                                    <p className="font-semibold mb-2">{t('common:orderSummary')}</p>
+                                    {Object.keys(foundEvent.purchasedTickets).map(ticket => 
+                                        foundEvent.purchasedTickets[ticket] > 0 && (
+                                            <div key={ticket} className="flex justify-between gap-4 items-center">
+                                                <span>{foundEvent.purchasedTickets[ticket]}x {locale === 'ar' ? event.tickets.find(t => t.name === ticket)?.nameArabic : ticket}</span>
+                                                <span><FormattedPrice price={foundEvent.purchasedTickets[ticket] * parseInt(availableTickets.find(availableTicket => availableTicket.name === ticket)?.price.toString() || '0')} exchangeRate={exchangeRate} /></span>
+                                            </div>
+                                        )
+                                    )}
+                                    {foundEvent.purchasedParkingPass > 0 && (
+                                        <div className="flex justify-between items-center">
+                                            <span>{foundEvent.purchasedParkingPass}x {t('common:parkingPass')}</span>
+                                            <span><FormattedPrice price={foundEvent.purchasedParkingPass * (availableParkingPasses.price ?? 0)} exchangeRate={exchangeRate} /></span>
+                                        </div>
+                                    )}
+                                    <hr className="border-[rgba(255,255,255,0.25)] my-2" />
+                                    <div className="flex justify-between items-center font-semibold">
+                                        <span>{t('common:total')}</span>
+                                        <span><FormattedPrice price={total} exchangeRate={exchangeRate} /></span>
+                                    </div>
+                                </div>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                     <div className='max-lg:flex-1 flex flex-col items-center justify-center'>
                         {
                             !user?.id ? (
